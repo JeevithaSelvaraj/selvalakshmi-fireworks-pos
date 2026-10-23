@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THOLILALAR PATTASU KADAI, SELVALAKSHMI AGENCY - POS v4.2</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        accent: {
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                        },
+                        darkbg: '#090d16',
+                        darkcard: 'rgba(15, 23, 42, 0.75)',
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'wave': 'wave 1.2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(34, 197, 94, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(34, 197, 94, 0.8)' },
+                        },
+                        wave: {
+                            '0%, 100%': { transform: 'scaleY(0.3)' },
+                            '50%': { transform: 'scaleY(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060911;
+            color: #f1f5f9;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-interactive {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease-in-out;
+        }
+        .glass-panel-interactive:hover {
+            border-color: rgba(34, 197, 94, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(34, 197, 94, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 197, 94, 0.5);
+        }
+
+        /* Thermal Receipt Printing Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #thermal-receipt-modal, #thermal-receipt-printable, #thermal-receipt-printable * {
+                visibility: visible;
+            }
+            #thermal-receipt-printable {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm;
+                padding: 10px;
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-family: monospace !important;
+                font-size: 11px !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white custom-scrollbar">
+
+    <!-- TOP HEADER / NAV BAR -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Brand Logo & Version -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-emerald-500 to-accent-500 p-0.5 shadow-lg shadow-brand-500/20">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i data-lucide="zap" class="w-5 h-5 text-brand-500 fill-brand-500"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-sm md:text-base tracking-tight text-white uppercase">THOLILALAR PATTASU KADAI</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/30">RETAIL PRO</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium">SELVALAKSHMI AGENCY • Smart Voice Billing v4.2</p>
+                </div>
+            </div>
+
+            <!-- Voice Status & Language Switcher -->
+            <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 rounded-full px-3 py-1.5 shadow-inner">
+                <!-- Status Badge -->
+                <div class="flex items-center gap-2 px-2 py-0.5 rounded-full bg-slate-950/80 border border-slate-800">
+                    <span id="voice-status-dot" class="w-2.5 h-2.5 rounded-full bg-brand-500 animate-pulse"></span>
+                    <span id="voice-status-text" class="text-xs font-semibold text-slate-300">Ready for commands</span>
+                </div>
+
+                <div class="h-4 w-px bg-slate-800"></div>
+
+                <!-- Language Toggle -->
+                <div class="flex items-center gap-1">
+                    <span class="text-xs text-slate-400 font-medium pl-1">Lang:</span>
+                    <button id="lang-toggle-en" onclick="setLanguage('en-IN')" class="px-2.5 py-1 text-xs font-bold rounded-full transition-all bg-brand-500 text-slate-950 shadow-sm">
+                        EN
+                    </button>
+                    <button id="lang-toggle-ta" onclick="setLanguage('ta-IN')" class="px-2.5 py-1 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white">
+                        தமிழ்
+                    </button>
+                </div>
+            </div>
+
+            <!-- Primary Navigation Tabs -->
+            <nav class="flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('pos')" id="tab-pos" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all bg-brand-500 text-slate-950 shadow-md">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                    <span>Billing POS</span>
+                </button>
+                <button onclick="switchTab('products')" id="tab-products" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                    <i data-lucide="package" class="w-4 h-4"></i>
+                    <span>Products & Stock</span>
+                </button>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('invoices')" id="tab-invoices" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    <span>Invoices</span>
+                </button>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTENT AREA -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6">
+
+        <!-- ================= VIEW 1: BILLING TERMINAL (POS) ================= -->
+        <section id="view-pos" class="tab-view grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- LEFT COLUMN: VOICE CONTROL + CATALOG SEARCH & GRID (7 Cols) -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                
+                <!-- VOICE ASSISTANT BAR CARD -->
+                <div class="glass-panel rounded-2xl p-5 border-brand-500/20 relative overflow-hidden shadow-2xl">
+                    <!-- Glow background accent -->
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
+                                <i data-lucide="mic" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                                    Smart Voice Terminal
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-accent-500/10 text-accent-400 font-mono border border-accent-500/20">AI Speech Engine</span>
+                                </h2>
+                                <p class="text-xs text-slate-400">Speak items & quantities to auto-fill cart</p>
+                            </div>
+                        </div>
+
+                        <!-- Big Interactive Mic Button -->
+                        <button id="mic-btn" onclick="toggleVoiceRecognition()" class="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-brand-600 to-emerald-400 text-slate-950 font-bold shadow-lg shadow-brand-500/25 transition-all transform active:scale-95 hover:scale-105">
+                            <i id="mic-icon" data-lucide="mic" class="w-6 h-6 transition-transform group-hover:scale-110"></i>
+                            <!-- Ripple Effect Ring -->
+                            <span id="mic-pulse-ring" class="hidden absolute inset-0 rounded-full bg-brand-500/40 animate-ping"></span>
+                        </button>
+                    </div>
+
+                    <!-- Audio Visualizer Waves (Animated during listening) -->
+                    <div id="voice-waves" class="hidden flex items-center justify-center gap-1.5 h-6 my-3">
+                        <span class="w-1 bg-brand-400 rounded-full h-full animate-wave"></span>
+                        <span class="w-1 bg-brand-400 rounded-full h-full animate-wave" style="animation-delay: 0.15s"></span>
+                        <span class="w-1 bg-brand-400 rounded-full h-full animate-wave" style="animation-delay: 0.3s"></span>
+                        <span class="w-1 bg-brand-400 rounded-full h-full animate-wave" style="animation-delay: 0.45s"></span>
+                        <span class="w-1 bg-brand-400 rounded-full h-full animate-wave" style="animation-delay: 0.6s"></span>
+                    </div>
+
+                    <!-- Live Speech Transcript Feed -->
+                    <div class="mt-4 p-3 bg-slate-950/70 rounded-xl border border-slate-800/80 min-h-[52px] flex items-center justify-between">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <i data-lucide="quote" class="w-4 h-4 text-brand-500 flex-shrink-0"></i>
+                            <span id="transcript-text" class="text-xs text-slate-300 italic truncate">Click microphone and speak (e.g. "Add 5 Flower Pot Small" or "2 லட்சுமி வெடி")...</span>
+                        </div>
+                        <span id="confidence-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">100% Match</span>
+                    </div>
+
+                    <!-- Voice Command Hints -->
+                    <div class="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
+                        <span class="font-semibold text-slate-500">Quick Voice Hints:</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/50">"Add 5 Flower Pot"</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/50">"2 Laxmi"</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/50">"10 சங்கு சக்கரம்"</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/50">"10 Atom Bomb"</span>
+                    </div>
+                </div>
+
+                <!-- CATALOG SEARCH & CATEGORY FILTER BAR -->
+                <div class="glass-panel rounded-2xl p-4 flex flex-col gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex-1">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="pos-search-input" onkeyup="filterPOSCatalog()" placeholder="Search item name, SKU, or category..." class="w-full pl-10 pr-4 py-2 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors">
+                        </div>
+                        <button onclick="clearPOSFilters()" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 rounded-xl text-xs font-medium border border-slate-800 transition-colors flex items-center gap-1.5">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                            Reset
+                        </button>
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div id="pos-category-pills" class="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
+                        <button onclick="selectPOSCategory('ALL')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-brand-500 text-slate-950 shadow-sm transition-all">All Items</button>
+                        <button onclick="selectPOSCategory('FLASH SOUND CRACKERS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Flash Sound</button>
+                        <button onclick="selectPOSCategory('BOMBS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Bombs</button>
+                        <button onclick="selectPOSCategory('GROUND CHAKKARS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Chakkars</button>
+                        <button onclick="selectPOSCategory('FLOWER POTS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Flower Pots</button>
+                        <button onclick="selectPOSCategory('ROCKETS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Rockets</button>
+                        <button onclick="selectPOSCategory('SPARKLERS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Sparklers</button>
+                        <button onclick="selectPOSCategory('FANCY CRACKERS')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Fancy Shots</button>
+                        <button onclick="selectPOSCategory('GIFT BOXES')" class="pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all">Gift Boxes</button>
+                    </div>
+                </div>
+
+                <!-- PRODUCT CARDS GRID CATALOG -->
+                <div id="pos-product-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: CART & CHECKOUT TERMINAL (5 Cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <div class="glass-panel rounded-2xl p-5 border-slate-800/80 flex flex-col h-full shadow-2xl relative">
+                    
+                    <!-- Cart Header -->
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-500"></i>
+                            <h2 class="font-bold text-white text-base">Current Cart Order</h2>
+                            <span id="cart-count-badge" class="px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 text-xs font-mono font-bold border border-brand-500/30">0 items</span>
+                        </div>
+                        <button onclick="clearCart()" class="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 font-medium hover:underline transition-colors">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            Clear All
+                        </button>
+                    </div>
+
+                    <!-- Cart Item List Container -->
+                    <div id="cart-items-list" class="flex-1 my-4 overflow-y-auto max-h-[320px] pr-1 flex flex-col gap-2.5 custom-scrollbar">
+                        <!-- Dynamic Cart Rows Rendered Here -->
+                    </div>
+
+                    <!-- FINANCIAL SUMMARY BREAKDOWN -->
+                    <div class="pt-4 border-t border-slate-800/80 flex flex-col gap-2 bg-slate-950/50 p-4 rounded-xl">
+                        
+                        <!-- Subtotal -->
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal" class="font-mono text-white font-medium">₹0.00</span>
+                        </div>
+
+                        <!-- Discount Control -->
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <div class="flex items-center gap-1.5">
+                                <span>Discount</span>
+                                <div class="flex items-center bg-slate-900 border border-slate-800 rounded px-1">
+                                    <input type="number" id="discount-input" onchange="calculateCartTotals()" onkeyup="calculateCartTotals()" value="0" min="0" max="100" class="w-10 bg-transparent text-center font-mono text-brand-400 text-xs focus:outline-none">
+                                    <span class="text-[10px] text-slate-500 font-mono">%</span>
+                                </div>
+                            </div>
+                            <span id="summary-discount-val" class="font-mono text-rose-400">-₹0.00</span>
+                        </div>
+
+                        <!-- Tax Breakdown (CGST 9% + SGST 9%) -->
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>GST Tax Breakdown (18%)</span>
+                            <span id="summary-tax-val" class="font-mono text-slate-300">₹0.00</span>
+                        </div>
+
+                        <div class="h-px bg-slate-800 my-1"></div>
+
+                        <!-- Grand Total -->
+                        <div class="flex items-center justify-between text-base font-extrabold text-white">
+                            <span>Grand Total</span>
+                            <span id="summary-grand-total" class="font-mono text-brand-400 text-xl">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- PAYMENT METHOD TOGGLE -->
+                    <div class="mt-4 flex flex-col gap-2">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Payment Method</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setPaymentMethod('CASH')" id="pay-cash" class="pay-method-btn flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all bg-brand-500/20 text-brand-400 border-brand-500/50 shadow-sm">
+                                <i data-lucide="banknote" class="w-4 h-4"></i>
+                                Cash
+                            </button>
+                            <button onclick="setPaymentMethod('UPI')" id="pay-upi" class="pay-method-btn flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium border transition-all bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700">
+                                <i data-lucide="qr-code" class="w-4 h-4"></i>
+                                UPI / GPay
+                            </button>
+                            <button onclick="setPaymentMethod('CARD')" id="pay-card" class="pay-method-btn flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium border transition-all bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700">
+                                <i data-lucide="credit-card" class="w-4 h-4"></i>
+                                Card
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CHECKOUT BUTTON -->
+                    <button id="checkout-btn" onclick="processCheckout()" class="mt-5 w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-500 via-emerald-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 text-slate-950 font-extrabold text-sm tracking-wide shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                        <i data-lucide="printer" class="w-5 h-5"></i>
+                        <span>Checkout & Print Thermal Receipt</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= VIEW 2: PRODUCTS & STOCK MANAGER ================= -->
+        <section id="view-products" class="tab-view hidden flex-col gap-6">
+            
+            <!-- Top Action Header -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        Inventory & Stock Control
+                        <span id="total-inventory-count" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">16 items</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Manage fireworks products, wholesale cost, selling prices & stock levels</p>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto">
+                    <!-- Search input -->
+                    <div class="relative flex-1 md:w-64">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="product-mgr-search" onkeyup="filterInventoryTable()" placeholder="Search product or SKU..." class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+
+                    <!-- Add New Product Button -->
+                    <button onclick="openAddProductModal()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold rounded-xl text-xs shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        Add Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- INVENTORY DATA TABLE -->
+            <div class="glass-panel rounded-2xl overflow-hidden border-slate-800">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 text-slate-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="p-4">SKU / ID</th>
+                                <th class="p-4">Product Name</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4">Selling Price</th>
+                                <th class="p-4">Unit</th>
+                                <th class="p-4">Items / Unit</th>
+                                <th class="p-4">Stock Level</th>
+                                <th class="p-4">Supplier</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= VIEW 3: SALES DASHBOARD & ANALYTICS ================= -->
+        <section id="view-dashboard" class="tab-view hidden flex-col gap-6">
+            
+            <!-- Summary Metric Cards (4 Grid) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Card 1: Revenue -->
+                <div class="glass-panel rounded-2xl p-5 border-slate-800 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Today's Revenue</span>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="indian-rupee" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <h3 id="dash-revenue" class="text-2xl font-extrabold text-white font-mono my-2">₹0.00</h3>
+                    <div class="flex items-center gap-1 text-[11px] text-emerald-400">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                        <span>Live counter updated</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Total Orders -->
+                <div class="glass-panel rounded-2xl p-5 border-slate-800 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Total Orders</span>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <h3 id="dash-orders" class="text-2xl font-extrabold text-white font-mono my-2">0</h3>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400">
+                        <span>Completed transactions</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Avg Bill Value -->
+                <div class="glass-panel rounded-2xl p-5 border-slate-800 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Avg. Bill Value</span>
+                        <div class="w-8 h-8 rounded-lg bg-accent-500/10 border border-accent-500/20 flex items-center justify-center text-accent-400">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <h3 id="dash-avg-bill" class="text-2xl font-extrabold text-white font-mono my-2">₹0.00</h3>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400">
+                        <span>Per order average</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Low Stock Alert -->
+                <div class="glass-panel rounded-2xl p-5 border-slate-800 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Low Stock Items</span>
+                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <h3 id="dash-low-stock" class="text-2xl font-extrabold text-rose-400 font-mono my-2">0</h3>
+                    <div class="flex items-center gap-1 text-[11px] text-rose-400">
+                        <span>Stock &lt; 20 units</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ANALYTICS CHARTS & TOP SELLERS GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Payment Methods Sales Share Chart (7 Cols) -->
+                <div class="lg:col-span-7 glass-panel rounded-2xl p-5 flex flex-col gap-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-4 h-4 text-brand-500"></i>
+                        Sales Breakdown by Payment Method
+                    </h3>
+
+                    <!-- Visual Bar Representation -->
+                    <div class="flex flex-col gap-3 my-2">
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span class="flex items-center gap-2 font-medium">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span> Cash Payments
+                                </span>
+                                <span id="bar-cash-val" class="font-mono">₹0.00 (0%)</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden">
+                                <div id="bar-cash-fill" class="h-full bg-brand-500 transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span class="flex items-center gap-2 font-medium">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-accent-500"></span> UPI / GPay
+                                </span>
+                                <span id="bar-upi-val" class="font-mono">₹0.00 (0%)</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden">
+                                <div id="bar-upi-fill" class="h-full bg-accent-500 transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span class="flex items-center gap-2 font-medium">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Card Payments
+                                </span>
+                                <span id="bar-card-val" class="font-mono">₹0.00 (0%)</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden">
+                                <div id="bar-card-fill" class="h-full bg-indigo-500 transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Fast-Moving Items List (5 Cols) -->
+                <div class="lg:col-span-5 glass-panel rounded-2xl p-5 flex flex-col gap-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="flame" class="w-4 h-4 text-orange-400"></i>
+                        Top Selling Products
+                    </h3>
+
+                    <div id="top-products-list" class="flex flex-col gap-2.5 max-h-[220px] overflow-y-auto pr-1 custom-scrollbar">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= VIEW 4: RECENT INVOICES & RECEIPTS ================= -->
+        <section id="view-invoices" class="tab-view hidden flex-col gap-6">
+            
+            <div class="glass-panel rounded-2xl p-5 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-white">Invoices & Sales History</h2>
+                    <p class="text-xs text-slate-400">Review generated receipts, customer payments, and print history</p>
+                </div>
+            </div>
+
+            <!-- Invoices Table -->
+            <div class="glass-panel rounded-2xl overflow-hidden border-slate-800">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 text-slate-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="p-4">Invoice #</th>
+                                <th class="p-4">Date & Time</th>
+                                <th class="p-4">Items Count</th>
+                                <th class="p-4">Payment Method</th>
+                                <th class="p-4">Tax (GST)</th>
+                                <th class="p-4">Grand Total</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoices-table-body" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= THERMAL RECEIPT PRINT MODAL (58mm/80mm) ================= -->
+    <div id="receipt-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        
+        <div class="glass-panel rounded-2xl max-w-sm w-full p-6 flex flex-col gap-4 border-slate-700 shadow-2xl relative">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 no-print">
+                <div class="flex items-center gap-2 text-white font-bold text-sm">
+                    <i data-lucide="receipt" class="w-4 h-4 text-brand-500"></i>
+                    Thermal Receipt Preview
+                </div>
+                <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Thermal Receipt Body Container (White Canvas for Receipt) -->
+            <div id="thermal-receipt-printable" class="bg-white text-slate-950 p-4 rounded-xl font-mono text-xs flex flex-col gap-2 shadow-inner border border-slate-200">
+                
+                <!-- Shop Header -->
+                <div class="text-center pb-2 border-b border-dashed border-slate-300">
+                    <h3 class="font-extrabold text-xs uppercase tracking-wide text-slate-950">THOLILALAR PATTASU KADAI</h3>
+                    <p class="text-[10px] font-bold text-slate-800 uppercase">SELVALAKSHMI AGENCY</p>
+                    <p class="text-[10px] text-slate-600">Sivakasi Main Road, TN - 626123</p>
+                    <p class="text-[10px] text-slate-600">GSTIN: 33AAAAA0000A1Z5 | Ph: 9894683113</p>
+                </div>
+
+                <!-- Invoice Meta -->
+                <div class="flex flex-col text-[11px] text-slate-700 my-1 font-mono">
+                    <div class="flex justify-between"><span class="text-slate-500">INV #:</span> <span id="rec-inv-no" class="font-bold">INV-1001</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">DATE:</span> <span id="rec-date">2026-10-23 10:30</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">PAYMENT:</span> <span id="rec-pay-mode" class="font-bold">CASH</span></div>
+                </div>
+
+                <!-- Itemized List Table -->
+                <table class="w-full text-left my-2 border-t border-b border-dashed border-slate-300 text-[10px]">
+                    <thead>
+                        <tr class="text-slate-600 font-bold border-b border-slate-200">
+                            <th class="py-1">ITEM</th>
+                            <th class="py-1 text-center">QTY</th>
+                            <th class="py-1 text-right">RATE</th>
+                            <th class="py-1 text-right">AMT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rec-items-tbody" class="divide-y divide-slate-100">
+                        <!-- Dynamic Receipt Rows -->
+                    </tbody>
+                </table>
+
+                <!-- Summary Totals -->
+                <div class="flex flex-col gap-1 text-[11px] font-mono">
+                    <div class="flex justify-between text-slate-600"><span>SUBTOTAL:</span><span id="rec-subtotal">₹0.00</span></div>
+                    <div class="flex justify-between text-slate-600"><span>DISCOUNT:</span><span id="rec-discount">-₹0.00</span></div>
+                    <div class="flex justify-between text-slate-600"><span>CGST (9%):</span><span id="rec-cgst">₹0.00</span></div>
+                    <div class="flex justify-between text-slate-600"><span>SGST (9%):</span><span id="rec-sgst">₹0.00</span></div>
+                    <div class="flex justify-between text-sm font-extrabold text-slate-950 pt-1 border-t border-slate-800">
+                        <span>NET TOTAL:</span><span id="rec-grand-total">₹0.00</span>
+                    </div>
+                </div>
+
+                <!-- Footer note -->
+                <div class="text-center pt-3 border-t border-dashed border-slate-300 text-[10px] text-slate-500">
+                    <p>Thank you for your business!</p>
+                    <p class="font-bold text-slate-700">Diwali Offers Valid Till Stocks Last!</p>
+                </div>
+
+            </div>
+
+            <!-- Modal Print Actions -->
+            <div class="flex items-center gap-3 no-print pt-2">
+                <button onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    Print Now
+                </button>
+                <button onclick="closeReceiptModal()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-medium text-xs border border-slate-800 transition-all">
+                    Close
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
+    <div id="add-product-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        
+        <div class="glass-panel rounded-2xl max-w-md w-full p-6 flex flex-col gap-4 border-slate-700 shadow-2xl">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <i data-lucide="package-plus" class="w-4 h-4 text-brand-500"></i>
+                    Add New Product
+                </h3>
+                <button onclick="closeAddProductModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="add-product-form" onsubmit="handleSaveProduct(event)" class="flex flex-col gap-3 text-xs">
+                
+                <div>
+                    <label class="block text-slate-400 font-medium mb-1">Product Name *</label>
+                    <input type="text" id="modal-p-name" required placeholder="e.g. 1000 DELTA DELUXE" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-400 font-medium mb-1">Category *</label>
+                        <select id="modal-p-cat" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500">
+                            <option value="FLASH SOUND CRACKERS">Flash Sound Crackers</option>
+                            <option value="BOMBS">Bombs</option>
+                            <option value="GROUND CHAKKARS">Ground Chakkars</option>
+                            <option value="FLOWER POTS">Flower Pots</option>
+                            <option value="ROCKETS">Rockets</option>
+                            <option value="SPARKLERS">Sparklers</option>
+                            <option value="FANCY CRACKERS">Fancy Crackers</option>
+                            <option value="GIFT BOXES">Gift Boxes</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 font-medium mb-1">Selling Price (₹) *</label>
+                        <input type="number" step="0.5" id="modal-p-price" required placeholder="120.00" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500 font-mono">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-slate-400 font-medium mb-1">Unit Type *</label>
+                        <select id="modal-p-unit" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500">
+                            <option value="BOX">BOX</option>
+                            <option value="PKT">PKT</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 font-medium mb-1">Per Unit Count</label>
+                        <input type="number" id="modal-p-perunit" value="1" min="1" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500 font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 font-medium mb-1">Opening Stock</label>
+                        <input type="number" id="modal-p-stock" value="100" min="0" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500 font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-400 font-medium mb-1">Supplier Brand</label>
+                    <input type="text" id="modal-p-supplier" value="SURYAKALA, SANTHIYA FIREWORKS" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+                    <button type="button" onclick="closeAddProductModal()" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white font-medium">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold shadow-md">Save Product</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+
+    <!-- JavaScript App Logic -->
+    <script>
+        // ================= APP INITIAL STATE & PRE-POPULATED PRODUCT INVENTORY (ALL 166 ITEMS) =================
+        const DEFAULT_PRODUCTS = [
+            { id: "SKU-001", name: "2 ¾ BIRD", category: "FLASH SOUND CRACKERS", price: 12.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["bird", "2 3/4 bird", "guruvi vedi"] },
+            { id: "SKU-002", name: "3 ½ CRACKERS LAKSHMI", category: "FLASH SOUND CRACKERS", price: 20.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["lakshmi", "laxmi", "3 1/2 lakshmi", "லட்சுமி வெடி"] },
+            { id: "SKU-003", name: "4\" LAXMI", category: "FLASH SOUND CRACKERS", price: 30.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["4 inch laxmi", "big lakshmi"] },
+            { id: "SKU-004", name: "4\" DELUXE LAKSHMI", category: "FLASH SOUND CRACKERS", price: 55.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["deluxe lakshmi"] },
+            { id: "SKU-005", name: "4\" GOLD LAKSHMI", category: "FLASH SOUND CRACKERS", price: 60.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["gold lakshmi"] },
+            { id: "SKU-006", name: "TWO SOUND CRACKERS", category: "FLASH SOUND CRACKERS", price: 50.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["two sound", "2 sound"] },
+            { id: "SKU-007", name: "28 CHORSA", category: "CHORSA,GAINT,DELUX CRACKERS", price: 30.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["28 chorsa"] },
+            { id: "SKU-008", name: "56 CHORSA", category: "CHORSA,GAINT,DELUX CRACKERS", price: 55.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["56 chorsa"] },
+            { id: "SKU-009", name: "28 GAINT", category: "CHORSA,GAINT,DELUX CRACKERS", price: 50.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["28 gaint"] },
+            { id: "SKU-010", name: "56 GAINT", category: "CHORSA,GAINT,DELUX CRACKERS", price: 100.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["56 gaint"] },
+            { id: "SKU-011", name: "24 DELUXE CRACKERS", category: "CHORSA,GAINT,DELUX CRACKERS", price: 85.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["24 deluxe"] },
+            { id: "SKU-012", name: "50 DELUXE CRACKERS", category: "CHORSA,GAINT,DELUX CRACKERS", price: 200.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["50 deluxe"] },
+            { id: "SKU-013", name: "100 DELTA DELUXE CRACKERS", category: "CHORSA,GAINT,DELUX CRACKERS", price: 500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["100 delta", "100 deluxe"] },
+            { id: "SKU-014", name: "1H", category: "HAPPY CRACKERS", price: 75.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["1h wala", "100 wala"] },
+            { id: "SKU-015", name: "2H", category: "HAPPY CRACKERS", price: 150.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["2h wala", "200 wala"] },
+            { id: "SKU-016", name: "3H", category: "HAPPY CRACKERS", price: 225.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["3h wala", "300 wala"] },
+            { id: "SKU-017", name: "6H", category: "HAPPY CRACKERS", price: 450.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["6h wala", "600 wala"] },
+            { id: "SKU-018", name: "1K", category: "HAPPY CRACKERS", price: 600.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["1k wala", "1000 wala"] },
+            { id: "SKU-019", name: "2K", category: "HAPPY CRACKERS", price: 1200.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["2k wala", "2000 wala"] },
+            { id: "SKU-020", name: "5K", category: "HAPPY CRACKERS", price: 3000.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["5k wala", "5000 wala"] },
+            { id: "SKU-021", name: "10K", category: "HAPPY CRACKERS", price: 6000.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10k wala", "10000 wala"] },
+            { id: "SKU-022", name: "ATOM BOMB SMALL", category: "BOMBS", price: 40.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["small bomb", "atom bomb small"] },
+            { id: "SKU-023", name: "BULLET BOMB", category: "BOMBS", price: 50.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["bullet bomb"] },
+            { id: "SKU-024", name: "ATOM BOMB GREEN", category: "BOMBS", price: 50.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["green bomb", "atom bomb", "ஆட்டம் பாம்"] },
+            { id: "SKU-025", name: "HYDRO BOMB GREEN", category: "BOMBS", price: 60.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["hydro bomb"] },
+            { id: "SKU-026", name: "KING OF KING BOMB", category: "BOMBS", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["king bomb", "ராஜ பாம்"] },
+            { id: "SKU-027", name: "CLASSIC BOMB", category: "BOMBS", price: 170.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["classic bomb"] },
+            { id: "SKU-028", name: "RED BIJILI(50 pcs)", category: "BIJILI CRACKERS", price: 30.0, unit: "PKT", perUnit: 50, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["bijili", "red bijili", "பிஜிலி வெடி"] },
+            { id: "SKU-029", name: "RED BIJILI", category: "BIJILI CRACKERS", price: 50.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["bijili packet"] },
+            { id: "SKU-030", name: "STRIPPED BIJILI", category: "BIJILI CRACKERS", price: 60.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["stripped bijili"] },
+            { id: "SKU-031", name: "GROUND CHAKKAR BIG (10 PCS)", category: "GROUND CHAKKARS", price: 70.0, unit: "BOX", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["chakkar", "ground chakkar", "சங்கு சக்கரம்"] },
+            { id: "SKU-032", name: "GROUND CHAKKAR ASHOKA", category: "GROUND CHAKKARS", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["ashoka chakkar"] },
+            { id: "SKU-033", name: "GROUND CHAKKAR SPECIAL", category: "GROUND CHAKKARS", price: 145.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["special chakkar"] },
+            { id: "SKU-034", name: "GROUND CHAKKAR DELUXE", category: "GROUND CHAKKARS", price: 230.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["deluxe chakkar"] },
+            { id: "SKU-035", name: "FLOWER POTS SMALL", category: "FLOWER POTS", price: 90.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["flower pot small", "பூச்சட்டி"] },
+            { id: "SKU-036", name: "FLOWER POTS BIG", category: "FLOWER POTS", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["flower pot big"] },
+            { id: "SKU-037", name: "FLOWER POTS SPECIAL", category: "FLOWER POTS", price: 190.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["flower pot special"] },
+            { id: "SKU-038", name: "FLOWER POTS ASHOKA/GAINT", category: "FLOWER POTS", price: 280.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["ashoka flower pot"] },
+            { id: "SKU-039", name: "FLOWER POTS DELUXE 5 PCS", category: "FLOWER POTS", price: 300.0, unit: "BOX", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["flower pot deluxe"] },
+            { id: "SKU-040", name: "FLOWER POTS SUPER 2 PCS", category: "FLOWER POTS", price: 180.0, unit: "BOX", perUnit: 2, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["flower pot super"] },
+            { id: "SKU-041", name: "COLOUR KOTI", category: "FLOWER POTS", price: 360.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["colour koti"] },
+            { id: "SKU-042", name: "BABY ROCKET", category: "ROCKETS", price: 60.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["baby rocket", "rocket", "ராக்கெட்"] },
+            { id: "SKU-043", name: "ROCKET BOMB", category: "ROCKETS", price: 110.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["rocket bomb"] },
+            { id: "SKU-044", name: "COLOUR ROCKET", category: "ROCKETS", price: 110.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["colour rocket"] },
+            { id: "SKU-045", name: "LUNIC ROCKET", category: "ROCKETS", price: 240.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["lunic rocket"] },
+            { id: "SKU-046", name: "1½\" TWINKLING STAR", category: "TWINKLING STAR,PENCIL", price: 50.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["twinkling star"] },
+            { id: "SKU-047", name: "4\" TWINKLING STAR", category: "TWINKLING STAR,PENCIL", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["4 inch twinkling star"] },
+            { id: "SKU-048", name: "10\" PENCIL", category: "TWINKLING STAR,PENCIL", price: 120.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["pencil"] },
+            { id: "SKU-049", name: "1 3/4\" FANCY SHOT(3PCS)", category: "AKASH WONDERS", price: 480.0, unit: "BOX", perUnit: 3, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["fancy shot 3pcs"] },
+            { id: "SKU-050", name: "2\" SINGLE FANCY SHOT", category: "AKASH WONDERS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["single fancy shot"] },
+            { id: "SKU-051", name: "2 1/2 \" FANCY SHOT (2 PCS)", category: "AKASH WONDERS", price: 400.0, unit: "BOX", perUnit: 2, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["fancy shot 2pcs"] },
+            { id: "SKU-052", name: "3 1/2 \" FANCY SHOT(1 PCS)", category: "AKASH WONDERS", price: 700.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["fancy shot 3.5 inch"] },
+            { id: "SKU-053", name: "74MM FANCY SHOT(1 PCS)", category: "AKASH WONDERS", price: 800.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["74mm fancy shot"] },
+            { id: "SKU-054", name: "7 SHOT", category: "AERIAL NOVELTIES", price: 160.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["7 shot"] },
+            { id: "SKU-055", name: "12 SHOT", category: "AERIAL NOVELTIES", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["12 shot"] },
+            { id: "SKU-056", name: "15 SHOT", category: "AERIAL NOVELTIES", price: 400.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["15 shot"] },
+            { id: "SKU-057", name: "30 SHOT COLOUR", category: "AERIAL NOVELTIES", price: 700.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["30 shot"] },
+            { id: "SKU-058", name: "60 SHOT", category: "AERIAL NOVELTIES", price: 1500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["60 shot"] },
+            { id: "SKU-059", name: "120SHOT", category: "AERIAL NOVELTIES", price: 3000.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["120 shot"] },
+            { id: "SKU-060", name: "240 SHOT", category: "AERIAL NOVELTIES", price: 6000.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["240 shot"] },
+            { id: "SKU-061", name: "10CM ELECTRIC", category: "SPARKLERS", price: 30.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10cm electric", "கம்பி மத்தாப்பு"] },
+            { id: "SKU-062", name: "10 CM COLOUR", category: "SPARKLERS", price: 40.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10cm colour sparkler"] },
+            { id: "SKU-063", name: "10CM GREEN", category: "SPARKLERS", price: 40.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10cm green sparkler"] },
+            { id: "SKU-064", name: "10CM RED", category: "SPARKLERS", price: 40.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10cm red sparkler"] },
+            { id: "SKU-065", name: "12CM ELECTRIC", category: "SPARKLERS", price: 50.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["12cm electric sparkler"] },
+            { id: "SKU-066", name: "12 CM COLOUR", category: "SPARKLERS", price: 55.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["12cm colour sparkler"] },
+            { id: "SKU-067", name: "12CM GREEN", category: "SPARKLERS", price: 60.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["12cm green sparkler"] },
+            { id: "SKU-068", name: "12CM RED", category: "SPARKLERS", price: 60.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["12cm red sparkler"] },
+            { id: "SKU-069", name: "15CM ELECTRIC", category: "SPARKLERS", price: 80.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["15cm electric sparkler"] },
+            { id: "SKU-070", name: "15 CM COLOUR", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["15cm colour sparkler"] },
+            { id: "SKU-071", name: "15CM GREEN", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["15cm green sparkler"] },
+            { id: "SKU-072", name: "15CM RED", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["15cm red sparkler"] },
+            { id: "SKU-073", name: "30CM ELECTRIC 5 pcs", category: "SPARKLERS", price: 60.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["30cm electric"] },
+            { id: "SKU-074", name: "30CM COLOUR 5 pcs", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["30cm colour"] },
+            { id: "SKU-075", name: "30CM GREEN", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["30cm green"] },
+            { id: "SKU-076", name: "30CM RED", category: "SPARKLERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["30cm red"] },
+            { id: "SKU-077", name: "50CM ELECTRIC 5 pcs", category: "SPARKLERS", price: 300.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["50cm electric"] },
+            { id: "SKU-078", name: "50CM COLOUR 5 pcs", category: "SPARKLERS", price: 330.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["50cm colour"] },
+            { id: "SKU-079", name: "75CM ELECTRIC 5 pcs", category: "SPARKLERS", price: 450.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["75cm electric"] },
+            { id: "SKU-080", name: "75CM COLOUR 5 pcs", category: "SPARKLERS", price: 500.0, unit: "PKT", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["75cm colour"] },
+            { id: "SKU-081", name: "ADIYAL 1/4 KG", category: "PAPER BOMB", price: 110.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["adiyal 1/4 kg", "paper bomb 1/4"] },
+            { id: "SKU-082", name: "ADIYAL 1/2 KG", category: "PAPER BOMB", price: 200.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["adiyal 1/2 kg", "paper bomb 1/2"] },
+            { id: "SKU-083", name: "ADIYAL 1KG", category: "PAPER BOMB", price: 410.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["adiyal 1kg", "paper bomb 1kg"] },
+            { id: "SKU-084", name: "TOYS CARTOON BOX(10", category: "FANCY CRACKERS", price: 50.0, unit: "BOX", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["toys cartoon box"] },
+            { id: "SKU-085", name: "GANAGA JAMUNA (5 PCS)", category: "FANCY CRACKERS", price: 160.0, unit: "BOX", perUnit: 5, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["ganga jamuna"] },
+            { id: "SKU-086", name: "TIN BEER", category: "FANCY CRACKERS", price: 160.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["tin beer"] },
+            { id: "SKU-087", name: "BUTTERFLY/PAMBARAM", category: "FANCY CRACKERS", price: 200.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["butterfly", "pambaram"] },
+            { id: "SKU-088", name: "SOCIAL MEDIA", category: "FANCY CRACKERS", price: 220.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["social media"] },
+            { id: "SKU-089", name: "SPLASH LIGHT", category: "FANCY CRACKERS", price: 220.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["splash light"] },
+            { id: "SKU-090", name: "GIPSY", category: "FANCY CRACKERS", price: 220.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["gipsy"] },
+            { id: "SKU-091", name: "SMOKE", category: "FANCY CRACKERS", price: 250.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["smoke bomb", "smoke"] },
+            { id: "SKU-092", name: "NAYAGARA PENCIL", category: "FANCY CRACKERS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["nayagara pencil"] },
+            { id: "SKU-093", name: "FOX STAR", category: "FANCY CRACKERS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["fox star"] },
+            { id: "SKU-094", name: "MIAMI RED", category: "FANCY CRACKERS", price: 320.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["miami red"] },
+            { id: "SKU-095", name: "SPARSHA GREEN", category: "FANCY CRACKERS", price: 320.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["sparsha green"] },
+            { id: "SKU-096", name: "KURKURE", category: "FANCY CRACKERS", price: 320.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["kurkure"] },
+            { id: "SKU-097", name: "SMALL PEACOCK", category: "FANCY CRACKERS", price: 330.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["small peacock", "peacock", "மயில் ஷாட்"] },
+            { id: "SKU-098", name: "SING POP", category: "FANCY CRACKERS", price: 350.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["sing pop"] },
+            { id: "SKU-099", name: "COLOUR SONG", category: "FANCY CRACKERS", price: 360.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["colour song"] },
+            { id: "SKU-100", name: "MITICO", category: "FANCY CRACKERS", price: 370.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["mitico"] },
+            { id: "SKU-101", name: "TOYGUN", category: "FANCY CRACKERS", price: 400.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["toygun"] },
+            { id: "SKU-102", name: "4 IN 1 ANDROID", category: "FANCY CRACKERS", price: 400.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["android"] },
+            { id: "SKU-103", name: "HAPPY DINOSAUR", category: "FANCY CRACKERS", price: 450.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["happy dinosaur"] },
+            { id: "SKU-104", name: "HAPPY MONKEY", category: "FANCY CRACKERS", price: 450.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["happy monkey"] },
+            { id: "SKU-105", name: "IPL", category: "FANCY CRACKERS", price: 500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["ipl"] },
+            { id: "SKU-106", name: "RAAVAN", category: "FANCY CRACKERS", price: 500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["raavan"] },
+            { id: "SKU-107", name: "FRUITS FLOWERPOTS", category: "FANCY CRACKERS", price: 500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["fruits flowerpots"] },
+            { id: "SKU-108", name: "BADA PEACOCK", category: "FANCY CRACKERS", price: 600.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["bada peacock"] },
+            { id: "SKU-109", name: "CAR BIG", category: "FANCY CRACKERS", price: 820.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["car big"] },
+            { id: "SKU-110", name: "CRAZY WHEEL", category: "FANCY CRACKERS", price: 880.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["crazy wheel"] },
+            { id: "SKU-111", name: "CANDY WHEEL", category: "FANCY CRACKERS", price: 880.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["candy wheel"] },
+            { id: "SKU-112", name: "GRAND SALAM", category: "FANCY CRACKERS", price: 880.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["grand salam"] },
+            { id: "SKU-113", name: "ROLL CAPS", category: "MATCHES & SPECIALS", price: 120.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["roll caps"] },
+            { id: "SKU-114", name: "SNAKE TABLATS SMALL", category: "MATCHES & SPECIALS", price: 30.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["snake tablet"] },
+            { id: "SKU-115", name: "RED GREEN MATCHES ORD(10NO)", category: "MATCHES & SPECIALS", price: 20.0, unit: "PKT", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["matches"] },
+            { id: "SKU-116", name: "JILJIL MATCH(10NO)", category: "MATCHES & SPECIALS", price: 40.0, unit: "PKT", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["jiljil match"] },
+            { id: "SKU-117", name: "MINIDELUXE MATCH(10NO)", category: "MATCHES & SPECIALS", price: 45.0, unit: "PKT", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["minideluxe match"] },
+            { id: "SKU-118", name: "HOLY BABA MATCH (10NO)", category: "MATCHES & SPECIALS", price: 60.0, unit: "PKT", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["holy baba match"] },
+            { id: "SKU-119", name: "MATRIX MATCH(10NO)", category: "MATCHES & SPECIALS", price: 80.0, unit: "PKT", perUnit: 10, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["matrix match"] },
+            { id: "SKU-120", name: "BLOOMS", category: "MATCHES & SPECIALS", price: 140.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["blooms"] },
+            { id: "SKU-121", name: "SUPER 6", category: "MATCHES & SPECIALS", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["super 6"] },
+            { id: "SKU-122", name: "10 IN 1", category: "MATCHES & SPECIALS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["10 in 1"] },
+            { id: "SKU-123", name: "NOKIO", category: "MATCHES & SPECIALS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["nokio"] },
+            { id: "SKU-124", name: "GANESH 16 items", category: "GIFT BOXES", price: 360.0, unit: "BOX", perUnit: 16, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["ganesh gift box", "gift box 16", "கிஃப்ட் பாக்ஸ்"] },
+            { id: "SKU-125", name: "TREAT 20 items", category: "GIFT BOXES", price: 450.0, unit: "BOX", perUnit: 20, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["treat gift box", "gift box 20"] },
+            { id: "SKU-126", name: "ESCORT 30 items", category: "GIFT BOXES", price: 1000.0, unit: "BOX", perUnit: 30, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["escort gift box"] },
+            { id: "SKU-127", name: "KGF 36 items", category: "GIFT BOXES", price: 800.0, unit: "BOX", perUnit: 36, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["kgf gift box"] },
+            { id: "SKU-128", name: "PUBG 41 items", category: "GIFT BOXES", price: 900.0, unit: "BOX", perUnit: 41, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["pubg gift box"] },
+            { id: "SKU-129", name: "BIG BOSS 51 Items", category: "GIFT BOXES", price: 1500.0, unit: "BOX", perUnit: 51, stock: 100, supplier: "SURYAKALA, SANTHIYA FIREWORKS", aliases: ["big boss gift box"] },
+            { id: "SKU-130", name: "ST RED BIJILI", category: "ELECTRIC CRACKERS", price: 90.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st red bijili"] },
+            { id: "SKU-131", name: "ST 100 MICRO", category: "ELECTRIC CRACKERS", price: 130.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 100 micro"] },
+            { id: "SKU-132", name: "ST 1K", category: "ELECTRIC CRACKERS", price: 800.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 1k wala"] },
+            { id: "SKU-133", name: "ST 2K", category: "ELECTRIC CRACKERS", price: 1500.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 2k wala"] },
+            { id: "SKU-134", name: "ST FLOWER POTS SMALL", category: "FLOWER POTS", price: 115.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st flower pots small"] },
+            { id: "SKU-135", name: "ST FLOWER POTS SPECIAL", category: "FLOWER POTS", price: 280.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st flower pots special"] },
+            { id: "SKU-136", name: "ST FLOWER POTS DELUXE", category: "FLOWER POTS", price: 380.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st flower pots deluxe"] },
+            { id: "SKU-137", name: "ST TRICOLOUR MILLENIUM", category: "FLOWER POTS", price: 700.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st tricolour"] },
+            { id: "SKU-138", name: "ST CHAVI ZAMIN CHAKKAR BIG", category: "CHAKKARS", price: 65.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st zamin chakkar big"] },
+            { id: "SKU-139", name: "ST CHAVI ZAMIN CHAKKAR ASHOKA", category: "CHAKKARS", price: 140.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st zamin chakkar ashoka"] },
+            { id: "SKU-140", name: "ST CHAVI ZAMIN CHAKKAR DELUXE", category: "CHAKKARS", price: 290.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st zamin chakkar deluxe"] },
+            { id: "SKU-141", name: "ST 45CM TWINKLING STAR", category: "NOVELTY CRACKERS/SPARKLERS", price: 75.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 45cm twinkling star"] },
+            { id: "SKU-142", name: "ST 120 CM TWINKLING STAR", category: "NOVELTY CRACKERS/SPARKLERS", price: 240.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 120cm twinkling star"] },
+            { id: "SKU-143", name: "ST MULTI COLOUR CANDLE", category: "NOVELTY CRACKERS/SPARKLERS", price: 150.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st multi colour candle"] },
+            { id: "SKU-144", name: "ST 30 COM GOLD SPARKLER", category: "NOVELTY CRACKERS/SPARKLERS", price: 110.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st gold sparkler"] },
+            { id: "SKU-145", name: "ST 30CM COLOUR", category: "NOVELTY CRACKERS/SPARKLERS", price: 120.0, unit: "PKT", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 30cm colour sparkler"] },
+            { id: "SKU-146", name: "2\" COMET(MIX)", category: "COMETTS AND SHOTS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["2 inch comet"] },
+            { id: "SKU-147", name: "RAINBOW THUNDER 12 SHOT", category: "COMETTS AND SHOTS", price: 300.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["rainbow thunder"] },
+            { id: "SKU-148", name: "30 SHOT", category: "COMETTS AND SHOTS", price: 1100.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 30 shot"] },
+            { id: "SKU-149", name: "60 SHOT", category: "COMETTS AND SHOTS", price: 1800.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 60 shot"] },
+            { id: "SKU-150", name: "120 SHOT", category: "COMETTS AND SHOTS", price: 3000.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 120 shot"] },
+            { id: "SKU-151", name: "240 SHOT", category: "COMETTS AND SHOTS", price: 6800.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st 240 shot"] },
+            { id: "SKU-152", name: "ST FAT BOY PAPER BOMB", category: "FANCY CRACKERS", price: 110.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st fat boy"] },
+            { id: "SKU-153", name: "ST TUK OF WAR", category: "FANCY CRACKERS", price: 200.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st tuk of war"] },
+            { id: "SKU-154", name: "ST COLOUR CHANGING BUTTERFLY", category: "FANCY CRACKERS", price: 310.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st butterfly"] },
+            { id: "SKU-155", name: "ST MINE OF CRACKERS", category: "FANCY CRACKERS", price: 420.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st mine of crackers"] },
+            { id: "SKU-156", name: "ST CUCKOO", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st cuckoo"] },
+            { id: "SKU-157", name: "ST DOLLAR WHEEL", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st dollar wheel"] },
+            { id: "SKU-158", name: "ST CRACKLING CANDY", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st crackling candy"] },
+            { id: "SKU-159", name: "ST POKER WHEEL", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st poker wheel"] },
+            { id: "SKU-160", name: "ST MONEY PENNY", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st money penny"] },
+            { id: "SKU-161", name: "ST SWASTIC WHEEL", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st swastic wheel"] },
+            { id: "SKU-162", name: "ST JIL JUNG JUK", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st jil jung juk"] },
+            { id: "SKU-163", name: "ST GOLD RUSH", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st gold rush"] },
+            { id: "SKU-164", name: "ST SUNDROPS", category: "FANCY CRACKERS", price: 430.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st sundrops"] },
+            { id: "SKU-165", name: "ST JIL JUNG JUK (SPL)", category: "FANCY CRACKERS", price: 450.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st jil jung juk spl"] },
+            { id: "SKU-166", name: "ST ARIEL OUT", category: "FANCY CRACKERS", price: 460.0, unit: "BOX", perUnit: 1, stock: 100, supplier: "STANDARD FIREWORKS", aliases: ["st ariel out"] }
+        ];
+
+        // Persistent State Stores
+        let products = JSON.parse(localStorage.getItem('sb_products'));
+        if (!products || !Array.isArray(products) || products.length < 166) {
+            products = DEFAULT_PRODUCTS;
+            localStorage.setItem('sb_products', JSON.stringify(products));
+        }
+
+        let cart = JSON.parse(localStorage.getItem('sb_cart')) || [];
+        let salesHistory = JSON.parse(localStorage.getItem('sb_sales')) || [];
+        
+        let currentLanguage = 'en-IN';
+        let currentPaymentMethod = 'CASH';
+        let selectedCategoryFilter = 'ALL';
+        let recognition = null;
+        let isListening = false;
+
+        // Initialize App on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initWebSpeechEngine();
+            renderPOSCatalog();
+            renderCart();
+            renderInventoryTable();
+            updateDashboardMetrics();
+            renderInvoicesTable();
+        });
+
+        // Save State to LocalStorage
+        function saveState() {
+            localStorage.setItem('sb_products', JSON.stringify(products));
+            localStorage.setItem('sb_cart', JSON.stringify(cart));
+            localStorage.setItem('sb_sales', JSON.stringify(salesHistory));
+        }
+
+        // ================= TAB NAVIGATION =================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('bg-brand-500', 'text-slate-950', 'shadow-md', 'font-bold');
+                tab.classList.add('text-slate-400', 'hover:text-white', 'font-medium');
+            });
+
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            if (tabName === 'pos') document.getElementById(`view-${tabName}`).classList.add('grid');
+            else document.getElementById(`view-${tabName}`).classList.add('flex');
+
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.add('bg-brand-500', 'text-slate-950', 'shadow-md', 'font-bold');
+            activeTab.classList.remove('text-slate-400', 'hover:text-white', 'font-medium');
+
+            if (tabName === 'dashboard') updateDashboardMetrics();
+            if (tabName === 'invoices') renderInvoicesTable();
+            if (tabName === 'products') renderInventoryTable();
+        }
+
+        // ================= LANGUAGE TOGGLE =================
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const btnEn = document.getElementById('lang-toggle-en');
+            const btnTa = document.getElementById('lang-toggle-ta');
+
+            if (lang === 'en-IN') {
+                btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-full transition-all bg-brand-500 text-slate-950 shadow-sm";
+                btnTa.className = "px-2.5 py-1 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white";
+                showToast("Voice engine set to English (en-IN)");
+            } else {
+                btnTa.className = "px-2.5 py-1 text-xs font-bold rounded-full transition-all bg-brand-500 text-slate-950 shadow-sm";
+                btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white";
+                showToast("குரல் முறை தமிழுக்கு மாற்றப்பட்டது (ta-IN)");
+            }
+
+            if (recognition) recognition.lang = lang;
+        }
+
+        // ================= WEB SPEECH API & VOICE BILLING ENGINE =================
+        function initWebSpeechEngine() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                document.getElementById('voice-status-text').innerText = "Voice engine not supported";
+                document.getElementById('voice-status-dot').className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = currentLanguage;
+
+            recognition.onstart = () => {
+                isListening = true;
+                updateVoiceUI(true);
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                updateVoiceUI(false);
+            };
+
+            recognition.onerror = (event) => {
+                isListening = false;
+                updateVoiceUI(false);
+                showToast("Voice error: " + event.error, "error");
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const confidence = Math.round(event.results[0][0].confidence * 100);
+                
+                document.getElementById('transcript-text').innerText = `"${transcript}"`;
+                document.getElementById('confidence-badge').innerText = `${confidence || 95}% Match`;
+                document.getElementById('confidence-badge').classList.remove('hidden');
+
+                // Process Voice Command
+                processVoiceCommand(transcript);
+            };
+        }
+
+        function toggleVoiceRecognition() {
+            if (!recognition) {
+                showToast("Web Speech API is not supported on this browser.", "error");
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.lang = currentLanguage;
+                recognition.start();
+            }
+        }
+
+        function updateVoiceUI(listening) {
+            const dot = document.getElementById('voice-status-dot');
+            const text = document.getElementById('voice-status-text');
+            const pulseRing = document.getElementById('mic-pulse-ring');
+            const waves = document.getElementById('voice-waves');
+
+            if (listening) {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
+                text.innerText = "Listening for commands...";
+                text.className = "text-xs font-bold text-brand-400";
+                pulseRing.classList.remove('hidden');
+                waves.classList.remove('hidden');
+                waves.classList.add('flex');
+            } else {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-brand-500 animate-pulse";
+                text.innerText = "Ready for commands";
+                text.className = "text-xs font-semibold text-slate-300";
+                pulseRing.classList.add('hidden');
+                waves.classList.add('hidden');
+                waves.classList.remove('flex');
+            }
+        }
+
+        // SMART VOICE COMMAND PARSER
+        function processVoiceCommand(transcript) {
+            const cleaned = transcript.toLowerCase().trim();
+            
+            // Extract number / quantity if mentioned
+            let quantity = 1;
+            const numberMatches = cleaned.match(/\d+/);
+            if (numberMatches) {
+                quantity = parseInt(numberMatches[0], 10);
+            } else {
+                // Check word numbers
+                if (cleaned.includes('two') || cleaned.includes('இரண்டு')) quantity = 2;
+                else if (cleaned.includes('three') || cleaned.includes('மூன்று')) quantity = 3;
+                else if (cleaned.includes('five') || cleaned.includes('ஐந்து')) quantity = 5;
+                else if (cleaned.includes('ten') || cleaned.includes('பத்து')) quantity = 10;
+            }
+
+            // Search best matching product
+            let matchedProduct = null;
+            let highestMatchScore = 0;
+
+            products.forEach(product => {
+                let score = 0;
+                const pName = product.name.toLowerCase();
+                const pCat = product.category.toLowerCase();
+
+                if (cleaned.includes(pName)) score += 10;
+
+                // Check aliases
+                if (product.aliases) {
+                    product.aliases.forEach(alias => {
+                        if (cleaned.includes(alias.toLowerCase())) score += 8;
+                    });
+                }
+
+                if (cleaned.includes(pCat)) score += 3;
+
+                if (score > highestMatchScore) {
+                    highestMatchScore = score;
+                    matchedProduct = product;
+                }
+            });
+
+            if (matchedProduct && highestMatchScore > 0) {
+                addToCart(matchedProduct.id, quantity);
+                showToast(`Voice Added: ${quantity}x ${matchedProduct.name}`, "success");
+            } else {
+                showToast(`Could not match "${transcript}" to inventory`, "warning");
+            }
+        }
+
+        // ================= POS CATALOG & CART MANAGEMENT =================
+        function renderPOSCatalog() {
+            const grid = document.getElementById('pos-product-grid');
+            const searchVal = document.getElementById('pos-search-input').value.toLowerCase();
+            grid.innerHTML = '';
+
+            const filtered = products.filter(p => {
+                const matchesCategory = (selectedCategoryFilter === 'ALL') || (p.category === selectedCategoryFilter);
+                const matchesSearch = p.name.toLowerCase().includes(searchVal) || p.id.toLowerCase().includes(searchVal) || p.category.toLowerCase().includes(searchVal);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-500 text-xs flex flex-col items-center justify-center gap-2">
+                        <i data-lucide="package-search" class="w-8 h-8 text-slate-600"></i>
+                        <p>No products found matching filters</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "glass-panel-interactive rounded-xl p-3 flex flex-col justify-between gap-3 relative group";
+                
+                const isLowStock = p.stock < 20;
+
+                card.innerHTML = `
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-mono text-slate-500">${p.id}</span>
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${isLowStock ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-slate-800 text-slate-400'}">
+                                ${p.stock} ${p.unit}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-white text-xs leading-snug line-clamp-2">${p.name}</h4>
+                        <span class="text-[10px] text-slate-400 truncate">${p.category}</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                        <span class="font-mono font-extrabold text-brand-400 text-xs">₹${p.price.toFixed(2)}</span>
+                        <button onclick="addToCart('${p.id}', 1)" class="w-7 h-7 rounded-lg bg-brand-500 hover:bg-brand-600 text-slate-950 flex items-center justify-center shadow-md transition-all active:scale-90">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function filterPOSCatalog() {
+            renderPOSCatalog();
+        }
+
+        function selectPOSCategory(catName) {
+            selectedCategoryFilter = catName;
+            document.querySelectorAll('.pos-cat-pill').forEach(pill => {
+                pill.className = "pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all";
+            });
+
+            event.target.className = "pos-cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-brand-500 text-slate-950 shadow-sm transition-all";
+            renderPOSCatalog();
+        }
+
+        function clearPOSFilters() {
+            document.getElementById('pos-search-input').value = '';
+            selectPOSCategory('ALL');
+        }
+
+        // CART LOGIC
+        function addToCart(productId, qtyToAdd = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            if (product.stock < qtyToAdd) {
+                showToast(`Low stock warning for ${product.name}!`, "warning");
+            }
+
+            const existingIndex = cart.findIndex(item => item.id === productId);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += qtyToAdd;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    unit: product.unit,
+                    qty: qtyToAdd
+                });
+            }
+
+            saveState();
+            renderCart();
+        }
+
+        function updateCartQty(productId, newQty) {
+            if (newQty <= 0) {
+                cart = cart.filter(item => item.id !== productId);
+            } else {
+                const item = cart.find(i => i.id === productId);
+                if (item) item.qty = newQty;
+            }
+            saveState();
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            saveState();
+            renderCart();
+            showToast("Cart cleared");
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items-list');
+            const countBadge = document.getElementById('cart-count-badge');
+            list.innerHTML = '';
+
+            const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
+            countBadge.innerText = `${totalCount} items`;
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="h-full py-12 flex flex-col items-center justify-center text-center text-slate-500 gap-2">
+                        <i data-lucide="shopping-cart" class="w-8 h-8 text-slate-700"></i>
+                        <p class="text-xs">Cart is empty. Speak or tap items to add.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                calculateCartTotals();
+                return;
+            }
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.qty;
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 gap-2";
+
+                row.innerHTML = `
+                    <div class="flex flex-col flex-1 min-w-0">
+                        <h5 class="text-xs font-bold text-white truncate">${item.name}</h5>
+                        <span class="text-[10px] text-slate-400 font-mono">₹${item.price.toFixed(2)} / ${item.unit}</span>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg p-1">
+                        <button onclick="updateCartQty('${item.id}', ${item.qty - 1})" class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold">-</button>
+                        <span class="w-6 text-center text-xs font-mono font-bold text-white">${item.qty}</span>
+                        <button onclick="updateCartQty('${item.id}', ${item.qty + 1})" class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold">+</button>
+                    </div>
+
+                    <div class="text-right font-mono text-xs font-bold text-brand-400 w-16">
+                        ₹${itemTotal.toFixed(2)}
+                    </div>
+
+                    <button onclick="updateCartQty('${item.id}', 0)" class="text-slate-500 hover:text-rose-400 p-1">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                `;
+                list.appendChild(row);
+            });
+
+            calculateCartTotals();
+            lucide.createIcons();
+        }
+
+        function calculateCartTotals() {
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const discountPct = parseFloat(document.getElementById('discount-input').value) || 0;
+            const discountAmount = (subtotal * discountPct) / 100;
+            
+            const taxableAmount = subtotal - discountAmount;
+            const gstTax = taxableAmount * 0.18; // 18% Total GST (9% CGST + 9% SGST)
+            const grandTotal = taxableAmount; // Standard prices inclusive or net
+
+            document.getElementById('summary-subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('summary-discount-val').innerText = `-₹${discountAmount.toFixed(2)}`;
+            document.getElementById('summary-tax-val').innerText = `₹${gstTax.toFixed(2)}`;
+            document.getElementById('summary-grand-total').innerText = `₹${grandTotal.toFixed(2)}`;
+        }
+
+        function setPaymentMethod(method) {
+            currentPaymentMethod = method;
+            document.querySelectorAll('.pay-method-btn').forEach(btn => {
+                btn.className = "pay-method-btn flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium border transition-all bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700";
+            });
+
+            const activeBtn = document.getElementById(`pay-${method.toLowerCase()}`);
+            activeBtn.className = "pay-method-btn flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold border transition-all bg-brand-500/20 text-brand-400 border-brand-500/50 shadow-sm";
+        }
+
+        // CHECKOUT & RECEIPT GENERATION
+        function processCheckout() {
+            if (cart.length === 0) {
+                showToast("Cannot checkout empty cart!", "warning");
+                return;
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const discountPct = parseFloat(document.getElementById('discount-input').value) || 0;
+            const discountAmt = (subtotal * discountPct) / 100;
+            const netAmount = subtotal - discountAmt;
+            const taxGst = netAmount * 0.18;
+
+            const invoiceNo = "INV-" + (1000 + salesHistory.length + 1);
+            const orderRecord = {
+                invoiceNo: invoiceNo,
+                timestamp: new Date().toISOString(),
+                formattedDate: new Date().toLocaleString(),
+                items: [...cart],
+                subtotal: subtotal,
+                discount: discountAmt,
+                tax: taxGst,
+                grandTotal: netAmount,
+                paymentMethod: currentPaymentMethod
+            };
+
+            // Deduct stock levels
+            cart.forEach(cartItem => {
+                const prod = products.find(p => p.id === cartItem.id);
+                if (prod) {
+                    prod.stock = Math.max(0, prod.stock - cartItem.qty);
+                }
+            });
+
+            // Add to sales history
+            salesHistory.unshift(orderRecord);
+            saveState();
+
+            // Populate Thermal Receipt Modal
+            openReceiptModal(orderRecord);
+
+            // Reset Cart
+            cart = [];
+            saveState();
+            renderCart();
+            renderPOSCatalog();
+            showToast("Transaction saved! Opening receipt printer...", "success");
+        }
+
+        function openReceiptModal(order) {
+            document.getElementById('rec-inv-no').innerText = order.invoiceNo;
+            document.getElementById('rec-date').innerText = order.formattedDate;
+            document.getElementById('rec-pay-mode').innerText = order.paymentMethod;
+
+            const tbody = document.getElementById('rec-items-tbody');
+            tbody.innerHTML = '';
+
+            order.items.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-1 uppercase">${item.name}</td>
+                    <td class="py-1 text-center font-bold">${item.qty}</td>
+                    <td class="py-1 text-right">₹${item.price.toFixed(2)}</td>
+                    <td class="py-1 text-right font-bold">₹${(item.price * item.qty).toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('rec-subtotal').innerText = `₹${order.subtotal.toFixed(2)}`;
+            document.getElementById('rec-discount').innerText = `-₹${order.discount.toFixed(2)}`;
+            document.getElementById('rec-cgst').innerText = `₹${(order.tax / 2).toFixed(2)}`;
+            document.getElementById('rec-sgst').innerText = `₹${(order.tax / 2).toFixed(2)}`;
+            document.getElementById('rec-grand-total').innerText = `₹${order.grandTotal.toFixed(2)}`;
+
+            document.getElementById('receipt-modal').classList.remove('hidden');
+            document.getElementById('receipt-modal').classList.add('flex');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+            document.getElementById('receipt-modal').classList.remove('flex');
+        }
+
+        // ================= INVENTORY MANAGER =================
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            const searchVal = (document.getElementById('product-mgr-search')?.value || '').toLowerCase();
+            tbody.innerHTML = '';
+
+            document.getElementById('total-inventory-count').innerText = `${products.length} items`;
+
+            const filtered = products.filter(p => p.name.toLowerCase().includes(searchVal) || p.id.toLowerCase().includes(searchVal));
+
+            filtered.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors";
+
+                const isLowStock = p.stock < 20;
+
+                tr.innerHTML = `
+                    <td class="p-4 font-mono text-slate-400">${p.id}</td>
+                    <td class="p-4 font-bold text-white">${p.name}</td>
+                    <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">${p.category}</span></td>
+                    <td class="p-4 font-mono font-bold text-brand-400">₹${p.price.toFixed(2)}</td>
+                    <td class="p-4">${p.unit}</td>
+                    <td class="p-4 font-mono">${p.perUnit || 1}</td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded font-mono font-bold text-[11px] ${isLowStock ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
+                            ${p.stock}
+                        </span>
+                    </td>
+                    <td class="p-4 text-slate-400 text-[11px] truncate max-w-[150px]">${p.supplier}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="deleteProduct('${p.id}')" class="p-1.5 rounded hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        function filterInventoryTable() {
+            renderInventoryTable();
+        }
+
+        function openAddProductModal() {
+            document.getElementById('add-product-modal').classList.remove('hidden');
+            document.getElementById('add-product-modal').classList.add('flex');
+        }
+
+        function closeAddProductModal() {
+            document.getElementById('add-product-modal').classList.add('hidden');
+            document.getElementById('add-product-modal').classList.remove('flex');
+        }
+
+        function handleSaveProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('modal-p-name').value.trim();
+            const category = document.getElementById('modal-p-cat').value;
+            const price = parseFloat(document.getElementById('modal-p-price').value) || 0;
+            const unit = document.getElementById('modal-p-unit').value;
+            const perUnit = parseInt(document.getElementById('modal-p-perunit').value, 10) || 1;
+            const stock = parseInt(document.getElementById('modal-p-stock').value, 10) || 0;
+            const supplier = document.getElementById('modal-p-supplier').value.trim();
+
+            const newId = "SKU-" + String(products.length + 1).padStart(3, '0');
+
+            products.unshift({
+                id: newId,
+                name,
+                category,
+                price,
+                unit,
+                perUnit,
+                stock,
+                supplier,
+                aliases: [name.toLowerCase()]
+            });
+
+            saveState();
+            renderInventoryTable();
+            renderPOSCatalog();
+            closeAddProductModal();
+            showToast(`Product ${name} created!`);
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            saveState();
+            renderInventoryTable();
+            renderPOSCatalog();
+            showToast("Product removed");
+        }
+
+        // ================= DASHBOARD & ANALYTICS =================
+        function updateDashboardMetrics() {
+            const totalRev = salesHistory.reduce((acc, order) => acc + order.grandTotal, 0);
+            const totalOrders = salesHistory.length;
+            const avgBill = totalOrders > 0 ? (totalRev / totalOrders) : 0;
+            const lowStockCount = products.filter(p => p.stock < 20).length;
+
+            document.getElementById('dash-revenue').innerText = `₹${totalRev.toFixed(2)}`;
+            document.getElementById('dash-orders').innerText = totalOrders;
+            document.getElementById('dash-avg-bill').innerText = `₹${avgBill.toFixed(2)}`;
+            document.getElementById('dash-low-stock').innerText = lowStockCount;
+
+            // Payment Methods Share
+            const cashSales = salesHistory.filter(s => s.paymentMethod === 'CASH').reduce((a, b) => a + b.grandTotal, 0);
+            const upiSales = salesHistory.filter(s => s.paymentMethod === 'UPI').reduce((a, b) => a + b.grandTotal, 0);
+            const cardSales = salesHistory.filter(s => s.paymentMethod === 'CARD').reduce((a, b) => a + b.grandTotal, 0);
+
+            const cashPct = totalRev > 0 ? (cashSales / totalRev) * 100 : 0;
+            const upiPct = totalRev > 0 ? (upiSales / totalRev) * 100 : 0;
+            const cardPct = totalRev > 0 ? (cardSales / totalRev) * 100 : 0;
+
+            document.getElementById('bar-cash-val').innerText = `₹${cashSales.toFixed(2)} (${cashPct.toFixed(0)}%)`;
+            document.getElementById('bar-cash-fill').style.width = `${cashPct}%`;
+
+            document.getElementById('bar-upi-val').innerText = `₹${upiSales.toFixed(2)} (${upiPct.toFixed(0)}%)`;
+            document.getElementById('bar-upi-fill').style.width = `${upiPct}%`;
+
+            document.getElementById('bar-card-val').innerText = `₹${cardSales.toFixed(2)} (${cardPct.toFixed(0)}%)`;
+            document.getElementById('bar-card-fill').style.width = `${cardPct}%`;
+
+            // Top Products
+            const productSalesMap = {};
+            salesHistory.forEach(order => {
+                order.items.forEach(item => {
+                    productSalesMap[item.name] = (productSalesMap[item.name] || 0) + item.qty;
+                });
+            });
+
+            const sortedProducts = Object.entries(productSalesMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const topList = document.getElementById('top-products-list');
+            topList.innerHTML = '';
+
+            if (sortedProducts.length === 0) {
+                topList.innerHTML = `<p class="text-xs text-slate-500 py-4 text-center">No sales recorded yet</p>`;
+            } else {
+                sortedProducts.forEach(([pName, qty]) => {
+                    const itemRow = document.createElement('div');
+                    itemRow.className = "flex items-center justify-between p-2 rounded-xl bg-slate-950/60 border border-slate-800 text-xs";
+                    itemRow.innerHTML = `
+                        <span class="font-bold text-white truncate">${pName}</span>
+                        <span class="font-mono px-2 py-0.5 rounded bg-brand-500/10 text-brand-400 font-bold">${qty} sold</span>
+                    `;
+                    topList.appendChild(itemRow);
+                });
+            }
+        }
+
+        // ================= INVOICES HISTORY TABLE =================
+        function renderInvoicesTable() {
+            const tbody = document.getElementById('invoices-table-body');
+            tbody.innerHTML = '';
+
+            if (salesHistory.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-slate-500 text-xs">No invoices generated yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            salesHistory.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors";
+
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-bold text-brand-400">${order.invoiceNo}</td>
+                    <td class="p-4 text-slate-400">${order.formattedDate}</td>
+                    <td class="p-4 font-mono">${order.items.length} items</td>
+                    <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] font-bold">${order.paymentMethod}</span></td>
+                    <td class="p-4 font-mono text-slate-400">₹${order.tax.toFixed(2)}</td>
+                    <td class="p-4 font-mono font-extrabold text-white">₹${order.grandTotal.toFixed(2)}</td>
+                    <td class="p-4 text-right">
+                        <button onclick='reprintInvoice("${order.invoiceNo}")' class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 inline-flex">
+                            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Reprint
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        function reprintInvoice(invoiceNo) {
+            const order = salesHistory.find(s => s.invoiceNo === invoiceNo);
+            if (order) {
+                openReceiptModal(order);
+            }
+        }
+
+        // UTILITY TOAST NOTIFICATIONS
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-slate-900 border-brand-500/50 text-white";
+            if (type === "warning") bgClass = "bg-slate-900 border-amber-500/50 text-amber-200";
+            if (type === "error") bgClass = "bg-slate-900 border-rose-500/50 text-rose-200";
+
+            toast.className = `p-3.5 rounded-xl border shadow-xl text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `
+                <i data-lucide="info" class="w-4 h-4 text-brand-400"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

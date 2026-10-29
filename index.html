@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THOLILALAR PATTASU KADAI, SELVALAKSHMI AGENCY - POS</title>
+    <title>THOLILALAR PATTASU KADAI, SELVALAKSHMI AGENCY - POS 2026</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -29,434 +29,520 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Bulletproof thermal print styling */
         @media print {
-            body > *:not(#printable-receipt) {
-                display: none !important;
-            }
-            #printable-receipt {
-                display: block !important;
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 80mm !important;
-                margin: 0 !important;
-                padding: 5px !important;
-                font-family: 'Courier New', Courier, monospace !important;
-                color: #000 !important;
-                background: #fff !important;
-                font-size: 11px !important;
-            }
-            #printable-receipt table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-            }
-            #printable-receipt th, #printable-receipt td {
-                padding: 2px 0 !important;
-            }
+            body * { visibility: hidden; }
+            #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
+            #receiptPrintArea { position: absolute; left: 0; top: 0; width: 100%; }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="bg-darkbg text-slate-100 min-h-screen font-sans flex flex-col">
 
-    <!-- Header Navigation -->
-    <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-30 backdrop-blur-md">
+    <!-- Header / Navbar -->
+    <header class="bg-cardbg border-b border-slate-700 sticky top-0 z-30 shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-rose-900/30">
-                    <span class="text-xl">💥</span>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center font-bold text-xl text-white shadow">
+                    💥
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold text-amber-400 tracking-wide uppercase leading-tight">THOLILALAR PATTASU KADAI</h1>
-                    <p class="text-xs text-slate-400">SELVALAKSHMI AGENCY • Peelamedu, Coimbatore - 641004</p>
+                    <h1 class="font-extrabold text-lg sm:text-xl text-amber-400 tracking-wide uppercase leading-tight">
+                        THOLILALAR PATTASU KADAI
+                    </h1>
+                    <p class="text-xs text-slate-300 font-medium">SELVALAKSHMI AGENCY • PEELAMEDU, COIMBATORE</p>
                 </div>
             </div>
-            
-            <div class="flex flex-wrap items-center gap-2">
-                <!-- Today's Sales Dashboard Button -->
-                <button onclick="openSalesReportModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow border border-emerald-400/30 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-line text-amber-300"></i> Today's Sales (இன்றைய விற்பனை)
+
+            <!-- Action Controls -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openInventoryModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm font-semibold rounded-lg text-slate-200 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-boxes-stacked text-amber-400"></i>
+                    <span>📦 இருப்பு (Stock)</span>
                 </button>
 
-                <!-- Inventory Management Button -->
-                <button onclick="openInventoryModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 font-semibold text-xs rounded-xl transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-boxes-stacked"></i> Inventory (இருப்பு)
+                <button onclick="openSalesModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm font-semibold rounded-lg text-slate-200 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                    <span>📊 விற்பனை (Sales)</span>
                 </button>
 
-                <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 hidden sm:inline-flex items-center">
-                    <i class="fa-solid fa-phone text-amber-400 mr-1.5"></i> 9894683113
-                </span>
+                <!-- Voice Lang Selector -->
+                <select id="voiceLangSelect" class="bg-slate-800 text-xs text-slate-200 border border-slate-600 rounded-lg px-2 py-1.5 focus:outline-none">
+                    <option value="ta-IN" selected>தமிழ் (ta-IN)</option>
+                    <option value="en-IN">English (en-IN)</option>
+                </select>
+
+                <!-- Voice Mic Button -->
+                <button id="micBtn" onclick="toggleVoiceRecognition()" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold rounded-lg transition flex items-center gap-1.5 shadow">
+                    <i id="micIcon" class="fa-solid fa-microphone"></i>
+                    <span id="micText" class="hidden sm:inline">Voice Bill</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main POS Body -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Voice Live Status Banner -->
+    <div id="voiceStatusBanner" class="hidden bg-amber-500/20 border-b border-amber-500/40 text-amber-300 px-4 py-2 text-xs sm:text-sm text-center font-medium">
+        <span id="voiceStatusText">🎤 Listening for Tamil / English voice commands...</span>
+    </div>
 
-        <!-- Left Column: Search & Product Catalog (7 cols) -->
-        <div class="lg:col-span-7 flex flex-col gap-4">
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
 
-            <!-- Quick Item Entry Bar -->
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-4 rounded-2xl border border-amber-500/30 shadow-xl">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Quick Item Number Entry (பொருள் எண் பில்லிங்)
-                    </label>
-                    <span class="text-[11px] text-slate-400">Type <code class="bg-slate-950 px-1.5 py-0.5 rounded text-amber-300">42</code> or <code class="bg-slate-950 px-1.5 py-0.5 rounded text-amber-300">42*3</code> & hit Enter</span>
-                </div>
-                <div class="flex gap-2">
-                    <div class="relative flex-1">
-                        <input type="text" id="quickItemInput" placeholder="Enter Item No (e.g. 1, 42, 124) or Item*Qty (e.g. 10*5)..." 
-                            class="w-full bg-slate-950 border border-slate-700 text-white font-mono placeholder-slate-500 text-base px-4 py-3 rounded-xl focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
-                            onkeydown="handleQuickItemKey(event)">
+        <!-- Left Column: Products & Search (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col space-y-3">
+
+            <!-- Search & Quick Entry Bar -->
+            <div class="bg-cardbg p-3 rounded-xl border border-slate-700 shadow-sm space-y-2">
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <!-- Quick Item Number Entry -->
+                    <div class="sm:col-span-5 relative">
+                        <input type="text" id="quickItemInput" onkeydown="handleQuickItemKey(event)" 
+                            placeholder="Type Item # (e.g., 42 or 42*5)..." 
+                            class="w-full bg-slate-800 text-slate-100 placeholder-slate-400 text-xs sm:text-sm px-3 py-2 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500">
+                        <button onclick="addQuickItem()" class="absolute right-1 top-1 bottom-1 px-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded transition">
+                            Add
+                        </button>
                     </div>
-                    <button onclick="addQuickItem()" class="px-5 py-3 bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg transition flex items-center gap-2">
-                        <i class="fa-solid fa-cart-plus"></i> Add
-                    </button>
-                </div>
-                <p id="quickFeedback" class="text-xs mt-1.5 h-4 font-medium transition"></p>
-            </div>
 
-            <!-- Search & Filters + Language Toggle -->
-            <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 flex flex-col sm:flex-row gap-3 items-center">
-                <div class="relative flex-1 w-full">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500"></i>
-                    <input type="text" id="searchInput" placeholder="Search item name, category, SKU, item number..." 
-                        class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm pl-10 pr-24 py-2.5 rounded-xl focus:outline-none focus:border-slate-600 transition"
-                        oninput="renderProducts()">
-                    
-                    <button onclick="toggleVoiceSearch()" id="micBtn" title="Voice Search / Voice Billing (Tamil / English)" class="absolute right-2 top-2 p-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-lg text-sm transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-microphone"></i> <span class="text-xs font-semibold">Voice</span>
-                    </button>
+                    <!-- Search Filter Input -->
+                    <div class="sm:col-span-7 relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="searchInput" oninput="renderProducts()" 
+                            placeholder="Search product name or SKU..." 
+                            class="w-full bg-slate-800 text-slate-100 placeholder-slate-400 text-xs sm:text-sm pl-8 pr-3 py-2 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500">
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <select id="voiceLangSelect" class="bg-slate-950 border border-slate-800 text-xs text-amber-300 py-2.5 px-2.5 rounded-xl focus:outline-none" title="Voice Language">
-                        <option value="ta-IN">🗣️ தமிழ் (Tamil)</option>
-                        <option value="en-IN">🗣️ English (India)</option>
-                    </select>
-
-                    <select id="categorySelect" onchange="renderProducts()" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs py-2.5 px-3 rounded-xl focus:outline-none w-full sm:w-auto">
+                <!-- Category Dropdown -->
+                <div class="flex items-center space-x-2">
+                    <label class="text-xs text-slate-400 font-medium whitespace-nowrap">Category:</label>
+                    <select id="categorySelect" onchange="renderProducts()" class="w-full bg-slate-800 text-slate-200 text-xs border border-slate-600 rounded-lg px-2 py-1.5 focus:outline-none">
                         <option value="ALL">All Categories</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Product Grid -->
-            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[520px] overflow-y-auto pr-1">
-                <!-- Product cards injected via JS -->
+            <!-- Custom / Other Item Entry Widget -->
+            <div class="bg-amber-950/30 border border-amber-500/40 p-3 rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>➕ Add Custom / Other Item (புதிய / பிற பொருள்)</span>
+                    </h3>
+                    <span class="text-[10px] text-amber-300/80">Type any unlisted price on the fly</span>
+                </div>
+                <div class="grid grid-cols-12 gap-2">
+                    <input type="text" id="customItemName" placeholder="Item Name (e.g. Special Box)" 
+                        class="col-span-6 bg-slate-800 text-slate-100 placeholder-slate-400 text-xs px-2.5 py-1.5 rounded border border-slate-600 focus:outline-none focus:border-amber-400">
+                    
+                    <input type="number" id="customItemPrice" placeholder="Price (₹)" min="1" 
+                        class="col-span-3 bg-slate-800 text-slate-100 placeholder-slate-400 text-xs px-2 py-1.5 rounded border border-slate-600 focus:outline-none focus:border-amber-400">
+                    
+                    <input type="number" id="customItemQty" placeholder="Qty" min="1" value="1" 
+                        class="col-span-1 bg-slate-800 text-slate-100 placeholder-slate-400 text-xs px-1.5 py-1.5 rounded border border-slate-600 text-center focus:outline-none focus:border-amber-400">
+                    
+                    <button onclick="addCustomItemToCart()" class="col-span-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded py-1.5 transition">
+                        Add
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <!-- Right Column: Active Cart & Billing (5 cols) -->
-        <div class="lg:col-span-5 flex flex-col">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col h-full shadow-2xl">
-                
-                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <div>
-                        <h2 class="font-bold text-slate-100 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-receipt text-rose-500"></i> Current Bill
-                        </h2>
-                        <p class="text-xs text-slate-400" id="billNoDisplay">Bill #TK-2026-1001</p>
-                    </div>
-                    <button onclick="clearCart()" class="text-xs text-rose-400 hover:text-rose-300 font-medium px-2 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 transition">
-                        <i class="fa-solid fa-trash-can mr-1"></i> Clear Cart
+            <!-- Products Cards Grid -->
+            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[480px] overflow-y-auto pr-1">
+                <!-- Dynamically Rendered Cards -->
+            </div>
+        </section>
+
+        <!-- Right Column: Active Bill & Checkout (5 Cols) -->
+        <section class="lg:col-span-5 flex flex-col bg-cardbg rounded-xl border border-slate-700 shadow-md overflow-hidden">
+            <!-- Cart Header -->
+            <div class="p-3 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-receipt text-amber-400"></i>
+                    <h2 class="font-bold text-sm sm:text-base text-slate-100">Active Bill (நடப்பு பில்)</h2>
+                </div>
+                <button onclick="clearCart()" class="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-trash-can"></i> Clear
+                </button>
+            </div>
+
+            <!-- Cart Items Table -->
+            <div class="flex-1 overflow-y-auto p-3 space-y-2 min-h-[260px] max-h-[380px]" id="cartItemsContainer">
+                <!-- Cart items dynamically added here -->
+            </div>
+
+            <!-- Bill Calculations Footer -->
+            <div class="p-3 bg-slate-800/90 border-t border-slate-700 space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Total Items:</span>
+                    <span id="cartCount" class="font-semibold text-slate-100">0</span>
+                </div>
+
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>GST (0% Tax Free):</span>
+                    <span class="font-semibold text-emerald-400">₹ 0.00</span>
+                </div>
+
+                <div class="flex justify-between text-base font-extrabold text-amber-400 pt-1 border-t border-slate-700">
+                    <span>Net Amount:</span>
+                    <span id="cartNetTotal">₹ 0.00</span>
+                </div>
+
+                <!-- Payment Options -->
+                <div class="grid grid-cols-3 gap-1.5 pt-1">
+                    <button onclick="selectPayment('CASH')" id="payCashBtn" class="pay-btn py-1.5 text-xs font-bold rounded-lg border border-slate-600 bg-emerald-600 text-white">
+                        💵 CASH
+                    </button>
+                    <button onclick="selectPayment('UPI')" id="payUpiBtn" class="pay-btn py-1.5 text-xs font-bold rounded-lg border border-slate-600 bg-slate-700 text-slate-300">
+                        📱 UPI/GPay
+                    </button>
+                    <button onclick="selectPayment('CARD')" id="payCardBtn" class="pay-btn py-1.5 text-xs font-bold rounded-lg border border-slate-600 bg-slate-700 text-slate-300">
+                        💳 CARD
                     </button>
                 </div>
 
-                <!-- Cart Items Table -->
-                <div class="flex-1 overflow-y-auto my-3 pr-1 min-h-[260px] max-h-[360px]">
-                    <table class="w-full text-left text-xs">
-                        <thead class="text-slate-400 border-b border-slate-800 sticky top-0 bg-slate-900">
-                            <tr>
-                                <th class="py-2">Item</th>
-                                <th class="py-2 text-center">Qty</th>
-                                <th class="py-2 text-right">Price</th>
-                                <th class="py-2 text-right">Total</th>
-                                <th class="py-2 text-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="cartTableBody" class="divide-y divide-slate-800/50">
-                            <!-- Injected by JS -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Bill Totals (NO GST) -->
-                <div class="pt-3 border-t border-slate-800 flex flex-col gap-2">
-                    <div class="flex justify-between text-xs text-slate-400">
-                        <span>Items Count:</span>
-                        <span id="cartCount" class="font-medium text-slate-200">0 items</span>
-                    </div>
-                    <div class="flex justify-between text-xs text-slate-400">
-                        <span>Subtotal:</span>
-                        <span id="subTotal" class="font-medium text-slate-200">₹0.00</span>
-                    </div>
-                    <div class="flex justify-between text-xs text-slate-400">
-                        <span>GST / Tax (0%):</span>
-                        <span class="font-medium text-emerald-400">₹0.00 (Non-GST)</span>
-                    </div>
-                    <div class="flex justify-between text-lg font-bold text-amber-400 pt-2 border-t border-slate-800/80">
-                        <span>Net Payable Amount:</span>
-                        <span id="grandTotal">₹0.00</span>
-                    </div>
-
-                    <!-- Payment Method & Checkout -->
-                    <div class="grid grid-cols-3 gap-2 mt-2">
-                        <button onclick="setPaymentMethod('CASH')" id="payCash" class="py-2 text-xs font-semibold rounded-lg bg-amber-500 text-slate-950 border border-amber-400 transition">Cash</button>
-                        <button onclick="setPaymentMethod('UPI')" id="payUPI" class="py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 border border-slate-700 transition">UPI / GPay</button>
-                        <button onclick="setPaymentMethod('CARD')" id="payCard" class="py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 border border-slate-700 transition">Card</button>
-                    </div>
-
-                    <button onclick="checkoutAndPrint()" class="w-full mt-2 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-base rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check-circle"></i> Complete Order & Print Bill
-                    </button>
-                </div>
-
+                <!-- Complete Checkout Button -->
+                <button onclick="checkoutOrder()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-lg shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>Complete Order & Print Bill</span>
+                </button>
             </div>
-        </div>
+        </section>
 
     </main>
 
-    <!-- Modal 1: TODAY'S SALES DASHBOARD (இன்றைய மொத்த விற்பனை) -->
-    <div id="salesReportModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div class="flex items-center gap-2 text-amber-400 font-bold text-lg">
-                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> Daily Sales Summary (இன்றைய விற்பனை அறிக்கை)
+    <!-- Printable Thermal Receipt Modal -->
+    <div id="receiptModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden">
+            <div id="receiptPrintArea" class="font-mono text-xs space-y-2 p-1">
+                <div class="text-center border-b border-dashed border-slate-400 pb-2">
+                    <h2 class="font-black text-sm uppercase">THOLILALAR PATTASU KADAI</h2>
+                    <p class="font-bold text-[11px]">SELVALAKSHMI AGENCY</p>
+                    <p class="text-[10px]">Avinashi Main Road, Peelamedu, Coimbatore - 641004</p>
+                    <p class="text-[10px]">Ph: 9894683113 / 8667010073</p>
                 </div>
-                <button onclick="closeSalesReportModal()" class="text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
 
-            <!-- Summary KPI Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-emerald-500/30 flex flex-col">
-                    <span class="text-[11px] text-slate-400 font-medium">Total Revenue Today</span>
-                    <span class="text-xl font-black text-emerald-400 mt-1" id="dashTotalSales">₹0.00</span>
+                <div class="flex justify-between text-[10px] py-1 border-b border-dashed border-slate-400">
+                    <span>Bill #: <b id="recBillNo">SL-1001</b></span>
+                    <span id="recDate">2026-10-29</span>
                 </div>
-                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-amber-500/30 flex flex-col">
-                    <span class="text-[11px] text-slate-400 font-medium">Cash Collected</span>
-                    <span class="text-lg font-bold text-amber-400 mt-1" id="dashCashSales">₹0.00</span>
-                </div>
-                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-cyan-500/30 flex flex-col">
-                    <span class="text-[11px] text-slate-400 font-medium">UPI / GPay</span>
-                    <span class="text-lg font-bold text-cyan-400 mt-1" id="dashUpiSales">₹0.00</span>
-                </div>
-                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-indigo-500/30 flex flex-col">
-                    <span class="text-[11px] text-slate-400 font-medium">Total Bills Issued</span>
-                    <span class="text-lg font-bold text-indigo-400 mt-1" id="dashBillsCount">0 Bills</span>
-                </div>
-            </div>
 
-            <!-- Detailed Sales History Table -->
-            <div class="flex flex-col gap-2">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-list-check text-amber-400"></i> Today's Transactions Log
-                </h3>
-                <div class="overflow-x-auto border border-slate-800 rounded-xl max-h-[300px]">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 sticky top-0">
-                            <tr>
-                                <th class="p-2.5">Bill No</th>
-                                <th class="p-2.5">Time</th>
-                                <th class="p-2.5">Payment</th>
-                                <th class="p-2.5">Items Summary</th>
-                                <th class="p-2.5 text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="salesHistoryTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40">
-                            <!-- Injected by JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between border-t border-slate-800 pt-3">
-                <button onclick="clearSalesHistory()" class="text-xs text-rose-400 hover:text-rose-300 font-medium px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 transition">
-                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Today's Register
-                </button>
-                <button onclick="closeSalesReportModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition">
-                    Close Summary
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 2: INVENTORY MANAGEMENT MODAL (சரக்கு இருப்பு விவரம்) -->
-    <div id="inventoryModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div>
-                    <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-boxes-stacked text-amber-500"></i> Stock & Inventory Details (சரக்கு இருப்பு விவரம்)
-                    </h2>
-                    <p class="text-xs text-slate-400">View current stock levels, update item stock quantities, and track stock value.</p>
-                </div>
-                <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
-            <!-- Inventory Search & Filter -->
-            <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
-                <input type="text" id="invSearchInput" placeholder="Filter inventory items..." 
-                    class="bg-slate-950 border border-slate-800 text-xs px-3.5 py-2 rounded-xl w-full sm:w-64 focus:outline-none focus:border-amber-400"
-                    oninput="renderInventoryTable()">
-                <div class="flex items-center gap-2">
-                    <span id="invTotalValue" class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-xl font-semibold">
-                        Total Stock Value: ₹0
-                    </span>
-                    <button onclick="resetDefaultStock()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition">
-                        Reset All Stock to 500
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stock Table -->
-            <div class="overflow-x-auto border border-slate-800 rounded-xl max-h-[420px]">
-                <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 sticky top-0">
-                        <tr>
-                            <th class="p-2.5">Item #</th>
-                            <th class="p-2.5">Product Name</th>
-                            <th class="p-2.5">Category</th>
-                            <th class="p-2.5 text-right">Price</th>
-                            <th class="p-2.5 text-center">Current Stock</th>
-                            <th class="p-2.5 text-center">Update Stock</th>
+                <table class="w-full text-left text-[11px]">
+                    <thead>
+                        <tr class="border-b border-slate-300">
+                            <th class="py-1">Item</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Total</th>
                         </tr>
                     </thead>
-                    <tbody id="inventoryTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40">
-                        <!-- Injected by JS -->
+                    <tbody id="recItemsTable">
+                        <!-- Print items -->
                     </tbody>
                 </table>
-            </div>
 
-            <div class="flex justify-end pt-2 border-t border-slate-800">
-                <button onclick="closeInventoryModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs">
-                    Close Inventory
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- On-Screen Invoice / Order Confirmation Modal -->
-    <div id="receiptModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div class="flex items-center gap-2 text-emerald-400 font-bold text-base">
-                    <i class="fa-solid fa-circle-check text-xl"></i> Order Completed!
-                </div>
-                <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="bg-white text-slate-900 p-4 rounded-xl font-mono text-xs shadow-inner">
-                <div class="text-center border-b border-dashed border-slate-400 pb-3 mb-3">
-                    <h3 class="font-bold text-sm uppercase">THOLILALAR PATTASU KADAI</h3>
-                    <p class="font-semibold text-slate-700">SELVALAKSHMI AGENCY</p>
-                    <p class="text-[10px] text-slate-600 mt-1">Peelamedu, Coimbatore - 641004</p>
-                    <p class="text-[10px] text-slate-600">Ph: 9894683113 / 8667010073</p>
-                </div>
-                <div class="flex justify-between text-[11px] mb-1">
-                    <span>Bill No: <strong id="mBillNo"></strong></span>
-                    <span id="mDate"></span>
-                </div>
-                <div class="text-[11px] mb-3">Payment: <strong id="mPayment">CASH</strong></div>
-
-                <table class="w-full text-left border-t border-b border-slate-300 py-1 my-1">
-                    <thead>
-                        <tr class="border-b border-slate-200">
-                            <th class="py-1">Item</th>
-                            <th class="text-center py-1">Qty</th>
-                            <th class="text-right py-1">Amt</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mTableBody" class="divide-y divide-slate-100"></tbody>
-                </table>
-
-                <div class="flex justify-between text-sm font-bold pt-2 border-t border-slate-800">
-                    <span>NET TOTAL:</span>
-                    <span id="mGrandTotal">₹0.00</span>
+                <div class="border-t border-dashed border-slate-400 pt-2 space-y-1 text-xs font-bold">
+                    <div class="flex justify-between">
+                        <span>Net Payable Amount:</span>
+                        <span id="recNetTotal">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-normal text-slate-700">
+                        <span>Payment Method:</span>
+                        <span id="recPaymentMethod">CASH</span>
+                    </div>
                 </div>
 
-                <div class="text-center text-[10px] text-slate-500 mt-4 pt-2 border-t border-dashed border-slate-300">
-                    <p class="font-bold text-slate-700">அனைவருக்கும் இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
+                <div class="text-center border-t border-dashed border-slate-400 pt-2 text-[10px]">
+                    <p>*** 0% TAX / NON-GST BILL ***</p>
+                    <p class="font-bold mt-1">இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
                     <p>Thank You! Visit Again!</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 pt-2">
-                <button onclick="triggerPrintFromModal()" class="py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-print"></i> Print Bill
+            <div class="mt-4 flex gap-2">
+                <button onclick="window.print()" class="flex-1 py-2 bg-blue-600 text-white font-bold text-xs rounded hover:bg-blue-700">
+                    🖨️ Print Receipt
                 </button>
-                <button onclick="closeReceiptModal()" class="py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-sm transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-plus"></i> Next Order
+                <button onclick="closeReceiptModal()" class="flex-1 py-2 bg-slate-300 text-slate-800 font-bold text-xs rounded hover:bg-slate-400">
+                    Close
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Hidden Printable Thermal Receipt Container for standard browser print -->
-    <div id="printable-receipt" style="display: none;">
-        <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 5px; margin-bottom: 5px;">
-            <h2 style="font-size: 14px; font-weight: bold; margin: 0;">THOLILALAR PATTASU KADAI</h2>
-            <h3 style="font-size: 11px; margin: 2px 0;">SELVALAKSHMI AGENCY</h3>
-            <p style="font-size: 9px; margin: 2px 0;">Peelamedu, Coimbatore - 641004</p>
-            <p style="font-size: 9px; margin: 2px 0;">Ph: 9894683113 / 8667010073</p>
-        </div>
-        <div style="font-size: 10px; margin-bottom: 5px;">
-            <div>Bill No: <span id="rBillNo"></span></div>
-            <div>Date: <span id="rDate"></span></div>
-            <div>Payment: <span id="rPayment"></span></div>
-        </div>
-        <table style="width: 100%; font-size: 10px; text-align: left; border-collapse: collapse;">
-            <thead>
-                <tr style="border-bottom: 1px solid #000; border-top: 1px solid #000;">
-                    <th>#</th>
-                    <th>Item</th>
-                    <th style="text-align: center;">Qty</th>
-                    <th style="text-align: right;">Rate</th>
-                    <th style="text-align: right;">Amt</th>
-                </tr>
-            </thead>
-            <tbody id="rTableBody"></tbody>
-        </table>
-        <div style="border-top: 1px dashed #000; margin-top: 5px; padding-top: 4px; font-size: 11px; font-weight: bold;">
-            <div style="display: flex; justify-content: space-between;">
-                <span>TOTAL AMOUNT:</span>
-                <span id="rGrandTotal"></span>
+    <!-- Inventory Stock Management Modal -->
+    <div id="inventoryModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-700">
+                <h3 class="font-bold text-base text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Inventory & Stock Management (இருப்பு விவரம்)</span>
+                </h3>
+                <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 10px; font-size: 9px; border-top: 1px solid #000; padding-top: 5px;">
-            <p style="margin: 2px 0; font-weight: bold;">அனைவருக்கும் இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
-            <p style="margin: 2px 0;">Thank You! Visit Again!</p>
+
+            <div class="py-2">
+                <input type="text" id="invSearchInput" oninput="renderInventoryTable()" placeholder="Search stock item..." 
+                    class="w-full bg-slate-800 text-slate-100 placeholder-slate-400 text-xs px-3 py-2 rounded-lg border border-slate-600 focus:outline-none">
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-800 text-slate-200 sticky top-0">
+                        <tr>
+                            <th class="p-2">#</th>
+                            <th class="p-2">Product Name</th>
+                            <th class="p-2">Price</th>
+                            <th class="p-2 text-center">Current Stock</th>
+                            <th class="p-2 text-right">Update</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody" class="divide-y divide-slate-700">
+                        <!-- Inventory rows -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <!-- Embedded Products Data & JS Logic -->
+    <!-- Today's Sales Dashboard Modal -->
+    <div id="salesModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-700">
+                <h3 class="font-bold text-base text-emerald-400 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Today's Sales Summary (இன்றைய விற்பனை)</span>
+                </h3>
+                <button onclick="closeSalesModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-2 my-3">
+                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Total Revenue</div>
+                    <div id="salesTotalRev" class="text-base font-black text-amber-400">₹0</div>
+                </div>
+                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Cash Collected</div>
+                    <div id="salesCashRev" class="text-base font-black text-emerald-400">₹0</div>
+                </div>
+                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">UPI / Online</div>
+                    <div id="salesUpiRev" class="text-base font-black text-cyan-400">₹0</div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-800 text-slate-200 sticky top-0">
+                        <tr>
+                            <th class="p-2">Bill #</th>
+                            <th class="p-2">Time</th>
+                            <th class="p-2">Pay</th>
+                            <th class="p-2 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTableBody" class="divide-y divide-slate-700">
+                        <!-- Sales logs -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic & Complete 2026 Price List Data -->
     <script>
-        const INITIAL_PRODUCTS = [{"id": 1, "itemNo": 1, "sku": "SKU-001", "name": "ST RED BIJILI", "category": "SOUND CRACKERS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST RED BIJILI"}, {"id": 2, "itemNo": 2, "sku": "SKU-002", "name": "ST 100 MICRO", "category": "SOUND CRACKERS", "price": 130.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 100 MICRO"}, {"id": 3, "itemNo": 3, "sku": "SKU-003", "name": "ST 1K", "category": "SOUND CRACKERS", "price": 800.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 1K"}, {"id": 4, "itemNo": 4, "sku": "SKU-004", "name": "ST 2K", "category": "SOUND CRACKERS", "price": 1500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 2K"}, {"id": 5, "itemNo": 5, "sku": "SKU-005", "name": "ST FLOWER POTS SMALL", "category": "SOUND CRACKERS", "price": 115.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST FLOWER POTS SMALL"}, {"id": 6, "itemNo": 6, "sku": "SKU-006", "name": "ST FLOWER POTS SPECIAL", "category": "SOUND CRACKERS", "price": 280.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST FLOWER POTS SPECIAL"}, {"id": 7, "itemNo": 7, "sku": "SKU-007", "name": "ST FLOWER POTS DELUXE", "category": "CHORSA & GARLANDS", "price": 380.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST FLOWER POTS DELUXE"}, {"id": 8, "itemNo": 8, "sku": "SKU-008", "name": "ST CHAVI ZAMIN CHAKKAR BIG", "category": "CHORSA & GARLANDS", "price": 65.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST CHAVI ZAMIN CHAKKAR BIG"}, {"id": 9, "itemNo": 9, "sku": "SKU-009", "name": "ST CHAVI ZAMIN CHAKKAR ASHOKA", "category": "CHORSA & GARLANDS", "price": 140.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST CHAVI ZAMIN CHAKKAR ASHOKA"}, {"id": 10, "itemNo": 10, "sku": "SKU-010", "name": "ST CHAVI ZAMIN CHAKKAR DELUXE", "category": "CHORSA & GARLANDS", "price": 290.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST CHAVI ZAMIN CHAKKAR DELUXE"}, {"id": 11, "itemNo": 11, "sku": "SKU-011", "name": "ST 45CM TWINKLING STAR", "category": "CHORSA & GARLANDS", "price": 75.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 45CM TWINKLING STAR"}, {"id": 12, "itemNo": 12, "sku": "SKU-012", "name": "ST 120 CM TWINKLING STAR", "category": "CHORSA & GARLANDS", "price": 240.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 120 CM TWINKLING STAR"}, {"id": 13, "itemNo": 13, "sku": "SKU-013", "name": "ST MULTI COLOUR CANDLE", "category": "CHORSA & GARLANDS", "price": 150.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST MULTI COLOUR CANDLE"}, {"id": 14, "itemNo": 14, "sku": "SKU-014", "name": "ST 30 COM GOLD SPARKLER", "category": "CHORSA & GARLANDS", "price": 110.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 30 COM GOLD SPARKLER"}, {"id": 15, "itemNo": 15, "sku": "SKU-015", "name": "ST 30CM COLOUR", "category": "FLOWER POTS", "price": 120.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST 30CM COLOUR"}, {"id": 16, "itemNo": 16, "sku": "SKU-016", "name": "2\" COMET(MIX)", "category": "FLOWER POTS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "2\" COMET(MIX)"}, {"id": 17, "itemNo": 17, "sku": "SKU-017", "name": "RAINBOW THUNDER 12 SHOT", "category": "FLOWER POTS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "RAINBOW THUNDER 12 SHOT"}, {"id": 18, "itemNo": 18, "sku": "SKU-018", "name": "30 SHOT", "category": "FLOWER POTS", "price": 1100.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30 SHOT"}, {"id": 19, "itemNo": 19, "sku": "SKU-019", "name": "60 SHOT", "category": "FLOWER POTS", "price": 1800.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "60 SHOT"}, {"id": 20, "itemNo": 20, "sku": "SKU-020", "name": "120 SHOT", "category": "FLOWER POTS", "price": 3000.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "120 SHOT"}, {"id": 21, "itemNo": 21, "sku": "SKU-021", "name": "240 SHOT", "category": "FLOWER POTS", "price": 6800.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "240 SHOT"}, {"id": 22, "itemNo": 22, "sku": "SKU-022", "name": "ST FAT BOY PAPER BOMB", "category": "FLOWER POTS", "price": 110.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST FAT BOY PAPER BOMB"}, {"id": 23, "itemNo": 23, "sku": "SKU-023", "name": "ST TUK OF WAR", "category": "FLOWER POTS", "price": 200.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST TUK OF WAR"}, {"id": 24, "itemNo": 24, "sku": "SKU-024", "name": "ST COLOUR CHANGING BUTTERFLY", "category": "FLOWER POTS", "price": 310.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST COLOUR CHANGING BUTTERFLY"}, {"id": 25, "itemNo": 25, "sku": "SKU-025", "name": "ST MINE OF CRACKERS", "category": "GROUND CHAKKARS", "price": 420.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST MINE OF CRACKERS"}, {"id": 26, "itemNo": 26, "sku": "SKU-026", "name": "ST CUCKOO", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST CUCKOO"}, {"id": 27, "itemNo": 27, "sku": "SKU-027", "name": "ST DOLLAR WHEEL", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST DOLLAR WHEEL"}, {"id": 28, "itemNo": 28, "sku": "SKU-028", "name": "ST CRACKLING CANDY", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST CRACKLING CANDY"}, {"id": 29, "itemNo": 29, "sku": "SKU-029", "name": "ST POKER WHEEL", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST POKER WHEEL"}, {"id": 30, "itemNo": 30, "sku": "SKU-030", "name": "ST MONEY PENNY", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST MONEY PENNY"}, {"id": 31, "itemNo": 31, "sku": "SKU-031", "name": "ST SWASTIC WHEEL", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST SWASTIC WHEEL"}, {"id": 32, "itemNo": 32, "sku": "SKU-032", "name": "ST JIL JUNG JUK", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST JIL JUNG JUK"}, {"id": 33, "itemNo": 33, "sku": "SKU-033", "name": "ST GOLD RUSH", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST GOLD RUSH"}, {"id": 34, "itemNo": 34, "sku": "SKU-034", "name": "ST SUNDROPS", "category": "GROUND CHAKKARS", "price": 430.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST SUNDROPS"}, {"id": 35, "itemNo": 35, "sku": "SKU-035", "name": "ST JIL JUNG JUK", "category": "BOMBS & SOUNDS", "price": 450.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST JIL JUNG JUK"}, {"id": 36, "itemNo": 36, "sku": "SKU-036", "name": "ST ARIEL OUT", "category": "BOMBS & SOUNDS", "price": 460.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ST ARIEL OUT"}, {"id": 37, "itemNo": 37, "sku": "SKU-037", "name": "FLOWER POTS SPECIAL", "category": "BOMBS & SOUNDS", "price": 190.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FLOWER POTS SPECIAL"}, {"id": 38, "itemNo": 38, "sku": "SKU-038", "name": "FLOWER POTS ASHOKA/GAINT", "category": "BOMBS & SOUNDS", "price": 280.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FLOWER POTS ASHOKA/GAINT"}, {"id": 39, "itemNo": 39, "sku": "SKU-039", "name": "FLOWER POTS DELUXE 5 PCS", "category": "BOMBS & SOUNDS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FLOWER POTS DELUXE 5 PCS"}, {"id": 40, "itemNo": 40, "sku": "SKU-040", "name": "FLOWER POTS SUPER 2 PCS", "category": "BOMBS & SOUNDS", "price": 180.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FLOWER POTS SUPER 2 PCS"}, {"id": 41, "itemNo": 41, "sku": "SKU-041", "name": "COLOUR KOTI", "category": "BOMBS & SOUNDS", "price": 360.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "COLOUR KOTI"}, {"id": 42, "itemNo": 42, "sku": "SKU-042", "name": "BABY ROCKET", "category": "ROCKETS", "price": 60.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "BABY ROCKET"}, {"id": 43, "itemNo": 43, "sku": "SKU-043", "name": "ROCKET BOMB", "category": "ROCKETS", "price": 110.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ROCKET BOMB"}, {"id": 44, "itemNo": 44, "sku": "SKU-044", "name": "COLOUR ROCKET", "category": "ROCKETS", "price": 110.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "COLOUR ROCKET"}, {"id": 45, "itemNo": 45, "sku": "SKU-045", "name": "LUNIC ROCKET", "category": "ROCKETS", "price": 240.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "LUNIC ROCKET"}, {"id": 46, "itemNo": 46, "sku": "SKU-046", "name": "1½\" TWINKLING STAR", "category": "TWINKLING STARS & PENCILS", "price": 50.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "1½\" TWINKLING STAR"}, {"id": 47, "itemNo": 47, "sku": "SKU-047", "name": "4\" TWINKLING STAR", "category": "TWINKLING STARS & PENCILS", "price": 130.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "4\" TWINKLING STAR"}, {"id": 48, "itemNo": 48, "sku": "SKU-048", "name": "10\" PENCIL", "category": "TWINKLING STARS & PENCILS", "price": 120.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10\" PENCIL"}, {"id": 49, "itemNo": 49, "sku": "SKU-049", "name": "1 3/4\" FANCY SHOT(3PCS)", "category": "TWINKLING STARS & PENCILS", "price": 480.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "1 3/4\" FANCY SHOT(3PCS)"}, {"id": 50, "itemNo": 50, "sku": "SKU-050", "name": "2\" SINGLE FANCY SHOT", "category": "TWINKLING STARS & PENCILS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "2\" SINGLE FANCY SHOT"}, {"id": 51, "itemNo": 51, "sku": "SKU-051", "name": "2 1/2 \" FANCY SHOT (2 PCS)", "category": "TWINKLING STARS & PENCILS", "price": 400.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "2 1/2 \" FANCY SHOT (2 PCS)"}, {"id": 52, "itemNo": 52, "sku": "SKU-052", "name": "3 1/2 \" FANCY SHOT(1 PCS)", "category": "TWINKLING STARS & PENCILS", "price": 700.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "3 1/2 \" FANCY SHOT(1 PCS)"}, {"id": 53, "itemNo": 53, "sku": "SKU-053", "name": "74MM FANCY SHOT(1 PCS)", "category": "TWINKLING STARS & PENCILS", "price": 800.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "74MM FANCY SHOT(1 PCS)"}, {"id": 54, "itemNo": 54, "sku": "SKU-054", "name": "7 SHOT", "category": "TWINKLING STARS & PENCILS", "price": 160.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "7 SHOT"}, {"id": 55, "itemNo": 55, "sku": "SKU-055", "name": "12 SHOT", "category": "FANCY & NOVELTY SHOTS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "12 SHOT"}, {"id": 56, "itemNo": 56, "sku": "SKU-056", "name": "15 SHOT", "category": "FANCY & NOVELTY SHOTS", "price": 400.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "15 SHOT"}, {"id": 57, "itemNo": 57, "sku": "SKU-057", "name": "30 SHOT COLOUR", "category": "FANCY & NOVELTY SHOTS", "price": 700.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30 SHOT COLOUR"}, {"id": 58, "itemNo": 58, "sku": "SKU-058", "name": "60 SHOT", "category": "FANCY & NOVELTY SHOTS", "price": 1500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "60 SHOT"}, {"id": 59, "itemNo": 59, "sku": "SKU-059", "name": "120SHOT", "category": "FANCY & NOVELTY SHOTS", "price": 3000.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "120SHOT"}, {"id": 60, "itemNo": 60, "sku": "SKU-060", "name": "240 SHOT", "category": "FANCY & NOVELTY SHOTS", "price": 6000.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "240 SHOT"}, {"id": 61, "itemNo": 61, "sku": "SKU-061", "name": "10CM ELECTRIC", "category": "FANCY & NOVELTY SHOTS", "price": 30.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10CM ELECTRIC"}, {"id": 62, "itemNo": 62, "sku": "SKU-062", "name": "10 CM COLOUR", "category": "FANCY & NOVELTY SHOTS", "price": 40.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10 CM COLOUR"}, {"id": 63, "itemNo": 63, "sku": "SKU-063", "name": "10CM  GREEN", "category": "FANCY & NOVELTY SHOTS", "price": 40.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10CM  GREEN"}, {"id": 64, "itemNo": 64, "sku": "SKU-064", "name": "10CM  RED", "category": "FANCY & NOVELTY SHOTS", "price": 40.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10CM  RED"}, {"id": 65, "itemNo": 65, "sku": "SKU-065", "name": "12CM ELECTRIC", "category": "FANCY & NOVELTY SHOTS", "price": 50.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "12CM ELECTRIC"}, {"id": 66, "itemNo": 66, "sku": "SKU-066", "name": "12 CM COLOUR", "category": "FANCY & NOVELTY SHOTS", "price": 55.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "12 CM COLOUR"}, {"id": 67, "itemNo": 67, "sku": "SKU-067", "name": "12CM  GREEN", "category": "FANCY & NOVELTY SHOTS", "price": 60.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "12CM  GREEN"}, {"id": 68, "itemNo": 68, "sku": "SKU-068", "name": "12CM  RED", "category": "FANCY & NOVELTY SHOTS", "price": 60.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "12CM  RED"}, {"id": 69, "itemNo": 69, "sku": "SKU-069", "name": "15CM ELECTRIC", "category": "FANCY & NOVELTY SHOTS", "price": 80.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "15CM ELECTRIC"}, {"id": 70, "itemNo": 70, "sku": "SKU-070", "name": "15 CM COLOUR", "category": "FANCY & NOVELTY SHOTS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "15 CM COLOUR"}, {"id": 71, "itemNo": 71, "sku": "SKU-071", "name": "15CM  GREEN", "category": "FANCY & NOVELTY SHOTS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "15CM  GREEN"}, {"id": 72, "itemNo": 72, "sku": "SKU-072", "name": "15CM  RED", "category": "FANCY & NOVELTY SHOTS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "15CM  RED"}, {"id": 73, "itemNo": 73, "sku": "SKU-073", "name": "30CM ELECTRIC 5 pcs", "category": "FANCY & NOVELTY SHOTS", "price": 60.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30CM ELECTRIC 5 pcs"}, {"id": 74, "itemNo": 74, "sku": "SKU-074", "name": "30CM COLOUR 5 pcs", "category": "FANCY & NOVELTY SHOTS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30CM COLOUR 5 pcs"}, {"id": 75, "itemNo": 75, "sku": "SKU-075", "name": "30CM  GREEN", "category": "SPARKLERS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30CM  GREEN"}, {"id": 76, "itemNo": 76, "sku": "SKU-076", "name": "30CM  RED", "category": "SPARKLERS", "price": 90.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "30CM  RED"}, {"id": 77, "itemNo": 77, "sku": "SKU-077", "name": "50CM ELECTRIC 5 pcs", "category": "SPARKLERS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "50CM ELECTRIC 5 pcs"}, {"id": 78, "itemNo": 78, "sku": "SKU-078", "name": "50CM COLOUR 5 pcs", "category": "SPARKLERS", "price": 330.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "50CM COLOUR 5 pcs"}, {"id": 79, "itemNo": 79, "sku": "SKU-079", "name": "75CM ELECTRIC 5 pcs", "category": "SPARKLERS", "price": 450.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "75CM ELECTRIC 5 pcs"}, {"id": 80, "itemNo": 80, "sku": "SKU-080", "name": "75CM COLOUR 5 pcs", "category": "SPARKLERS", "price": 500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "75CM COLOUR 5 pcs"}, {"id": 81, "itemNo": 81, "sku": "SKU-081", "name": "ADIYAL 1/4 KG", "category": "SPARKLERS", "price": 110.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ADIYAL 1/4 KG"}, {"id": 82, "itemNo": 82, "sku": "SKU-082", "name": "ADIYAL 1/2 KG", "category": "SPARKLERS", "price": 200.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ADIYAL 1/2 KG"}, {"id": 83, "itemNo": 83, "sku": "SKU-083", "name": "ADIYAL 1KG", "category": "SPARKLERS", "price": 410.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ADIYAL 1KG"}, {"id": 84, "itemNo": 84, "sku": "SKU-084", "name": "TOYS CARTOON BOX(10", "category": "SPARKLERS", "price": 50.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "TOYS CARTOON BOX(10"}, {"id": 85, "itemNo": 85, "sku": "SKU-085", "name": "GANAGA JAMUNA (5 PCS)", "category": "SPARKLERS", "price": 160.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "GANAGA JAMUNA (5 PCS)"}, {"id": 86, "itemNo": 86, "sku": "SKU-086", "name": "TIN BEER", "category": "SPARKLERS", "price": 160.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "TIN BEER"}, {"id": 87, "itemNo": 87, "sku": "SKU-087", "name": "BUTTERFLY/PAMBARAM", "category": "SPARKLERS", "price": 200.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "BUTTERFLY/PAMBARAM"}, {"id": 88, "itemNo": 88, "sku": "SKU-088", "name": "SOCIAL MEDIA", "category": "SPARKLERS", "price": 220.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SOCIAL MEDIA"}, {"id": 89, "itemNo": 89, "sku": "SKU-089", "name": "SPLASH LIGHT", "category": "SPARKLERS", "price": 220.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SPLASH LIGHT"}, {"id": 90, "itemNo": 90, "sku": "SKU-090", "name": "GIPSY", "category": "SPARKLERS", "price": 220.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "GIPSY"}, {"id": 91, "itemNo": 91, "sku": "SKU-091", "name": "SMOKE", "category": "SPARKLERS", "price": 250.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SMOKE"}, {"id": 92, "itemNo": 92, "sku": "SKU-092", "name": "NAYAGARA PENCIL", "category": "SPARKLERS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "NAYAGARA PENCIL"}, {"id": 93, "itemNo": 93, "sku": "SKU-093", "name": "FOX STAR", "category": "SPARKLERS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FOX STAR"}, {"id": 94, "itemNo": 94, "sku": "SKU-094", "name": "MIAMI RED", "category": "SPARKLERS", "price": 320.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "MIAMI RED"}, {"id": 95, "itemNo": 95, "sku": "SKU-095", "name": "SPARSHA GREEN", "category": "KIDS SPECIAL & MATCHES", "price": 320.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SPARSHA GREEN"}, {"id": 96, "itemNo": 96, "sku": "SKU-096", "name": "KURKURE", "category": "KIDS SPECIAL & MATCHES", "price": 320.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "KURKURE"}, {"id": 97, "itemNo": 97, "sku": "SKU-097", "name": "SMALL PEACOCK", "category": "KIDS SPECIAL & MATCHES", "price": 330.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SMALL PEACOCK"}, {"id": 98, "itemNo": 98, "sku": "SKU-098", "name": "SING POP", "category": "KIDS SPECIAL & MATCHES", "price": 350.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SING POP"}, {"id": 99, "itemNo": 99, "sku": "SKU-099", "name": "COLOUR SONG", "category": "KIDS SPECIAL & MATCHES", "price": 360.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "COLOUR SONG"}, {"id": 100, "itemNo": 100, "sku": "SKU-100", "name": "MITICO", "category": "KIDS SPECIAL & MATCHES", "price": 370.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "MITICO"}, {"id": 101, "itemNo": 101, "sku": "SKU-101", "name": "TOYGUN", "category": "KIDS SPECIAL & MATCHES", "price": 400.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "TOYGUN"}, {"id": 102, "itemNo": 102, "sku": "SKU-102", "name": "4 IN 1 ANDROID", "category": "KIDS SPECIAL & MATCHES", "price": 400.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "4 IN 1 ANDROID"}, {"id": 103, "itemNo": 103, "sku": "SKU-103", "name": "HAPPY DINOSAUR", "category": "KIDS SPECIAL & MATCHES", "price": 450.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "HAPPY DINOSAUR"}, {"id": 104, "itemNo": 104, "sku": "SKU-104", "name": "HAPPY MONKEY", "category": "KIDS SPECIAL & MATCHES", "price": 450.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "HAPPY MONKEY"}, {"id": 105, "itemNo": 105, "sku": "SKU-105", "name": "IPL", "category": "KIDS SPECIAL & MATCHES", "price": 500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "IPL"}, {"id": 106, "itemNo": 106, "sku": "SKU-106", "name": "RAAVAN", "category": "KIDS SPECIAL & MATCHES", "price": 500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "RAAVAN"}, {"id": 107, "itemNo": 107, "sku": "SKU-107", "name": "FRUITS FLOWERPOTS", "category": "KIDS SPECIAL & MATCHES", "price": 500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "FRUITS FLOWERPOTS"}, {"id": 108, "itemNo": 108, "sku": "SKU-108", "name": "BADA PEACOCK", "category": "KIDS SPECIAL & MATCHES", "price": 600.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "BADA PEACOCK"}, {"id": 109, "itemNo": 109, "sku": "SKU-109", "name": "CAR BIG", "category": "KIDS SPECIAL & MATCHES", "price": 820.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "CAR BIG"}, {"id": 110, "itemNo": 110, "sku": "SKU-110", "name": "CRAZY WHEEL", "category": "KIDS SPECIAL & MATCHES", "price": 880.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "CRAZY WHEEL"}, {"id": 111, "itemNo": 111, "sku": "SKU-111", "name": "CANDY WHEEL", "category": "KIDS SPECIAL & MATCHES", "price": 880.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "CANDY WHEEL"}, {"id": 112, "itemNo": 112, "sku": "SKU-112", "name": "GRAND SALAM", "category": "KIDS SPECIAL & MATCHES", "price": 880.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "GRAND SALAM"}, {"id": 113, "itemNo": 113, "sku": "SKU-113", "name": "ROLL CAPS", "category": "KIDS SPECIAL & MATCHES", "price": 120.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ROLL CAPS"}, {"id": 114, "itemNo": 114, "sku": "SKU-114", "name": "SNAKE TABLATS SMALL", "category": "KIDS SPECIAL & MATCHES", "price": 30.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SNAKE TABLATS SMALL"}, {"id": 115, "itemNo": 115, "sku": "SKU-115", "name": "RED GREEN MATCHES ORD(10NO)", "category": "GIFT BOXES & COMBO PACKS", "price": 20.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "RED GREEN MATCHES ORD(10NO)"}, {"id": 116, "itemNo": 116, "sku": "SKU-116", "name": "JILJIL MATCH(10NO)", "category": "GIFT BOXES & COMBO PACKS", "price": 40.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "JILJIL MATCH(10NO)"}, {"id": 117, "itemNo": 117, "sku": "SKU-117", "name": "MINIDELUXE MATCH(10NO)", "category": "GIFT BOXES & COMBO PACKS", "price": 45.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "MINIDELUXE MATCH(10NO)"}, {"id": 118, "itemNo": 118, "sku": "SKU-118", "name": "HOLY BABA MATCH (10NO)", "category": "GIFT BOXES & COMBO PACKS", "price": 60.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "HOLY BABA MATCH (10NO)"}, {"id": 119, "itemNo": 119, "sku": "SKU-119", "name": "MATRIX MATCH(10NO)", "category": "GIFT BOXES & COMBO PACKS", "price": 80.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "MATRIX MATCH(10NO)"}, {"id": 120, "itemNo": 120, "sku": "SKU-120", "name": "BLOOMS", "category": "GIFT BOXES & COMBO PACKS", "price": 140.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "BLOOMS"}, {"id": 121, "itemNo": 121, "sku": "SKU-121", "name": "SUPER 6", "category": "GIFT BOXES & COMBO PACKS", "price": 130.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "SUPER 6"}, {"id": 122, "itemNo": 122, "sku": "SKU-122", "name": "10 IN 1", "category": "GIFT BOXES & COMBO PACKS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "10 IN 1"}, {"id": 123, "itemNo": 123, "sku": "SKU-123", "name": "NOKIO", "category": "GIFT BOXES & COMBO PACKS", "price": 300.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "NOKIO"}, {"id": 124, "itemNo": 124, "sku": "SKU-124", "name": "GANESH                                      16 items", "category": "GIFT BOXES & COMBO PACKS", "price": 360.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "GANESH                                      16 items"}, {"id": 125, "itemNo": 125, "sku": "SKU-125", "name": "TREAT                                          20 items", "category": "GIFT BOXES & COMBO PACKS", "price": 450.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "TREAT                                          20 items"}, {"id": 126, "itemNo": 126, "sku": "SKU-126", "name": "ESCORT                                       30 items", "category": "GIFT BOXES & COMBO PACKS", "price": 1000.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "ESCORT                                       30 items"}, {"id": 127, "itemNo": 127, "sku": "SKU-127", "name": "KGF                                              36 items", "category": "GIFT BOXES & COMBO PACKS", "price": 800.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "KGF                                              36 items"}, {"id": 128, "itemNo": 128, "sku": "SKU-128", "name": "PUBG                                           41 items", "category": "GIFT BOXES & COMBO PACKS", "price": 900.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "PUBG                                           41 items"}, {"id": 129, "itemNo": 129, "sku": "SKU-129", "name": "BIG BOSS                                    51 Items", "category": "GIFT BOXES & COMBO PACKS", "price": 1500.0, "stock": 500, "unit": "BOX", "perUnit": 1, "brand": "SELVALAKSHMI AGENCY", "voiceAlias": "BIG BOSS                                    51 Items"}];
+        // NEW 2026 CATALOG (173 ITEMS)
+        const NEW_2026_PRODUCTS = [
+            {"id":1,"itemNo":1,"displaySno":"1","sku":"SKU-001","name":"2 ¾\" BIRD","category":"FLASH SOUND CRACKERS","price":15,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":2,"itemNo":2,"displaySno":"2","sku":"SKU-002","name":"3 ½\" CRACKERS LAKSHMI","category":"FLASH SOUND CRACKERS","price":25,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":3,"itemNo":3,"displaySno":"3","sku":"SKU-003","name":"4\" LAXMI","category":"FLASH SOUND CRACKERS","price":35,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":4,"itemNo":4,"displaySno":"4","sku":"SKU-004","name":"4\" DELUXE LAKSHMI","category":"FLASH SOUND CRACKERS","price":65,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":5,"itemNo":5,"displaySno":"5","sku":"SKU-005","name":"4\" GOLD LAKSHMI","category":"FLASH SOUND CRACKERS","price":70,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":6,"itemNo":6,"displaySno":"6","sku":"SKU-006","name":"5\" KOMBEN","category":"FLASH SOUND CRACKERS","price":70,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":7,"itemNo":7,"displaySno":"7","sku":"SKU-007","name":"TWO SOUND CRACKERS","category":"FLASH SOUND CRACKERS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":8,"itemNo":8,"displaySno":"8","sku":"SKU-008","name":"28 CHORSA","category":"CHORSA,GAINT,DELUX CRACKERS","price":35,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":9,"itemNo":9,"displaySno":"9","sku":"SKU-009","name":"56 CHORSA","category":"CHORSA,GAINT,DELUX CRACKERS","price":65,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":10,"itemNo":10,"displaySno":"10","sku":"SKU-010","name":"24 DELUXE CRACKERS","category":"CHORSA,GAINT,DELUX CRACKERS","price":100,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":11,"itemNo":11,"displaySno":"11","sku":"SKU-011","name":"50 DELUXE CRACKERS","category":"CHORSA,GAINT,DELUX CRACKERS","price":230,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":12,"itemNo":12,"displaySno":"12","sku":"SKU-012","name":"100 DELTA DELUXE CRACKERS","category":"CHORSA,GAINT,DELUX CRACKERS","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":13,"itemNo":13,"displaySno":"13","sku":"SKU-013","name":"100 WALA","category":"HAPPY CRACKERS","price":80,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":14,"itemNo":14,"displaySno":"14","sku":"SKU-014","name":"200 WALA","category":"HAPPY CRACKERS","price":160,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":15,"itemNo":15,"displaySno":"15","sku":"SKU-015","name":"300 WALA","category":"HAPPY CRACKERS","price":320,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":16,"itemNo":16,"displaySno":"16","sku":"SKU-016","name":"600 WALA","category":"HAPPY CRACKERS","price":480,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":17,"itemNo":17,"displaySno":"17","sku":"SKU-017","name":"1000 WALA","category":"HAPPY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":18,"itemNo":18,"displaySno":"18","sku":"SKU-018","name":"1000 WALA SK","category":"HAPPY CRACKERS","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":19,"itemNo":19,"displaySno":"19","sku":"SKU-019","name":"2000 WALA","category":"HAPPY CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":20,"itemNo":20,"displaySno":"20","sku":"SKU-020","name":"2000 WALA SK","category":"HAPPY CRACKERS","price":1200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":21,"itemNo":21,"displaySno":"21","sku":"SKU-021","name":"5000 WALA","category":"HAPPY CRACKERS","price":2000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":22,"itemNo":22,"displaySno":"22","sku":"SKU-022","name":"5000 WALA SK","category":"HAPPY CRACKERS","price":3000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":23,"itemNo":23,"displaySno":"23","sku":"SKU-023","name":"10000 WALA","category":"HAPPY CRACKERS","price":4000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":24,"itemNo":24,"displaySno":"24","sku":"SKU-024","name":"10000 WALA SK","category":"HAPPY CRACKERS","price":6000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":25,"itemNo":25,"displaySno":"25","sku":"SKU-025","name":"BULLET BOMB","category":"BOMBS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":26,"itemNo":26,"displaySno":"26","sku":"SKU-026","name":"ATOM BOMB BIG","category":"BOMBS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":27,"itemNo":27,"displaySno":"27","sku":"SKU-027","name":"HYDRO BOMB GREEN","category":"BOMBS","price":70,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":28,"itemNo":28,"displaySno":"28","sku":"SKU-028","name":"KING OF KING BOMB","category":"BOMBS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":29,"itemNo":29,"displaySno":"29","sku":"SKU-029","name":"CLASSIC BOMB","category":"BOMBS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":30,"itemNo":30,"displaySno":"30","sku":"SKU-030","name":"RED BIJILI(50 pcs)","category":"BIJILI CRACKERS","price":30,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":31,"itemNo":31,"displaySno":"31","sku":"SKU-031","name":"RED BIJILI(100 pcs)","category":"BIJILI CRACKERS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":32,"itemNo":32,"displaySno":"32","sku":"SKU-032","name":"STRIPPED BIJILI(100 pcs)","category":"BIJILI CRACKERS","price":70,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":33,"itemNo":33,"displaySno":"33","sku":"SKU-033","name":"GROUND CHAKKAR BIG","category":"GROUND CHAKKARS","price":80,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":34,"itemNo":34,"displaySno":"34","sku":"SKU-034","name":"GROUND CHAKKAR ASHOKA","category":"GROUND CHAKKARS","price":140,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":35,"itemNo":35,"displaySno":"35","sku":"SKU-035","name":"GROUND CHAKKAR SPECIAL","category":"GROUND CHAKKARS","price":180,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":36,"itemNo":36,"displaySno":"36","sku":"SKU-036","name":"GROUND CHAKKAR DELUXE","category":"GROUND CHAKKARS","price":240,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":37,"itemNo":37,"displaySno":"37","sku":"SKU-037","name":"FLOWER POTS SMALL","category":"FLOWER POTS","price":100,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":38,"itemNo":38,"displaySno":"38","sku":"SKU-038","name":"FLOWER POTS BIG","category":"FLOWER POTS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":39,"itemNo":39,"displaySno":"39","sku":"SKU-039","name":"FLOWER POTS SPECIAL","category":"FLOWER POTS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":40,"itemNo":40,"displaySno":"40","sku":"SKU-040","name":"FLOWER POTS ASHOKA/GAINT","category":"FLOWER POTS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":41,"itemNo":41,"displaySno":"41","sku":"SKU-041","name":"FLOWER POTS DELUXE (5 pcs)","category":"FLOWER POTS","price":320,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":42,"itemNo":42,"displaySno":"42","sku":"SKU-042","name":"FLOWER POTS SUPER DLX (2 pcs)","category":"FLOWER POTS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":43,"itemNo":43,"displaySno":"43","sku":"SKU-043","name":"COLOUR KOTI/POT GIRL","category":"FLOWER POTS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":44,"itemNo":44,"displaySno":"44","sku":"SKU-044","name":"COLOUR KOTI DELUXE","category":"FLOWER POTS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":45,"itemNo":45,"displaySno":"45","sku":"SKU-045","name":"BABY ROCKET","category":"ROCKETS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":46,"itemNo":46,"displaySno":"46","sku":"SKU-046","name":"ROCKET BOMB","category":"ROCKETS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":47,"itemNo":47,"displaySno":"47","sku":"SKU-047","name":"COLOUR ROCKET","category":"ROCKETS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":48,"itemNo":48,"displaySno":"48","sku":"SKU-048","name":"LUNIC ROCKET","category":"ROCKETS","price":250,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":49,"itemNo":49,"displaySno":"49","sku":"SKU-049","name":"WHISTELING ROCKET","category":"ROCKETS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":50,"itemNo":50,"displaySno":"50","sku":"SKU-050","name":"1½\" TWINKLING STAR","category":"TWINKLING STAR,PENCIL","price":50,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":51,"itemNo":51,"displaySno":"51","sku":"SKU-051","name":"4\" TWINKLING STAR","category":"TWINKLING STAR,PENCIL","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":52,"itemNo":52,"displaySno":"52","sku":"SKU-052","name":"10\" PENCIL","category":"TWINKLING STAR,PENCIL","price":130,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":53,"itemNo":53,"displaySno":"53","sku":"SKU-053","name":"1 3/4\" FANCY SHOT(3PCS)","category":"AKASH WONDERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":54,"itemNo":54,"displaySno":"54","sku":"SKU-054","name":"2\" SINGLE FANCY SHOT","category":"AKASH WONDERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":55,"itemNo":55,"displaySno":"55","sku":"SKU-055","name":"2 1/2 \" FANCY SHOT -3 STEP","category":"AKASH WONDERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":56,"itemNo":56,"displaySno":"56","sku":"SKU-056","name":"3 1/2 \" FANCY SHOT(1 PCS)","category":"AKASH WONDERS","price":700,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":57,"itemNo":57,"displaySno":"57","sku":"SKU-057","name":"74MM FANCY SHOT(1 PCS)","category":"AKASH WONDERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":58,"itemNo":58,"displaySno":"58","sku":"SKU-058","name":"7 SHOT","category":"AERIAL NOVELTIES","price":160,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":59,"itemNo":59,"displaySno":"59","sku":"SKU-059","name":"12 SHOT","category":"AERIAL NOVELTIES","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":60,"itemNo":60,"displaySno":"60","sku":"SKU-060","name":"15 SHOT MULTICOLOUR","category":"AERIAL NOVELTIES","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":61,"itemNo":61,"displaySno":"61","sku":"SKU-061","name":"30 SHOT MULTICOLOUR","category":"AERIAL NOVELTIES","price":700,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":62,"itemNo":62,"displaySno":"62","sku":"SKU-062","name":"60 SHOT MULTICOLOUR","category":"AERIAL NOVELTIES","price":1500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":63,"itemNo":63,"displaySno":"63","sku":"SKU-063","name":"120 SHOT MULTICOLOUR","category":"AERIAL NOVELTIES","price":3000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":64,"itemNo":64,"displaySno":"64","sku":"SKU-064","name":"240 SHOT MULTICOLOUR","category":"AERIAL NOVELTIES","price":6000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":65,"itemNo":65,"displaySno":"65","sku":"SKU-065","name":"10CM ELECTRIC","category":"SPARKLERS","price":30,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":66,"itemNo":66,"displaySno":"66","sku":"SKU-066","name":"10 CM COLOUR","category":"SPARKLERS","price":40,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":67,"itemNo":67,"displaySno":"67","sku":"SKU-067","name":"10CM GREEN","category":"SPARKLERS","price":40,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":68,"itemNo":68,"displaySno":"68","sku":"SKU-068","name":"10CM RED","category":"SPARKLERS","price":40,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":69,"itemNo":69,"displaySno":"69","sku":"SKU-069","name":"12CM ELECTRIC","category":"SPARKLERS","price":50,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":70,"itemNo":70,"displaySno":"70","sku":"SKU-070","name":"12 CM COLOUR","category":"SPARKLERS","price":55,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":71,"itemNo":71,"displaySno":"71","sku":"SKU-071","name":"12CM YELLOW","category":"SPARKLERS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":72,"itemNo":72,"displaySno":"72","sku":"SKU-072","name":"12CM RED","category":"SPARKLERS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":73,"itemNo":73,"displaySno":"73","sku":"SKU-073","name":"15CM ELECTRIC","category":"SPARKLERS","price":80,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":74,"itemNo":74,"displaySno":"74","sku":"SKU-074","name":"15 CM COLOUR","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":75,"itemNo":75,"displaySno":"75","sku":"SKU-075","name":"15CM GREEN","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":76,"itemNo":76,"displaySno":"76","sku":"SKU-076","name":"15CM RED","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":77,"itemNo":77,"displaySno":"77","sku":"SKU-077","name":"30CM ELECTRIC (5 pcs)","category":"SPARKLERS","price":60,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":78,"itemNo":78,"displaySno":"78","sku":"SKU-078","name":"30CM COLOUR (5 pcs)","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":79,"itemNo":79,"displaySno":"79","sku":"SKU-079","name":"30CM YELLOW (5 pcs)","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":80,"itemNo":80,"displaySno":"80","sku":"SKU-080","name":"30CM RED (5 pcs)","category":"SPARKLERS","price":90,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":81,"itemNo":81,"displaySno":"81","sku":"SKU-081","name":"50CM ELECTRIC (5 pcs)","category":"SPARKLERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":82,"itemNo":82,"displaySno":"82","sku":"SKU-082","name":"50CM COLOUR (5 pcs)","category":"SPARKLERS","price":330,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":83,"itemNo":83,"displaySno":"83","sku":"SKU-083","name":"75CM ELECTRIC (5 pcs)","category":"SPARKLERS","price":450,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":84,"itemNo":84,"displaySno":"84","sku":"SKU-084","name":"75CM COLOUR (5 pcs)","category":"SPARKLERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":85,"itemNo":85,"displaySno":"85","sku":"SKU-085","name":"ADIYAL 1/4 KG","category":"PAPER BOMB","price":120,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":86,"itemNo":86,"displaySno":"86","sku":"SKU-086","name":"ADIYAL 1/2 KG","category":"PAPER BOMB","price":240,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":87,"itemNo":87,"displaySno":"87","sku":"SKU-087","name":"ADIYAL 1KG","category":"PAPER BOMB","price":480,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":88,"itemNo":88,"displaySno":"88","sku":"SKU-088","name":"MONEY","category":"PAPER BOMB","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":89,"itemNo":89,"displaySno":"89","sku":"SKU-089","name":"GANAGA JAMUNA (5 pcs))","category":"FANCY CRACKERS","price":160,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":90,"itemNo":90,"displaySno":"90","sku":"SKU-090","name":"PHOTOFLASH","category":"FANCY CRACKERS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":91,"itemNo":91,"displaySno":"91","sku":"SKU-091","name":"TIN BEER SMALL","category":"FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":92,"itemNo":92,"displaySno":"92","sku":"SKU-092","name":"BUTTERFLY/PAMBARAM","category":"FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":93,"itemNo":93,"displaySno":"93","sku":"SKU-093","name":"HELICOPTER","category":"FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":94,"itemNo":94,"displaySno":"94","sku":"SKU-094","name":"DANCING WHEEL","category":"FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":95,"itemNo":95,"displaySno":"95","sku":"SKU-095","name":"SPLASH LIGHT","category":"FANCY CRACKERS","price":220,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":96,"itemNo":96,"displaySno":"96","sku":"SKU-096","name":"GIPSY","category":"FANCY CRACKERS","price":250,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":97,"itemNo":97,"displaySno":"97","sku":"SKU-097","name":"JONE & JOKES(2 pcs)","category":"FANCY CRACKERS","price":250,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":98,"itemNo":98,"displaySno":"98","sku":"SKU-098","name":"KATHI","category":"FANCY CRACKERS","price":250,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":99,"itemNo":99,"displaySno":"99","sku":"SKU-099","name":"MERI JAAN(2 pcs)","category":"FANCY CRACKERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":100,"itemNo":100,"displaySno":"100","sku":"SKU-100","name":"SMOKE","category":"FANCY CRACKERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":101,"itemNo":101,"displaySno":"101","sku":"SKU-101","name":"SIREN","category":"FANCY CRACKERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":102,"itemNo":102,"displaySno":"102","sku":"SKU-102","name":"SPARSHA GREEN","category":"FANCY CRACKERS","price":350,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":103,"itemNo":103,"displaySno":"103","sku":"SKU-103","name":"KURKURE","category":"FANCY CRACKERS","price":350,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":104,"itemNo":104,"displaySno":"104","sku":"SKU-104","name":"SMALL PEACOCK","category":"FANCY CRACKERS","price":350,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":105,"itemNo":105,"displaySno":"105","sku":"SKU-105","name":"COLOUR SONG","category":"FANCY CRACKERS","price":360,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":106,"itemNo":106,"displaySno":"106","sku":"SKU-106","name":"TIN BEER BIG","category":"FANCY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":107,"itemNo":107,"displaySno":"107","sku":"SKU-107","name":"5 STAR","category":"FANCY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":108,"itemNo":108,"displaySno":"108","sku":"SKU-108","name":"YOYO(5 pcs)","category":"FANCY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":109,"itemNo":109,"displaySno":"109","sku":"SKU-109","name":"NACHOS(2 pcs)","category":"FANCY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":110,"itemNo":110,"displaySno":"110","sku":"SKU-110","name":"EMU EGG","category":"FANCY CRACKERS","price":450,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":111,"itemNo":111,"displaySno":"111","sku":"SKU-111","name":"TOPGUN(5 pcs)","category":"FANCY CRACKERS","price":450,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":112,"itemNo":112,"displaySno":"112","sku":"SKU-112","name":"COCKTAIL(3 pcs)","category":"FANCY CRACKERS","price":450,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":113,"itemNo":113,"displaySno":"113","sku":"SKU-113","name":"4 IN 1 ANDROID","category":"FANCY CRACKERS","price":450,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":114,"itemNo":114,"displaySno":"114","sku":"SKU-114","name":"TROPICAL MUSHROOM","category":"FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":115,"itemNo":115,"displaySno":"115","sku":"SKU-115","name":"STAR MIX","category":"FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":116,"itemNo":116,"displaySno":"116","sku":"SKU-116","name":"BLOSSOM","category":"FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":117,"itemNo":117,"displaySno":"117","sku":"SKU-117","name":"IPL MIX","category":"FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":118,"itemNo":118,"displaySno":"118","sku":"SKU-118","name":"BOOMER(10 pcs)","category":"FANCY CRACKERS","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":119,"itemNo":119,"displaySno":"119","sku":"SKU-119","name":"LOVE SPARK FOUNTAIN","category":"FANCY CRACKERS","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":120,"itemNo":120,"displaySno":"120","sku":"SKU-120","name":"BADA PEACOCK","category":"FANCY CRACKERS","price":600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":121,"itemNo":121,"displaySno":"121","sku":"SKU-121","name":"BADA PEACOCK MULTICOLOUR","category":"FANCY CRACKERS","price":700,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":122,"itemNo":122,"displaySno":"122","sku":"SKU-122","name":"KULFI","category":"FANCY CRACKERS","price":700,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":123,"itemNo":123,"displaySno":"123","sku":"SKU-123","name":"WELCOME SHOW","category":"FANCY CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":124,"itemNo":124,"displaySno":"124","sku":"SKU-124","name":"FANTASY LION/ELEPHANT","category":"FANCY CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":125,"itemNo":125,"displaySno":"125","sku":"SKU-125","name":"CAR BIG","category":"FANCY CRACKERS","price":900,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":126,"itemNo":126,"displaySno":"126","sku":"SKU-126","name":"ROLL CAPS","category":"MATCHES & ROLLCAPS","price":120,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":127,"itemNo":127,"displaySno":"127","sku":"SKU-127","name":"SNAKE TABLATS BIG","category":"MATCHES & ROLLCAPS","price":50,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":128,"itemNo":128,"displaySno":"128","sku":"SKU-128","name":"RED GREEN MATCHES ORD(10NO)","category":"MATCHES & ROLLCAPS","price":20,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":129,"itemNo":129,"displaySno":"129","sku":"SKU-129","name":"JILJIL MATCH(10NO)","category":"MATCHES & ROLLCAPS","price":40,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":130,"itemNo":130,"displaySno":"130","sku":"SKU-130","name":"BLOOMS","category":"MATCHES & ROLLCAPS","price":140,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":131,"itemNo":131,"displaySno":"131","sku":"SKU-131","name":"SUPER 6","category":"MATCHES & ROLLCAPS","price":130,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":132,"itemNo":132,"displaySno":"132","sku":"SKU-132","name":"NOKIO/ 10 IN 1","category":"MATCHES & ROLLCAPS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":133,"itemNo":133,"displaySno":"133","sku":"SKU-133","name":"GANESH (16 items)","category":"GIFT BOXES","price":410,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":134,"itemNo":134,"displaySno":"134","sku":"SKU-134","name":"TREAT (20 items)","category":"GIFT BOXES","price":460,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":135,"itemNo":135,"displaySno":"135","sku":"SKU-135","name":"KGF (36 items)","category":"GIFT BOXES","price":900,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":136,"itemNo":136,"displaySno":"136","sku":"SKU-136","name":"PUBG (41 items)","category":"GIFT BOXES","price":1000,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":137,"itemNo":137,"displaySno":"137","sku":"SKU-137","name":"BIG BOSS (51 items)","category":"GIFT BOXES","price":1600,"stock":500,"unit":"BOX","perUnit":1,"brand":"SURYAKALA / SANTHIYA"},
+            {"id":138,"itemNo":138,"displaySno":"ST-1","sku":"SKU-138","name":"ST BOOM BOMB","category":"STANDARD - ELECTRIC CRACKERS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":139,"itemNo":139,"displaySno":"ST-2","sku":"SKU-139","name":"ST 1000 DIGITAL","category":"STANDARD - ELECTRIC CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":140,"itemNo":140,"displaySno":"ST-3","sku":"SKU-140","name":"ST FLOWER POTS SMALL","category":"STANDARD - FLOWER POTS","price":120,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":141,"itemNo":141,"displaySno":"ST-4","sku":"SKU-141","name":"ST FLOWER POTS SPECIAL","category":"STANDARD - FLOWER POTS","price":300,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":142,"itemNo":142,"displaySno":"ST-5","sku":"SKU-142","name":"ST FLOWER POTS DELUXE","category":"STANDARD - FLOWER POTS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":143,"itemNo":143,"displaySno":"ST-6","sku":"SKU-143","name":"ST TRICOLOUR FOUNTAIN","category":"STANDARD - FLOWER POTS","price":650,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":144,"itemNo":144,"displaySno":"ST-7","sku":"SKU-144","name":"ST TRICOLOUR MILLENIUM","category":"STANDARD - FLOWER POTS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":145,"itemNo":145,"displaySno":"ST-8","sku":"SKU-145","name":"ST CHAVI ZAMIN CHAKKAR ASHOKA","category":"STANDARD - CHAKKARS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":146,"itemNo":146,"displaySno":"ST-9","sku":"SKU-146","name":"ST CHAVI ZAMIN CHAKKAR DELUXE","category":"STANDARD - CHAKKARS","price":350,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":147,"itemNo":147,"displaySno":"ST-10","sku":"SKU-147","name":"ST 45CM TWINKLING STAR","category":"STANDARD - NOVELTY CRACKERS/SPARKLERS","price":75,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":148,"itemNo":148,"displaySno":"ST-11","sku":"SKU-148","name":"ST 120 CM TWINKLING STAR","category":"STANDARD - NOVELTY CRACKERS/SPARKLERS","price":240,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":149,"itemNo":149,"displaySno":"ST-12","sku":"SKU-149","name":"ST MULTI COLOUR CANDLE","category":"STANDARD - NOVELTY CRACKERS/SPARKLERS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":150,"itemNo":150,"displaySno":"ST-13","sku":"SKU-150","name":"ST 30 CM GOLD SPARKLER","category":"STANDARD - NOVELTY CRACKERS/SPARKLERS","price":130,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":151,"itemNo":151,"displaySno":"ST-14","sku":"SKU-151","name":"ST 30CM COLOUR SPARKLER","category":"STANDARD - NOVELTY CRACKERS/SPARKLERS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":152,"itemNo":152,"displaySno":"ST-15","sku":"SKU-152","name":"ST SUN FLOWER 12 SHOT","category":"STANDARD - SHOTS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":153,"itemNo":153,"displaySno":"ST-16","sku":"SKU-153","name":"ST COLOUR MAGIC 16 SHOT","category":"STANDARD - SHOTS","price":550,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":154,"itemNo":154,"displaySno":"ST-17","sku":"SKU-154","name":"ST 30 SHOT","category":"STANDARD - SHOTS","price":1200,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":155,"itemNo":155,"displaySno":"ST-18","sku":"SKU-155","name":"ST 60 SHOT","category":"STANDARD - SHOTS","price":2000,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":156,"itemNo":156,"displaySno":"ST-19","sku":"SKU-156","name":"ST 120 SHOT","category":"STANDARD - SHOTS","price":3300,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":157,"itemNo":157,"displaySno":"ST-20","sku":"SKU-157","name":"ST CHAT CHAT","category":"STANDARD - FANCY CRACKERS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":158,"itemNo":158,"displaySno":"ST-21","sku":"SKU-158","name":"ST SIGNAL LIGHTS","category":"STANDARD - FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":159,"itemNo":159,"displaySno":"ST-22","sku":"SKU-159","name":"ST COLOUR CHANGING BUTTERFLY","category":"STANDARD - FANCY CRACKERS","price":400,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":160,"itemNo":160,"displaySno":"ST-23","sku":"SKU-160","name":"ST DOLLAR WHEEL","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":161,"itemNo":161,"displaySno":"ST-24","sku":"SKU-161","name":"ST POKER WHEEL","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":162,"itemNo":162,"displaySno":"ST-25","sku":"SKU-162","name":"ST CRACKLING CANDY","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":163,"itemNo":163,"displaySno":"ST-26","sku":"SKU-163","name":"ST SIGNAL LIGHTS","category":"STANDARD - FANCY CRACKERS","price":200,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":164,"itemNo":164,"displaySno":"ST-27","sku":"SKU-164","name":"ST MONEY PENNY","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":165,"itemNo":165,"displaySno":"ST-28","sku":"SKU-165","name":"ST JIL JUNG JUK","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":166,"itemNo":166,"displaySno":"ST-29","sku":"SKU-166","name":"ST SUNDROPS","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":167,"itemNo":167,"displaySno":"ST-30","sku":"SKU-167","name":"ST DIAMOND MINE","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":168,"itemNo":168,"displaySno":"ST-31","sku":"SKU-168","name":"ST ARIEL OUT","category":"STANDARD - FANCY CRACKERS","price":550,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":169,"itemNo":169,"displaySno":"ST-32","sku":"SKU-169","name":"ST POPCORN FOUNTAIN","category":"STANDARD - FANCY CRACKERS","price":550,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":170,"itemNo":170,"displaySno":"ST-33","sku":"SKU-170","name":"ST TREASURE BOX","category":"STANDARD - FANCY CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":171,"itemNo":171,"displaySno":"ST-34","sku":"SKU-171","name":"ST RED BIJILI(50 pcs)","category":"STANDARD - BIJILI","price":50,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":172,"itemNo":172,"displaySno":"ST-35","sku":"SKU-172","name":"ST RED BIJILI(100 pcs)","category":"STANDARD - BIJILI","price":100,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
+            {"id":173,"itemNo":173,"displaySno":"ST-36","sku":"SKU-173","name":"ST ROLLCAPS","category":"STANDARD - ROLLCAPS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"}
+        ];
 
-        // Persistent storage for products and sales history
-        let savedProducts = localStorage.getItem('tpl_products');
-        let products = savedProducts ? JSON.parse(savedProducts) : INITIAL_PRODUCTS;
-        if (!savedProducts) localStorage.setItem('tpl_products', JSON.stringify(INITIAL_PRODUCTS));
-
+        // Ensure 2026 data replaces old localStorage
+        localStorage.setItem('tpl_products_2026_v1', JSON.stringify(NEW_2026_PRODUCTS));
+        let products = NEW_2026_PRODUCTS;
         let cart = [];
         let selectedPayment = 'CASH';
+        let isListening = false;
+        let recognition = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             populateCategories();
             renderProducts();
             updateCartUI();
+            initWebSpeech();
         });
-
-        function saveProductsState() {
-            localStorage.setItem('tpl_products', JSON.stringify(products));
-        }
 
         function populateCategories() {
             const select = document.getElementById('categorySelect');
@@ -474,124 +560,146 @@
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             if (!grid) return;
-            const searchInput = document.getElementById('searchInput');
-            const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            const catSelect = document.getElementById('categorySelect');
-            const cat = catSelect ? catSelect.value : 'ALL';
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cat = document.getElementById('categorySelect').value;
 
             const filtered = products.filter(p => {
                 const matchesSearch = p.name.toLowerCase().includes(search) || 
-                                      p.sku.toLowerCase().includes(search) || 
-                                      p.category.toLowerCase().includes(search) ||
-                                      p.itemNo.toString() === search;
+                                      p.displaySno.toLowerCase().includes(search) || 
+                                      p.category.toLowerCase().includes(search);
                 const matchesCat = (cat === 'ALL' || p.category === cat);
                 return matchesSearch && matchesCat;
             });
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '<div class="col-span-full py-8 text-center text-slate-500 text-xs">No items found. Try clearing your search filter.</div>';
+            grid.innerHTML = '';
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-cardbg p-2.5 rounded-xl border border-slate-700 hover:border-brand-500 transition shadow flex flex-col justify-between space-y-2 cursor-pointer";
+                card.onclick = () => addToCart(p.id, 1);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold mb-1">
+                            <span class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-400">#${p.displaySno}</span>
+                            <span class="${p.stock < 20 ? 'text-rose-400' : 'text-emerald-400'}">Stock: ${p.stock}</span>
+                        </div>
+                        <h4 class="font-bold text-xs text-slate-100 leading-snug line-clamp-2">${p.name}</h4>
+                        <div class="text-[10px] text-slate-400 mt-0.5">${p.brand}</div>
+                    </div>
+                    <div class="flex items-center justify-between pt-1 border-t border-slate-700/60">
+                        <span class="text-sm font-extrabold text-amber-400">₹${p.price}</span>
+                        <button onclick="event.stopPropagation(); addToCart(${p.id}, 1)" class="px-2 py-1 bg-brand-600 hover:bg-brand-700 text-white font-bold text-[10px] rounded transition">
+                            + Add
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addToCart(productId, qty = 1) {
+            const prod = products.find(p => p.id === productId);
+            if (!prod) return;
+
+            const existing = cart.find(c => c.id === productId);
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                cart.push({
+                    id: prod.id,
+                    name: prod.name,
+                    price: prod.price,
+                    qty: qty,
+                    displaySno: prod.displaySno,
+                    isCustom: false
+                });
+            }
+            updateCartUI();
+        }
+
+        // Custom / Other Item Addition
+        function addCustomItemToCart() {
+            const nameInput = document.getElementById('customItemName');
+            const priceInput = document.getElementById('customItemPrice');
+            const qtyInput = document.getElementById('customItemQty');
+
+            const name = nameInput.value.trim() || "Other Item (பிற பொருள்)";
+            const price = parseFloat(priceInput.value);
+            const qty = parseInt(qtyInput.value) || 1;
+
+            if (isNaN(price) || price <= 0) {
+                alert("Please enter a valid price for the custom item.");
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => `
-                <div onclick="addToCart(${p.id})" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-3 rounded-xl cursor-pointer transition flex flex-col justify-between group">
-                    <div>
-                        <div class="flex items-center justify-between gap-1 mb-1">
-                            <span class="text-[10px] font-mono bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/20 font-bold">#${p.itemNo}</span>
-                            <span class="text-[9px] ${p.stock < 20 ? 'text-rose-400 font-bold' : 'text-slate-400'}">Stock: ${p.stock} ${p.unit}</span>
-                        </div>
-                        <h3 class="text-xs font-semibold text-slate-200 group-hover:text-amber-300 line-clamp-2 leading-snug">${p.name}</h3>
-                    </div>
-                    <div class="mt-2 flex items-center justify-between">
-                        <span class="text-sm font-bold text-amber-400">₹${p.price}</span>
-                        <span class="w-6 h-6 rounded-lg bg-amber-500/20 group-hover:bg-amber-500 text-amber-400 group-hover:text-slate-950 flex items-center justify-center text-xs transition">
-                            <i class="fa-solid fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
-            `).join('');
+            const customId = "custom_" + Date.now();
+            cart.push({
+                id: customId,
+                name: `[OTHER] ${name}`,
+                price: price,
+                qty: qty,
+                displaySno: "NEW",
+                isCustom: true
+            });
+
+            // reset input fields
+            nameInput.value = "";
+            priceInput.value = "";
+            qtyInput.value = "1";
+
+            updateCartUI();
         }
 
         function handleQuickItemKey(e) {
-            if (e.key === 'Enter') {
-                addQuickItem();
-            }
+            if (e.key === 'Enter') addQuickItem();
         }
 
         function addQuickItem() {
             const input = document.getElementById('quickItemInput');
-            const feedback = document.getElementById('quickFeedback');
-            if (!input) return;
-            const val = input.value.trim();
-
+            const val = input.value.trim().toUpperCase();
             if (!val) return;
 
-            let itemNum = 0;
+            let snoStr = val;
             let qty = 1;
 
             if (val.includes('*')) {
                 const parts = val.split('*');
-                itemNum = parseInt(parts[0].trim());
-                qty = parseInt(parts[1].trim()) || 1;
-            } else if (val.toLowerCase().includes('x')) {
-                const parts = val.toLowerCase().split('x');
-                itemNum = parseInt(parts[0].trim());
-                qty = parseInt(parts[1].trim()) || 1;
-            } else {
-                itemNum = parseInt(val);
+                snoStr = parts[0].trim();
+                qty = parseInt(parts[1]) || 1;
+            } else if (val.includes('X')) {
+                const parts = val.split('X');
+                snoStr = parts[0].trim();
+                qty = parseInt(parts[1]) || 1;
             }
 
-            const foundProduct = products.find(p => p.itemNo === itemNum || p.id === itemNum);
+            // Search product by displaySno, itemNo or SKU
+            const prod = products.find(p => 
+                p.displaySno.toUpperCase() === snoStr || 
+                p.itemNo.toString() === snoStr ||
+                p.sku.toUpperCase() === snoStr
+            );
 
-            if (foundProduct) {
-                addToCart(foundProduct.id, qty);
-                if (feedback) {
-                    feedback.className = "text-xs mt-1.5 font-medium text-emerald-400";
-                    feedback.textContent = `✓ Added ${qty}x ${foundProduct.name} (#${foundProduct.itemNo})`;
-                }
+            if (prod) {
+                addToCart(prod.id, qty);
                 input.value = '';
             } else {
-                if (feedback) {
-                    feedback.className = "text-xs mt-1.5 font-medium text-rose-400";
-                    feedback.textContent = `✗ Item #${val} not found. Try item numbers from your price list.`;
-                }
-            }
-
-            if (feedback) {
-                setTimeout(() => { feedback.textContent = ''; }, 3000);
+                alert(`Item #${snoStr} not found in 2026 Price List!`);
             }
         }
 
-        function addToCart(productId, qty = 1) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            if (product.stock < qty) {
-                alert(`Insufficient stock for ${product.name}! Available stock: ${product.stock}`);
-            }
-
-            const cartItem = cart.find(item => item.id === productId);
-            if (cartItem) {
-                cartItem.qty += qty;
-            } else {
-                cart.push({ ...product, qty: qty });
+        function updateCartQty(cartId, delta) {
+            const item = cart.find(c => c.id === cartId);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(c => c.id !== cartId);
             }
             updateCartUI();
         }
 
-        function updateQty(productId, delta) {
-            const item = cart.find(i => i.id === productId);
-            if (item) {
-                item.qty += delta;
-                if (item.qty <= 0) {
-                    cart = cart.filter(i => i.id !== productId);
-                }
-            }
-            updateCartUI();
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(i => i.id !== productId);
+        function removeFromCart(cartId) {
+            cart = cart.filter(c => c.id !== cartId);
             updateCartUI();
         }
 
@@ -601,421 +709,242 @@
         }
 
         function updateCartUI() {
-            const tbody = document.getElementById('cartTableBody');
-            if (!tbody) return;
-            
+            const container = document.getElementById('cartItemsContainer');
+            if (!container) return;
+
+            container.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
             if (cart.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500 text-xs">Cart is empty. Type an item number above or speak via Voice to add.</td></tr>`;
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-slate-500 py-10">
+                        <i class="fa-solid fa-cart-flatbed text-3xl mb-2"></i>
+                        <p class="text-xs">No items in bill (பட்டியல் காலியாக உள்ளது)</p>
+                    </div>
+                `;
             } else {
-                tbody.innerHTML = cart.map(item => `
-                    <tr class="hover:bg-slate-800/40">
-                        <td class="py-2 pr-1">
-                            <div class="font-medium text-slate-200 line-clamp-1">${item.name}</div>
-                            <div class="text-[10px] text-amber-400">#${item.itemNo}</div>
-                        </td>
-                        <td class="py-2 text-center">
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="updateQty(${item.id}, -1)" class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center justify-center">-</button>
-                                <span class="w-6 text-center font-bold text-slate-100">${item.qty}</span>
-                                <button onclick="updateQty(${item.id}, 1)" class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center justify-center">+</button>
-                            </div>
-                        </td>
-                        <td class="py-2 text-right text-slate-400">₹${item.price}</td>
-                        <td class="py-2 text-right font-semibold text-slate-100">₹${(item.price * item.qty).toFixed(2)}</td>
-                        <td class="py-2 text-center">
-                            <button onclick="removeFromCart(${item.id})" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-xmark"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.qty;
+                    total += itemTotal;
+                    count += item.qty;
+
+                    const row = document.createElement('div');
+                    row.className = "bg-slate-800/80 p-2 rounded-lg border border-slate-700 flex items-center justify-between text-xs space-x-2";
+                    row.innerHTML = `
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-slate-200 truncate">${item.name}</div>
+                            <div class="text-[10px] text-amber-400">#${item.displaySno} • ₹${item.price} x ${item.qty}</div>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <button onclick="updateCartQty('${item.id}', -1)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-slate-200 font-bold text-xs">-</button>
+                            <span class="font-extrabold text-slate-100 text-xs px-1">${item.qty}</span>
+                            <button onclick="updateCartQty('${item.id}', 1)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-slate-200 font-bold text-xs">+</button>
+                            <span class="font-bold text-emerald-400 w-12 text-right">₹${itemTotal}</span>
+                            <button onclick="removeFromCart('${item.id}')" class="text-rose-400 hover:text-rose-300 pl-1">✕</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
             }
 
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-            const cartCount = document.getElementById('cartCount');
-            const subTotal = document.getElementById('subTotal');
-            const grandTotal = document.getElementById('grandTotal');
-
-            if (cartCount) cartCount.textContent = `${totalCount} items`;
-            if (subTotal) subTotal.textContent = `₹${subtotal.toFixed(2)}`;
-            if (grandTotal) grandTotal.textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartNetTotal').textContent = `₹ ${total.toFixed(2)}`;
         }
 
-        function setPaymentMethod(method) {
-            selectedPayment = method;
-            ['payCash', 'payUPI', 'payCard'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.className = 'py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 border border-slate-700 transition';
+        function selectPayment(mode) {
+            selectedPayment = mode;
+            ['payCashBtn', 'payUpiBtn', 'payCardBtn'].forEach(id => {
+                document.getElementById(id).className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-slate-600 bg-slate-700 text-slate-300";
             });
 
-            const activeBtn = document.getElementById(method === 'CASH' ? 'payCash' : (method === 'UPI' ? 'payUPI' : 'payCard'));
-            if (activeBtn) activeBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-slate-950 border border-amber-400 transition';
+            if (mode === 'CASH') document.getElementById('payCashBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-emerald-500 bg-emerald-600 text-white";
+            if (mode === 'UPI') document.getElementById('payUpiBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-cyan-500 bg-cyan-600 text-white";
+            if (mode === 'CARD') document.getElementById('payCardBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-purple-500 bg-purple-600 text-white";
         }
 
-        // ==========================================
-        // CHECKOUT, INVENTORY DEDUCTION & SALES LOG
-        // ==========================================
-        function checkoutAndPrint() {
+        function checkoutOrder() {
             if (cart.length === 0) {
-                alert('Cart is empty! Please add items before completing order.');
+                alert("Cart is empty! Add products first.");
                 return;
             }
 
-            const now = new Date();
-            const billNo = 'TK-' + now.getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const billNo = "SL-" + Math.floor(1000 + Math.random() * 9000);
+            const timestamp = new Date().toLocaleString();
 
-            // Deduct stock for items sold
-            cart.forEach(cartItem => {
-                const p = products.find(prod => prod.id === cartItem.id);
-                if (p) {
-                    p.stock = Math.max(0, p.stock - cartItem.qty);
-                }
+            // Populate Receipt Modal
+            document.getElementById('recBillNo').textContent = billNo;
+            document.getElementById('recDate').textContent = timestamp;
+            document.getElementById('recPaymentMethod').textContent = selectedPayment;
+            document.getElementById('recNetTotal').textContent = `₹${total.toFixed(2)}`;
+
+            const recTable = document.getElementById('recItemsTable');
+            recTable.innerHTML = '';
+            cart.forEach(i => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-200/50";
+                tr.innerHTML = `
+                    <td class="py-1 max-w-[120px] truncate">${i.name}</td>
+                    <td class="text-center">${i.qty}</td>
+                    <td class="text-right">₹${i.price}</td>
+                    <td class="text-right font-bold">₹${i.price * i.qty}</td>
+                `;
+                recTable.appendChild(tr);
             });
-            saveProductsState();
-            renderProducts();
 
-            // Save transaction to local Daily Sales Log
-            const saleRecord = {
-                billNo: billNo,
-                timestamp: now.toISOString(),
-                timeStr: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-                dateStr: now.toLocaleDateString('en-IN'),
-                paymentMethod: selectedPayment,
-                amount: subtotal,
-                itemsSummary: cart.map(i => `${i.qty}x ${i.name}`).join(', '),
-                itemsCount: cart.reduce((s, i) => s + i.qty, 0)
-            };
-
+            // Save transaction to local sales history
             let salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
-            salesHistory.unshift(saleRecord);
+            salesHistory.push({
+                billNo: billNo,
+                timestamp: timestamp,
+                amount: total,
+                payment: selectedPayment,
+                itemCount: cart.length
+            });
             localStorage.setItem('tpl_sales_history', JSON.stringify(salesHistory));
 
-            // Populate printable thermal receipt
-            document.getElementById('rBillNo').textContent = billNo;
-            document.getElementById('rDate').textContent = now.toLocaleString('en-IN');
-            document.getElementById('rPayment').textContent = selectedPayment;
+            // Deduct inventory stock for non-custom items
+            cart.forEach(ci => {
+                if (!ci.isCustom) {
+                    const p = products.find(prod => prod.id === ci.id);
+                    if (p) p.stock = Math.max(0, p.stock - ci.qty);
+                }
+            });
 
-            const rTbody = document.getElementById('rTableBody');
-            rTbody.innerHTML = cart.map((item, idx) => `
-                <tr>
-                    <td>${idx + 1}</td>
-                    <td>${item.name}</td>
-                    <td style="text-align: center;">${item.qty}</td>
-                    <td style="text-align: right;">₹${item.price}</td>
-                    <td style="text-align: right;">₹${(item.price * item.qty).toFixed(2)}</td>
-                </tr>
-            `).join('');
-            document.getElementById('rGrandTotal').textContent = `₹${subtotal.toFixed(2)}`;
-
-            // Populate On-Screen Modal Receipt
-            document.getElementById('mBillNo').textContent = billNo;
-            document.getElementById('mDate').textContent = now.toLocaleDateString('en-IN');
-            document.getElementById('mPayment').textContent = selectedPayment;
-
-            const mTbody = document.getElementById('mTableBody');
-            mTbody.innerHTML = cart.map(item => `
-                <tr>
-                    <td class="py-1">${item.name}</td>
-                    <td class="text-center py-1">${item.qty}</td>
-                    <td class="text-right py-1">₹${(item.price * item.qty).toFixed(2)}</td>
-                </tr>
-            `).join('');
-            document.getElementById('mGrandTotal').textContent = `₹${subtotal.toFixed(2)}`;
-
-            // Show Modal Popup
+            // Open Modal
             document.getElementById('receiptModal').classList.remove('hidden');
-
-            // Trigger printer dialog
-            try {
-                window.print();
-            } catch (e) {
-                console.log('Window print triggered');
-            }
-        }
-
-        function triggerPrintFromModal() {
-            window.print();
         }
 
         function closeReceiptModal() {
             document.getElementById('receiptModal').classList.add('hidden');
-            cart = [];
-            updateCartUI();
+            clearCart();
+            renderProducts();
         }
 
-        // ==========================================
-        // DAILY SALES REPORT DASHBOARD
-        // ==========================================
-        function openSalesReportModal() {
-            const modal = document.getElementById('salesReportModal');
-            if (!modal) return;
-
-            const salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
-            const todayStr = new Date().toLocaleDateString('en-IN');
-            
-            // Filter today's sales
-            const todaySales = salesHistory.filter(s => s.dateStr === todayStr);
-
-            const totalRev = todaySales.reduce((sum, s) => sum + s.amount, 0);
-            const cashRev = todaySales.filter(s => s.paymentMethod === 'CASH').reduce((sum, s) => sum + s.amount, 0);
-            const upiRev = todaySales.filter(s => s.paymentMethod === 'UPI').reduce((sum, s) => sum + s.amount, 0);
-
-            document.getElementById('dashTotalSales').textContent = `₹${totalRev.toFixed(2)}`;
-            document.getElementById('dashCashSales').textContent = `₹${cashRev.toFixed(2)}`;
-            document.getElementById('dashUpiSales').textContent = `₹${upiRev.toFixed(2)}`;
-            document.getElementById('dashBillsCount').textContent = `${todaySales.length} Bills`;
-
-            const tbody = document.getElementById('salesHistoryTableBody');
-            if (todaySales.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No transactions recorded today yet. Completed orders will appear here automatically.</td></tr>`;
-            } else {
-                tbody.innerHTML = todaySales.map(s => `
-                    <tr class="hover:bg-slate-800/40">
-                        <td class="p-2.5 font-mono text-amber-400 font-bold">${s.billNo}</td>
-                        <td class="p-2.5 text-slate-400">${s.timeStr}</td>
-                        <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${s.paymentMethod === 'CASH' ? 'bg-amber-500/20 text-amber-400' : 'bg-cyan-500/20 text-cyan-400'}">${s.paymentMethod}</span></td>
-                        <td class="p-2.5 text-slate-300 max-w-xs truncate">${s.itemsSummary}</td>
-                        <td class="p-2.5 text-right font-bold text-emerald-400">₹${s.amount.toFixed(2)}</td>
-                    </tr>
-                `).join('');
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeSalesReportModal() {
-            document.getElementById('salesReportModal').classList.add('hidden');
-        }
-
-        function clearSalesHistory() {
-            if (confirm("Reset today's sales register? This action cannot be undone.")) {
-                localStorage.setItem('tpl_sales_history', '[]');
-                openSalesReportModal();
-            }
-        }
-
-        // ==========================================
-        // INVENTORY MANAGEMENT MODAL
-        // ==========================================
+        // Inventory Modal Controls
         function openInventoryModal() {
-            const modal = document.getElementById('inventoryModal');
-            if (!modal) return;
             renderInventoryTable();
-            modal.classList.remove('hidden');
+            document.getElementById('inventoryModal').classList.remove('hidden');
         }
-
         function closeInventoryModal() {
             document.getElementById('inventoryModal').classList.add('hidden');
         }
 
         function renderInventoryTable() {
+            const search = document.getElementById('invSearchInput').value.toLowerCase().trim();
             const tbody = document.getElementById('inventoryTableBody');
-            const search = (document.getElementById('invSearchInput')?.value || '').toLowerCase().trim();
+            tbody.innerHTML = '';
 
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(search) || 
-                p.category.toLowerCase().includes(search) || 
-                p.itemNo.toString() === search
-            );
-
-            const totalVal = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
-            document.getElementById('invTotalValue').textContent = `Total Inventory Value: ₹${totalVal.toLocaleString('en-IN')}`;
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">No inventory items matching filter.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = filtered.map(p => `
-                <tr class="hover:bg-slate-800/40">
-                    <td class="p-2.5 font-mono text-amber-400 font-bold">#${p.itemNo}</td>
-                    <td class="p-2.5 font-medium text-slate-200">${p.name}</td>
-                    <td class="p-2.5 text-slate-400 text-[11px]">${p.category}</td>
-                    <td class="p-2.5 text-right font-semibold text-slate-300">₹${p.price}</td>
-                    <td class="p-2.5 text-center font-bold ${p.stock < 20 ? 'text-rose-400' : 'text-emerald-400'}">${p.stock} ${p.unit}</td>
-                    <td class="p-2.5 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <input type="number" id="stockInp_${p.id}" value="${p.stock}" min="0" class="w-16 bg-slate-950 border border-slate-700 text-center text-xs py-1 rounded text-amber-300 font-bold">
-                            <button onclick="updateStockDirect(${p.id})" class="px-2 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded text-[10px]">Save</button>
-                        </div>
+            products.filter(p => p.name.toLowerCase().includes(search) || p.displaySno.includes(search)).forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 font-bold text-amber-400">#${p.displaySno}</td>
+                    <td class="p-2 font-medium">${p.name}</td>
+                    <td class="p-2">₹${p.price}</td>
+                    <td class="p-2 text-center font-bold ${p.stock < 20 ? 'text-rose-400' : 'text-emerald-400'}">${p.stock}</td>
+                    <td class="p-2 text-right">
+                        <button onclick="updateStockDirect(${p.id})" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-xs rounded text-amber-300">
+                            Edit
+                        </button>
                     </td>
-                </tr>
-            `).join('');
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        function updateStockDirect(productId) {
-            const inp = document.getElementById(`stockInp_${productId}`);
-            if (!inp) return;
-            const newStock = parseInt(inp.value) || 0;
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                product.stock = newStock;
-                saveProductsState();
-                renderProducts();
+        function updateStockDirect(prodId) {
+            const prod = products.find(p => p.id === prodId);
+            if (!prod) return;
+            const newStock = prompt(`Update stock for ${prod.name}:`, prod.stock);
+            if (newStock !== null && !isNaN(parseInt(newStock))) {
+                prod.stock = parseInt(newStock);
                 renderInventoryTable();
-            }
-        }
-
-        function resetDefaultStock() {
-            if (confirm("Reset all product stock levels back to default 500 BOX?")) {
-                products.forEach(p => p.stock = 500);
-                saveProductsState();
                 renderProducts();
-                renderInventoryTable();
             }
         }
 
-        // ==========================================
-        // SMART VOICE BILLING & SEARCH ENGINE
-        // ==========================================
-        let recognition = null;
-        let isListening = false;
+        // Sales Modal Controls
+        function openSalesModal() {
+            const salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
+            let total = 0, cash = 0, upi = 0;
 
-        function initVoiceRecognition() {
+            const tbody = document.getElementById('salesTableBody');
+            tbody.innerHTML = '';
+
+            salesHistory.forEach(s => {
+                total += s.amount;
+                if (s.payment === 'CASH') cash += s.amount;
+                else upi += s.amount;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 font-bold text-amber-400">${s.billNo}</td>
+                    <td class="p-2 text-[10px]">${s.timestamp}</td>
+                    <td class="p-2 font-semibold text-xs">${s.payment}</td>
+                    <td class="p-2 text-right font-extrabold text-emerald-400">₹${s.amount.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('salesTotalRev').textContent = `₹${total.toFixed(0)}`;
+            document.getElementById('salesCashRev').textContent = `₹${cash.toFixed(0)}`;
+            document.getElementById('salesUpiRev').textContent = `₹${upi.toFixed(0)}`;
+
+            document.getElementById('salesModal').classList.remove('hidden');
+        }
+        function closeSalesModal() {
+            document.getElementById('salesModal').classList.add('hidden');
+        }
+
+        // Voice Recognition Engine
+        function initWebSpeech() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return null;
+            if (!SpeechRecognition) return;
 
-            const rec = new SpeechRecognition();
-            const langSel = document.getElementById('voiceLangSelect');
-            rec.lang = langSel ? langSel.value : 'ta-IN'; // Multi-lingual recognition
-            rec.interimResults = false;
-            rec.maxAlternatives = 1;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = false;
 
-            rec.onstart = () => {
-                isListening = true;
-                const micBtn = document.getElementById('micBtn');
-                if (micBtn) {
-                    micBtn.className = 'absolute right-2 top-2 p-1.5 px-3 bg-rose-600 text-white rounded-lg text-xs font-semibold animate-pulse flex items-center gap-1.5';
-                    micBtn.innerHTML = '<i class="fa-solid fa-microphone font-bold"></i> Listening...';
+            recognition.onresult = (event) => {
+                const last = event.results.length - 1;
+                const text = event.results[last][0].transcript.trim().toLowerCase();
+                document.getElementById('voiceStatusText').textContent = `🎤 Heard: "${text}"`;
+
+                // Check if spoken phrase matches item number or name
+                const match = products.find(p => text.includes(p.name.toLowerCase()) || text.includes(p.displaySno.toLowerCase()));
+                if (match) {
+                    addToCart(match.id, 1);
                 }
             };
 
-            rec.onend = () => {
-                isListening = false;
-                const micBtn = document.getElementById('micBtn');
-                if (micBtn) {
-                    micBtn.className = 'absolute right-2 top-2 p-1.5 px-3 bg-slate-800 text-amber-400 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-700 transition';
-                    micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Voice';
-                }
-            };
-
-            rec.onresult = (event) => {
-                const transcript = event.results[0][0].transcript.trim();
-                console.log('Voice recognized:', transcript);
-
-                // Populate search input field
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) searchInput.value = transcript;
-
-                // Smart Voice Billing Matcher (Name / Number / Alias)
-                parseVoiceCommand(transcript);
-                renderProducts();
-            };
-
-            rec.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                isListening = false;
-                const micBtn = document.getElementById('micBtn');
-                if (micBtn) {
-                    micBtn.className = 'absolute right-2 top-2 p-1.5 px-3 bg-slate-800 text-amber-400 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-700 transition';
-                    micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Voice';
-                }
-                if (event.error === 'not-allowed') {
-                    alert('Microphone permission blocked! Please click the lock/camera icon in your browser URL bar to grant microphone access.');
-                }
-            };
-
-            return rec;
+            recognition.onerror = () => stopVoice();
+            recognition.onend = () => { if (isListening) recognition.start(); };
         }
 
-        function parseVoiceCommand(rawText) {
-            const text = rawText.toLowerCase().trim();
-            
-            // 1. Check for spoken numbers (e.g., "42", "item 42", "42 qty 3")
-            const numMatch = text.match(/\d+/g);
-            let matchedProduct = null;
-            let qty = 1;
-
-            if (numMatch && numMatch.length > 0) {
-                const num = parseInt(numMatch[0]);
-                matchedProduct = products.find(p => p.itemNo === num || p.id === num);
-                if (numMatch.length > 1) {
-                    qty = parseInt(numMatch[1]) || 1;
-                }
-            }
-
-            // 2. If no number matched, try matching item names, voiceAlias, or keywords
-            if (!matchedProduct) {
-                const cleanText = text.replace(/(add|put|give me|item|box|pack|சேர்|வேண்டும்|பாக்ஸ்|ஒன்று|இரண்டு)/gi, '').trim();
-                
-                if (cleanText.length > 1) {
-                    matchedProduct = products.find(p => 
-                        p.name.toLowerCase().includes(cleanText) || 
-                        p.voiceAlias.toLowerCase().includes(cleanText) ||
-                        cleanText.includes(p.name.toLowerCase())
-                    );
-
-                    // Token matching if exact substring match fails
-                    if (!matchedProduct) {
-                        const tokens = cleanText.split(' ');
-                        let bestScore = 0;
-                        products.forEach(p => {
-                            const pName = p.name.toLowerCase();
-                            let score = 0;
-                            tokens.forEach(tok => {
-                                if (tok.length > 2 && pName.includes(tok)) score += 1;
-                            });
-                            if (score > bestScore) {
-                                bestScore = score;
-                                matchedProduct = p;
-                            }
-                        });
-                    }
-                }
-            }
-
-            const feedback = document.getElementById('quickFeedback');
-            if (matchedProduct) {
-                addToCart(matchedProduct.id, qty);
-                if (feedback) {
-                    feedback.className = "text-xs mt-1.5 font-medium text-emerald-400";
-                    feedback.textContent = `🎤 Spoke: "${rawText}" ➔ Added ${qty}x ${matchedProduct.name} (#${matchedProduct.itemNo})`;
-                    setTimeout(() => { feedback.textContent = ''; }, 4000);
-                }
-            } else {
-                if (feedback) {
-                    feedback.className = "text-xs mt-1.5 font-medium text-amber-400";
-                    feedback.textContent = `🎤 Spoke: "${rawText}" (Filtering catalog for spoken words)`;
-                    setTimeout(() => { feedback.textContent = ''; }, 4000);
-                }
-            }
+        function toggleVoiceRecognition() {
+            if (isListening) stopVoice();
+            else startVoice();
         }
 
-        function toggleVoiceSearch() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-            if (!SpeechRecognition) {
-                alert('Voice speech recognition is not supported on this browser version. Please use Google Chrome or Microsoft Edge browser on HTTPS.');
+        function startVoice() {
+            if (!recognition) {
+                alert("Web Speech API is not supported in this browser. Please use Chrome or Edge.");
                 return;
             }
+            const lang = document.getElementById('voiceLangSelect').value;
+            recognition.lang = lang;
+            recognition.start();
+            isListening = true;
+            document.getElementById('micBtn').className = "px-3 py-1.5 bg-emerald-600 text-white text-xs sm:text-sm font-semibold rounded-lg transition flex items-center gap-1.5 animate-pulse";
+            document.getElementById('voiceStatusBanner').classList.remove('hidden');
+        }
 
-            // Reset instance to pick up language change if user switched
-            recognition = initVoiceRecognition();
-
-            if (!recognition) return;
-
-            if (isListening) {
-                try { recognition.stop(); } catch(e){}
-                isListening = false;
-            } else {
-                try {
-                    recognition.start();
-                } catch(e) {
-                    recognition = initVoiceRecognition();
-                    recognition.start();
-                }
-            }
+        function stopVoice() {
+            if (recognition) recognition.stop();
+            isListening = false;
+            document.getElementById('micBtn').className = "px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold rounded-lg transition flex items-center gap-1.5 shadow";
+            document.getElementById('voiceStatusBanner').classList.add('hidden');
         }
     </script>
 </body>

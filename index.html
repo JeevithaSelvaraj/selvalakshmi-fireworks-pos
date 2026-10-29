@@ -32,7 +32,8 @@
         @media print {
             body * { visibility: hidden; }
             #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
-            #receiptPrintArea { position: absolute; left: 0; top: 0; width: 100%; }
+            #receiptPrintArea { position: absolute; left: 0; top: 0; width: 100%; color: #000 !important; }
+            #receiptModalButtons { display: none !important; }
         }
     </style>
 </head>
@@ -129,7 +130,7 @@
                         <i class="fa-solid fa-circle-plus"></i>
                         <span>➕ Add Custom / Other Item (புதிய / பிற பொருள்)</span>
                     </h3>
-                    <span class="text-[10px] text-amber-300/80">Type any unlisted price on the fly</span>
+                    <span class="text-[10px] text-amber-300/80">Type any price on the fly</span>
                 </div>
                 <div class="grid grid-cols-12 gap-2">
                     <input type="text" id="customItemName" placeholder="Item Name (e.g. Special Box)" 
@@ -204,64 +205,25 @@
                 <!-- Complete Checkout Button -->
                 <button onclick="checkoutOrder()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-lg shadow transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-check-circle"></i>
-                    <span>Complete Order & Print Bill</span>
+                    <span>Complete Order & Print Dual Bill</span>
                 </button>
             </div>
         </section>
 
     </main>
 
-    <!-- Printable Thermal Receipt Modal -->
+    <!-- Printable Thermal Receipt Modal (Customer Copy + Merchant Copy) -->
     <div id="receiptModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden">
-            <div id="receiptPrintArea" class="font-mono text-xs space-y-2 p-1">
-                <div class="text-center border-b border-dashed border-slate-400 pb-2">
-                    <h2 class="font-black text-sm uppercase">THOLILALAR PATTASU KADAI</h2>
-                    <p class="font-bold text-[11px]">SELVALAKSHMI AGENCY</p>
-                    <p class="text-[10px]">Avinashi Main Road, Peelamedu, Coimbatore - 641004</p>
-                    <p class="text-[10px]">Ph: 9894683113 / 8667010073</p>
-                </div>
-
-                <div class="flex justify-between text-[10px] py-1 border-b border-dashed border-slate-400">
-                    <span>Bill #: <b id="recBillNo">SL-1001</b></span>
-                    <span id="recDate">2026-10-29</span>
-                </div>
-
-                <table class="w-full text-left text-[11px]">
-                    <thead>
-                        <tr class="border-b border-slate-300">
-                            <th class="py-1">Item</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-right">Price</th>
-                            <th class="text-right">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recItemsTable">
-                        <!-- Print items -->
-                    </tbody>
-                </table>
-
-                <div class="border-t border-dashed border-slate-400 pt-2 space-y-1 text-xs font-bold">
-                    <div class="flex justify-between">
-                        <span>Net Payable Amount:</span>
-                        <span id="recNetTotal">₹0.00</span>
-                    </div>
-                    <div class="flex justify-between text-[10px] font-normal text-slate-700">
-                        <span>Payment Method:</span>
-                        <span id="recPaymentMethod">CASH</span>
-                    </div>
-                </div>
-
-                <div class="text-center border-t border-dashed border-slate-400 pt-2 text-[10px]">
-                    <p>*** BILL ***</p>
-                    <p class="font-bold mt-1">இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
-                    <p>Thank You! Visit Again!</p>
-                </div>
+        <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+            
+            <div id="receiptPrintArea" class="font-mono text-xs text-slate-900 space-y-2">
+                <!-- Dynamically populated with Customer & Merchant Copies -->
             </div>
 
-            <div class="mt-4 flex gap-2">
-                <button onclick="window.print()" class="flex-1 py-2 bg-blue-600 text-white font-bold text-xs rounded hover:bg-blue-700">
-                    🖨️ Print Receipt
+            <div id="receiptModalButtons" class="mt-4 flex gap-2 pt-2 border-t border-slate-200">
+                <button onclick="window.print()" class="flex-1 py-2 bg-emerald-600 text-white font-bold text-xs rounded hover:bg-emerald-700 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Print Receipts</span>
                 </button>
                 <button onclick="closeReceiptModal()" class="flex-1 py-2 bg-slate-300 text-slate-800 font-bold text-xs rounded hover:bg-slate-400">
                     Close
@@ -529,8 +491,8 @@
             {"id":173,"itemNo":173,"displaySno":"ST-36","sku":"SKU-173","name":"ST ROLLCAPS","category":"STANDARD - ROLLCAPS","price":150,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"}
         ];
 
-        // Ensure 2026 data replaces old localStorage
-        localStorage.setItem('tpl_products_2026_v1', JSON.stringify(NEW_2026_PRODUCTS));
+        // Replace localStorage with new 2026 products
+        localStorage.setItem('tpl_products_2026_v2', JSON.stringify(NEW_2026_PRODUCTS));
         let products = NEW_2026_PRODUCTS;
         let cart = [];
         let selectedPayment = 'CASH';
@@ -763,6 +725,7 @@
             if (mode === 'CARD') document.getElementById('payCardBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-purple-500 bg-purple-600 text-white";
         }
 
+        // Complete Order & Print Dual Receipts (Customer + Merchant Copy)
         function checkoutOrder() {
             if (cart.length === 0) {
                 alert("Cart is empty! Add products first.");
@@ -773,25 +736,80 @@
             const billNo = "SL-" + Math.floor(1000 + Math.random() * 9000);
             const timestamp = new Date().toLocaleString();
 
-            // Populate Receipt Modal
-            document.getElementById('recBillNo').textContent = billNo;
-            document.getElementById('recDate').textContent = timestamp;
-            document.getElementById('recPaymentMethod').textContent = selectedPayment;
-            document.getElementById('recNetTotal').textContent = `₹${total.toFixed(2)}`;
+            // Helper function to build single receipt HTML block
+            function buildReceiptBlock(copyTitle) {
+                let itemsTableHtml = '';
+                cart.forEach(i => {
+                    itemsTableHtml += `
+                        <tr class="border-b border-slate-200/50">
+                            <td class="py-1 max-w-[120px] truncate">${i.name}</td>
+                            <td class="text-center">${i.qty}</td>
+                            <td class="text-right">₹${i.price}</td>
+                            <td class="text-right font-bold">₹${(i.price * i.qty).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
 
-            const recTable = document.getElementById('recItemsTable');
-            recTable.innerHTML = '';
-            cart.forEach(i => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-200/50";
-                tr.innerHTML = `
-                    <td class="py-1 max-w-[120px] truncate">${i.name}</td>
-                    <td class="text-center">${i.qty}</td>
-                    <td class="text-right">₹${i.price}</td>
-                    <td class="text-right font-bold">₹${i.price * i.qty}</td>
+                return `
+                    <div class="receipt-single-copy bg-white p-2 rounded border border-slate-300">
+                        <div class="text-center border-b border-dashed border-slate-400 pb-2">
+                            <span class="inline-block bg-slate-900 text-white font-bold text-[10px] px-2 py-0.5 rounded mb-1 uppercase tracking-wider">${copyTitle}</span>
+                            <h2 class="font-black text-sm uppercase">THOLILALAR PATTASU KADAI</h2>
+                            <p class="font-bold text-[11px]">SELVALAKSHMI AGENCY</p>
+                            <p class="text-[10px]">Avinashi Main Road, Peelamedu, Coimbatore - 641004</p>
+                            <p class="text-[10px]">Ph: 9894683113 / 8667010073</p>
+                        </div>
+
+                        <div class="flex justify-between text-[10px] py-1 border-b border-dashed border-slate-400">
+                            <span>Bill #: <b>${billNo}</b></span>
+                            <span>${timestamp}</span>
+                        </div>
+
+                        <table class="w-full text-left text-[11px] my-2">
+                            <thead>
+                                <tr class="border-b border-slate-300">
+                                    <th class="py-1">Item</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-right">Price</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsTableHtml}
+                            </tbody>
+                        </table>
+
+                        <div class="border-t border-dashed border-slate-400 pt-2 space-y-1 text-xs font-bold">
+                            <div class="flex justify-between">
+                                <span>Net Payable Amount:</span>
+                                <span>₹${total.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] font-normal text-slate-700">
+                                <span>Payment Method:</span>
+                                <span>${selectedPayment}</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center border-t border-dashed border-slate-400 pt-2 text-[10px] mt-2">
+                            <p>*** 0% TAX / NON-GST BILL ***</p>
+                            <p class="font-bold mt-1">இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
+                            <p>Thank You! Visit Again!</p>
+                        </div>
+                    </div>
                 `;
-                recTable.appendChild(tr);
-            });
+            }
+
+            // Populate both Customer & Merchant copies into print area
+            const printArea = document.getElementById('receiptPrintArea');
+            printArea.innerHTML = `
+                ${buildReceiptBlock('👤 CUSTOMER COPY / வாடிக்கையாளர் நகல்')}
+                
+                <div class="text-center text-[10px] my-3 border-b-2 border-dashed border-slate-500 py-1 font-bold text-slate-700">
+                    ✂️ - - - - - CUT HERE (வெட்டவும்) - - - - - ✂️
+                </div>
+
+                ${buildReceiptBlock('🏪 MERCHANT COPY / கடை நகல்')}
+            `;
 
             // Save transaction to local sales history
             let salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
@@ -812,7 +830,7 @@
                 }
             });
 
-            // Open Modal
+            // Open Receipt Modal
             document.getElementById('receiptModal').classList.remove('hidden');
         }
 
@@ -911,7 +929,6 @@
                 const text = event.results[last][0].transcript.trim().toLowerCase();
                 document.getElementById('voiceStatusText').textContent = `🎤 Heard: "${text}"`;
 
-                // Check if spoken phrase matches item number or name
                 const match = products.find(p => text.includes(p.name.toLowerCase()) || text.includes(p.displaySno.toLowerCase()));
                 if (match) {
                     addToCart(match.id, 1);

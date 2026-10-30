@@ -167,12 +167,20 @@
                 </button>
             </div>
 
+            <!-- Optional Customer Info Fields -->
+            <div class="p-2 bg-slate-800/60 border-b border-slate-700 grid grid-cols-2 gap-2 text-xs">
+                <input type="text" id="custName" placeholder="👤 Customer Name (Optional)" 
+                    class="bg-slate-900 text-slate-100 placeholder-slate-400 text-xs px-2.5 py-1.5 rounded border border-slate-600 focus:outline-none focus:border-amber-400">
+                <input type="tel" id="custPhone" placeholder="📞 Phone No. (Optional)" 
+                    class="bg-slate-900 text-slate-100 placeholder-slate-400 text-xs px-2.5 py-1.5 rounded border border-slate-600 focus:outline-none focus:border-amber-400">
+            </div>
+
             <!-- Cart Items Table -->
-            <div class="flex-1 overflow-y-auto p-3 space-y-2 min-h-[260px] max-h-[380px]" id="cartItemsContainer">
+            <div class="flex-1 overflow-y-auto p-3 space-y-2 min-h-[200px] max-h-[320px]" id="cartItemsContainer">
                 <!-- Cart items dynamically added here -->
             </div>
 
-            <!-- Bill Calculations Footer -->
+            <!-- Bill Calculations & Discount Footer -->
             <div class="p-3 bg-slate-800/90 border-t border-slate-700 space-y-2">
                 <div class="flex justify-between text-xs text-slate-300">
                     <span>Total Items:</span>
@@ -180,8 +188,26 @@
                 </div>
 
                 <div class="flex justify-between text-xs text-slate-300">
-                    <span>GST (0% Tax Free):</span>
-                    <span class="font-semibold text-emerald-400">₹ 0.00</span>
+                    <span>Subtotal Amount:</span>
+                    <span id="cartSubtotal" class="font-semibold text-slate-100">₹ 0.00</span>
+                </div>
+
+                <!-- Discount Input Widget -->
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-700/60">
+                    <span class="text-slate-300 font-medium">Discount (தள்ளுபடி):</span>
+                    <div class="flex items-center space-x-1">
+                        <select id="discountType" onchange="updateCartUI()" class="bg-slate-900 text-amber-400 font-bold text-xs border border-slate-600 rounded px-1.5 py-1 focus:outline-none">
+                            <option value="RUPEES">₹ (Rupees)</option>
+                            <option value="PERCENT">% (Percent)</option>
+                        </select>
+                        <input type="number" id="discountValue" oninput="updateCartUI()" min="0" placeholder="0" 
+                            class="w-16 bg-slate-900 text-amber-400 font-bold text-xs text-right px-1.5 py-1 rounded border border-slate-600 focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+
+                <div class="flex justify-between text-xs text-rose-400 font-semibold" id="discountAmountRow">
+                    <span>Discount Amount:</span>
+                    <span id="cartDiscountAmt">- ₹ 0.00</span>
                 </div>
 
                 <div class="flex justify-between text-base font-extrabold text-amber-400 pt-1 border-t border-slate-700">
@@ -300,6 +326,7 @@
                         <tr>
                             <th class="p-2">Bill #</th>
                             <th class="p-2">Time</th>
+                            <th class="p-2">Customer</th>
                             <th class="p-2">Pay</th>
                             <th class="p-2 text-right">Amount</th>
                         </tr>
@@ -482,9 +509,6 @@
             {"id":164,"itemNo":164,"displaySno":"ST-27","sku":"SKU-164","name":"ST MONEY PENNY","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
             {"id":165,"itemNo":165,"displaySno":"ST-28","sku":"SKU-165","name":"ST JIL JUNG JUK","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
             {"id":166,"itemNo":166,"displaySno":"ST-29","sku":"SKU-166","name":"ST SUNDROPS","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
-            {"id":167,"itemNo":167,"displaySno":"ST-30","sku":"SKU-167","name":"ST DIAMOND MINE","category":"STANDARD - FANCY CRACKERS","price":500,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
-            {"id":168,"itemNo":168,"displaySno":"ST-31","sku":"SKU-168","name":"ST ARIEL OUT","category":"STANDARD - FANCY CRACKERS","price":550,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
-            {"id":169,"itemNo":169,"displaySno":"ST-32","sku":"SKU-169","name":"ST POPCORN FOUNTAIN","category":"STANDARD - FANCY CRACKERS","price":550,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
             {"id":170,"itemNo":170,"displaySno":"ST-33","sku":"SKU-170","name":"ST TREASURE BOX","category":"STANDARD - FANCY CRACKERS","price":800,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
             {"id":171,"itemNo":171,"displaySno":"ST-34","sku":"SKU-171","name":"ST RED BIJILI(50 pcs)","category":"STANDARD - BIJILI","price":50,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
             {"id":172,"itemNo":172,"displaySno":"ST-35","sku":"SKU-172","name":"ST RED BIJILI(100 pcs)","category":"STANDARD - BIJILI","price":100,"stock":500,"unit":"BOX","perUnit":1,"brand":"STANDARD FIREWORKS"},
@@ -635,7 +659,6 @@
                 qty = parseInt(parts[1]) || 1;
             }
 
-            // Search product by displaySno, itemNo or SKU
             const prod = products.find(p => 
                 p.displaySno.toUpperCase() === snoStr || 
                 p.itemNo.toString() === snoStr ||
@@ -667,7 +690,24 @@
 
         function clearCart() {
             cart = [];
+            document.getElementById('custName').value = "";
+            document.getElementById('custPhone').value = "";
+            document.getElementById('discountValue').value = "";
             updateCartUI();
+        }
+
+        // Calculate Discount Amount in Rupees
+        function getDiscountAmount(subtotal) {
+            const type = document.getElementById('discountType').value;
+            const val = parseFloat(document.getElementById('discountValue').value) || 0;
+
+            if (val <= 0 || subtotal <= 0) return 0;
+
+            if (type === 'PERCENT') {
+                return (subtotal * (val / 100));
+            } else {
+                return Math.min(subtotal, val); // Cannot exceed subtotal
+            }
         }
 
         function updateCartUI() {
@@ -675,7 +715,7 @@
             if (!container) return;
 
             container.innerHTML = '';
-            let total = 0;
+            let subtotal = 0;
             let count = 0;
 
             if (cart.length === 0) {
@@ -688,7 +728,7 @@
             } else {
                 cart.forEach(item => {
                     const itemTotal = item.price * item.qty;
-                    total += itemTotal;
+                    subtotal += itemTotal;
                     count += item.qty;
 
                     const row = document.createElement('div');
@@ -710,8 +750,13 @@
                 });
             }
 
+            const discountAmount = getDiscountAmount(subtotal);
+            const netTotal = Math.max(0, subtotal - discountAmount);
+
             document.getElementById('cartCount').textContent = count;
-            document.getElementById('cartNetTotal').textContent = `₹ ${total.toFixed(2)}`;
+            document.getElementById('cartSubtotal').textContent = `₹ ${subtotal.toFixed(2)}`;
+            document.getElementById('cartDiscountAmt').textContent = `- ₹ ${discountAmount.toFixed(2)}`;
+            document.getElementById('cartNetTotal').textContent = `₹ ${netTotal.toFixed(2)}`;
         }
 
         function selectPayment(mode) {
@@ -732,7 +777,13 @@
                 return;
             }
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const discountAmt = getDiscountAmount(subtotal);
+            const netTotal = Math.max(0, subtotal - discountAmt);
+
+            const custNameVal = document.getElementById('custName').value.trim();
+            const custPhoneVal = document.getElementById('custPhone').value.trim();
+
             const billNo = "SL-" + Math.floor(1000 + Math.random() * 9000);
             const timestamp = new Date().toLocaleString();
 
@@ -750,6 +801,30 @@
                     `;
                 });
 
+                let customerBlock = '';
+                if (custNameVal || custPhoneVal) {
+                    customerBlock = `
+                        <div class="text-[10px] py-1 border-b border-dashed border-slate-400 font-semibold">
+                            ${custNameVal ? `<div>Customer: <b>${custNameVal}</b></div>` : ''}
+                            ${custPhoneVal ? `<div>Phone: <b>${custPhoneVal}</b></div>` : ''}
+                        </div>
+                    `;
+                }
+
+                let discountBlock = '';
+                if (discountAmt > 0) {
+                    discountBlock = `
+                        <div class="flex justify-between text-[11px] font-normal">
+                            <span>Subtotal:</span>
+                            <span>₹${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] font-normal text-rose-700">
+                            <span>Discount:</span>
+                            <span>- ₹${discountAmt.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
                 return `
                     <div class="receipt-single-copy bg-white p-2 rounded border border-slate-300">
                         <div class="text-center border-b border-dashed border-slate-400 pb-2">
@@ -764,6 +839,8 @@
                             <span>Bill #: <b>${billNo}</b></span>
                             <span>${timestamp}</span>
                         </div>
+
+                        ${customerBlock}
 
                         <table class="w-full text-left text-[11px] my-2">
                             <thead>
@@ -780,9 +857,10 @@
                         </table>
 
                         <div class="border-t border-dashed border-slate-400 pt-2 space-y-1 text-xs font-bold">
-                            <div class="flex justify-between">
+                            ${discountBlock}
+                            <div class="flex justify-between text-sm">
                                 <span>Net Payable Amount:</span>
-                                <span>₹${total.toFixed(2)}</span>
+                                <span>₹${netTotal.toFixed(2)}</span>
                             </div>
                             <div class="flex justify-between text-[10px] font-normal text-slate-700">
                                 <span>Payment Method:</span>
@@ -791,7 +869,7 @@
                         </div>
 
                         <div class="text-center border-t border-dashed border-slate-400 pt-2 text-[10px] mt-2">
-                            <p>*** NO RETURN/EXCHANGE ***</p>
+                            <p>*** No return/Exchange ***</p>
                             <p class="font-bold mt-1">இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
                             <p>Thank You! Visit Again!</p>
                         </div>
@@ -816,7 +894,8 @@
             salesHistory.push({
                 billNo: billNo,
                 timestamp: timestamp,
-                amount: total,
+                amount: netTotal,
+                customer: custNameVal ? `${custNameVal} (${custPhoneVal || 'No Phone'})` : 'Walk-in',
                 payment: selectedPayment,
                 itemCount: cart.length
             });
@@ -899,6 +978,7 @@
                 tr.innerHTML = `
                     <td class="p-2 font-bold text-amber-400">${s.billNo}</td>
                     <td class="p-2 text-[10px]">${s.timestamp}</td>
+                    <td class="p-2 text-xs text-slate-300">${s.customer || 'Walk-in'}</td>
                     <td class="p-2 font-semibold text-xs">${s.payment}</td>
                     <td class="p-2 text-right font-extrabold text-emerald-400">₹${s.amount.toFixed(2)}</td>
                 `;

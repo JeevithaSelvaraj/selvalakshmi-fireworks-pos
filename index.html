@@ -295,46 +295,78 @@
 
     <!-- Today's Sales Dashboard Modal -->
     <div id="salesModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-700">
+        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-3xl w-full border border-slate-700 max-h-[85vh] flex flex-col space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-700">
                 <h3 class="font-bold text-base text-emerald-400 flex items-center gap-2">
                     <i class="fa-solid fa-chart-line"></i>
-                    <span>Today's Sales Summary (இன்றைய விற்பனை)</span>
+                    <span>Sales Dashboard & Date-wise Summary (விற்பனை விவரம்)</span>
                 </h3>
                 <button onclick="closeSalesModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-2 my-3">
-                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Total Revenue</div>
-                    <div id="salesTotalRev" class="text-base font-black text-amber-400">₹0</div>
+            <!-- Overall Stats Cards -->
+            <div class="grid grid-cols-4 gap-2">
+                <div class="bg-slate-800 p-2 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Overall Total</div>
+                    <div id="salesTotalRev" class="text-sm sm:text-base font-black text-amber-400">₹0</div>
                 </div>
-                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Cash Collected</div>
-                    <div id="salesCashRev" class="text-base font-black text-emerald-400">₹0</div>
+                <div class="bg-slate-800 p-2 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Cash</div>
+                    <div id="salesCashRev" class="text-sm sm:text-base font-black text-emerald-400">₹0</div>
                 </div>
-                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center">
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase">UPI / Online</div>
-                    <div id="salesUpiRev" class="text-base font-black text-cyan-400">₹0</div>
+                <div class="bg-slate-800 p-2 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">UPI / GPay</div>
+                    <div id="salesUpiRev" class="text-sm sm:text-base font-black text-cyan-400">₹0</div>
+                </div>
+                <div class="bg-slate-800 p-2 rounded-lg border border-slate-700 text-center">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Card</div>
+                    <div id="salesCardRev" class="text-sm sm:text-base font-black text-purple-400">₹0</div>
                 </div>
             </div>
 
-            <div class="flex-1 overflow-y-auto pr-1">
-                <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-800 text-slate-200 sticky top-0">
-                        <tr>
-                            <th class="p-2">Bill #</th>
-                            <th class="p-2">Time</th>
-                            <th class="p-2">Customer</th>
-                            <th class="p-2">Pay</th>
-                            <th class="p-2 text-right">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody id="salesTableBody" class="divide-y divide-slate-700">
-                        <!-- Sales logs -->
-                    </tbody>
-                </table>
+            <!-- Date-wise Breakdown Table & Logs -->
+            <div class="flex-1 overflow-y-auto pr-1 space-y-3">
+                <div>
+                    <h4 class="text-xs font-bold text-amber-400 mb-1.5 flex items-center gap-1">
+                        <i class="fa-solid fa-calendar-days"></i> Date-Wise Sales Breakdown (தேதி வாரியான விற்பனை)
+                    </h4>
+                    <table class="w-full text-left text-xs text-slate-300 border border-slate-700 rounded-lg overflow-hidden">
+                        <thead class="bg-slate-800 text-slate-200">
+                            <tr>
+                                <th class="p-2">Date</th>
+                                <th class="p-2 text-center">Bills</th>
+                                <th class="p-2 text-right">Cash (₹)</th>
+                                <th class="p-2 text-right">UPI (₹)</th>
+                                <th class="p-2 text-right">Card (₹)</th>
+                                <th class="p-2 text-right">Day Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datewiseSalesBody" class="divide-y divide-slate-700">
+                            <!-- Datewise summary rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Transactions Log -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-300 mb-1.5 flex items-center gap-1">
+                        <i class="fa-solid fa-list-check"></i> Recent Transaction Log
+                    </h4>
+                    <table class="w-full text-left text-xs text-slate-300 border border-slate-700 rounded-lg overflow-hidden">
+                        <thead class="bg-slate-800 text-slate-200">
+                            <tr>
+                                <th class="p-2">Bill #</th>
+                                <th class="p-2">Date & Time</th>
+                                <th class="p-2">Customer</th>
+                                <th class="p-2">Payment</th>
+                                <th class="p-2 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody" class="divide-y divide-slate-700">
+                            <!-- Sales logs -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -629,7 +661,6 @@
                 isCustom: true
             });
 
-            // reset input fields
             nameInput.value = "";
             priceInput.value = "";
             qtyInput.value = "1";
@@ -706,7 +737,7 @@
             if (type === 'PERCENT') {
                 return (subtotal * (val / 100));
             } else {
-                return Math.min(subtotal, val); // Cannot exceed subtotal
+                return Math.min(subtotal, val);
             }
         }
 
@@ -961,33 +992,87 @@
             }
         }
 
-        // Sales Modal Controls
+        // Sales Modal Controls with Date-Wise Breakdown across CASH, UPI, and CARD
         function openSalesModal() {
             const salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
-            let total = 0, cash = 0, upi = 0;
+            let totalRev = 0, cashRev = 0, upiRev = 0, cardRev = 0;
 
+            const dateSummary = {};
+
+            salesHistory.forEach(s => {
+                const amt = s.amount || 0;
+                const pay = (s.payment || 'CASH').toUpperCase();
+                
+                // Aggregate totals
+                totalRev += amt;
+                if (pay === 'CASH') cashRev += amt;
+                else if (pay === 'UPI') upiRev += amt;
+                else if (pay === 'CARD') cardRev += amt;
+
+                // Extract date string
+                let dateKey = 'Today';
+                if (s.timestamp) {
+                    dateKey = s.timestamp.split(',')[0].trim();
+                }
+
+                if (!dateSummary[dateKey]) {
+                    dateSummary[dateKey] = { CASH: 0, UPI: 0, CARD: 0, TOTAL: 0, COUNT: 0 };
+                }
+
+                dateSummary[dateKey][pay] = (dateSummary[dateKey][pay] || 0) + amt;
+                dateSummary[dateKey].TOTAL += amt;
+                dateSummary[dateKey].COUNT += 1;
+            });
+
+            // Populate Overall Cards
+            document.getElementById('salesTotalRev').textContent = `₹${totalRev.toFixed(0)}`;
+            document.getElementById('salesCashRev').textContent = `₹${cashRev.toFixed(0)}`;
+            document.getElementById('salesUpiRev').textContent = `₹${upiRev.toFixed(0)}`;
+            document.getElementById('salesCardRev').textContent = `₹${cardRev.toFixed(0)}`;
+
+            // Populate Datewise Summary Table
+            const datewiseBody = document.getElementById('datewiseSalesBody');
+            datewiseBody.innerHTML = '';
+
+            const dateKeys = Object.keys(dateSummary).reverse();
+            if (dateKeys.length === 0) {
+                datewiseBody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-500">No sales recorded yet.</td></tr>`;
+            } else {
+                dateKeys.forEach(dk => {
+                    const row = dateSummary[dk];
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-800/50";
+                    tr.innerHTML = `
+                        <td class="p-2 font-bold text-amber-400">${dk}</td>
+                        <td class="p-2 text-center font-medium">${row.COUNT}</td>
+                        <td class="p-2 text-right font-semibold text-emerald-400">₹${row.CASH.toFixed(2)}</td>
+                        <td class="p-2 text-right font-semibold text-cyan-400">₹${row.UPI.toFixed(2)}</td>
+                        <td class="p-2 text-right font-semibold text-purple-400">₹${row.CARD.toFixed(2)}</td>
+                        <td class="p-2 text-right font-extrabold text-amber-400">₹${row.TOTAL.toFixed(2)}</td>
+                    `;
+                    datewiseBody.appendChild(tr);
+                });
+            }
+
+            // Populate Itemized Transaction Log
             const tbody = document.getElementById('salesTableBody');
             tbody.innerHTML = '';
 
-            salesHistory.forEach(s => {
-                total += s.amount;
-                if (s.payment === 'CASH') cash += s.amount;
-                else upi += s.amount;
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-2 font-bold text-amber-400">${s.billNo}</td>
-                    <td class="p-2 text-[10px]">${s.timestamp}</td>
-                    <td class="p-2 text-xs text-slate-300">${s.customer || 'Walk-in'}</td>
-                    <td class="p-2 font-semibold text-xs">${s.payment}</td>
-                    <td class="p-2 text-right font-extrabold text-emerald-400">₹${s.amount.toFixed(2)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('salesTotalRev').textContent = `₹${total.toFixed(0)}`;
-            document.getElementById('salesCashRev').textContent = `₹${cash.toFixed(0)}`;
-            document.getElementById('salesUpiRev').textContent = `₹${upi.toFixed(0)}`;
+            if (salesHistory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-500">No transaction logs available.</td></tr>`;
+            } else {
+                salesHistory.slice().reverse().forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="p-2 font-bold text-amber-400">${s.billNo}</td>
+                        <td class="p-2 text-[10px]">${s.timestamp}</td>
+                        <td class="p-2 text-xs text-slate-300">${s.customer || 'Walk-in'}</td>
+                        <td class="p-2 font-semibold text-xs">${s.payment}</td>
+                        <td class="p-2 text-right font-extrabold text-emerald-400">₹${(s.amount || 0).toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
 
             document.getElementById('salesModal').classList.remove('hidden');
         }

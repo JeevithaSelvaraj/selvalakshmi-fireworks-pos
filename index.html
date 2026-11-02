@@ -238,12 +238,12 @@
 
     </main>
 
-    <!-- Printable Thermal Receipt Modal (Customer Copy + Merchant Copy) -->
+    <!-- Printable Thermal Receipt Modal -->
     <div id="receiptModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             
             <div id="receiptPrintArea" class="font-mono text-xs text-slate-900 space-y-2">
-                <!-- Dynamically populated with Customer & Merchant Copies -->
+                <!-- Dynamically populated -->
             </div>
 
             <div id="receiptModalButtons" class="mt-4 flex gap-2 pt-2 border-t border-slate-200">
@@ -371,7 +371,7 @@
         </div>
     </div>
 
-    <!-- JS Logic & 100% Realigned 173-Item Dataset from Latest CSV -->
+    <!-- JS Logic & 100% Realigned 173-Item Dataset from PL FINAL.xlsx -->
     <script>
         const NEW_2026_PRODUCTS = [
     {
@@ -381,7 +381,7 @@
         "sku": "SKU-001",
         "name": "2 \u00be\"  BIRD",
         "category": "FLASH SOUND CRACKERS",
-        "price": 15,
+        "price": 15.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -394,7 +394,7 @@
         "sku": "SKU-002",
         "name": "3 \u00bd\" CRACKERS LAKSHMI",
         "category": "FLASH SOUND CRACKERS",
-        "price": 25,
+        "price": 25.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -407,7 +407,7 @@
         "sku": "SKU-003",
         "name": "4\" LAXMI",
         "category": "FLASH SOUND CRACKERS",
-        "price": 35,
+        "price": 35.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -420,7 +420,7 @@
         "sku": "SKU-004",
         "name": "4\" DELUXE LAKSHMI",
         "category": "FLASH SOUND CRACKERS",
-        "price": 65,
+        "price": 65.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -433,7 +433,7 @@
         "sku": "SKU-005",
         "name": "4\" GOLD LAKSHMI",
         "category": "FLASH SOUND CRACKERS",
-        "price": 70,
+        "price": 70.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -446,7 +446,7 @@
         "sku": "SKU-006",
         "name": "5\" KOMBEN",
         "category": "FLASH SOUND CRACKERS",
-        "price": 70,
+        "price": 70.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -459,7 +459,7 @@
         "sku": "SKU-007",
         "name": "TWO SOUND CRACKERS",
         "category": "FLASH SOUND CRACKERS",
-        "price": 60,
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -472,7 +472,7 @@
         "sku": "SKU-008",
         "name": "28 CHORSA",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 35,
+        "price": 35.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -485,7 +485,7 @@
         "sku": "SKU-009",
         "name": "56 CHORSA",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 65,
+        "price": 65.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -498,7 +498,7 @@
         "sku": "SKU-010",
         "name": "28 GAINT",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 60,
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -511,7 +511,7 @@
         "sku": "SKU-011",
         "name": "56 GAINT",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 120,
+        "price": 120.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -524,7 +524,7 @@
         "sku": "SKU-012",
         "name": "24 DELUXE CRACKERS",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 100,
+        "price": 100.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -537,7 +537,7 @@
         "sku": "SKU-013",
         "name": "50 DELUXE CRACKERS",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 230,
+        "price": 230.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -550,7 +550,7 @@
         "sku": "SKU-014",
         "name": "100 DELTA DELUXE CRACKERS",
         "category": "CHORSA,GAINT,DELUX CRACKERS",
-        "price": 600,
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -563,7 +563,7 @@
         "sku": "SKU-015",
         "name": "100 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 80,
+        "price": 80.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -576,7 +576,7 @@
         "sku": "SKU-016",
         "name": "200 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 160,
+        "price": 160.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -589,7 +589,7 @@
         "sku": "SKU-017",
         "name": "300 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 320,
+        "price": 320.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -602,7 +602,7 @@
         "sku": "SKU-018",
         "name": "600 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 480,
+        "price": 480.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -615,7 +615,7 @@
         "sku": "SKU-019",
         "name": "1000 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 400,
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -628,7 +628,7 @@
         "sku": "SKU-020",
         "name": "1000 WALA SK",
         "category": "HAPPY CRACKERS",
-        "price": 600,
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -641,7 +641,7 @@
         "sku": "SKU-021",
         "name": "2000 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 800,
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -654,7 +654,7 @@
         "sku": "SKU-022",
         "name": "2000 WALA SK",
         "category": "HAPPY CRACKERS",
-        "price": 1200,
+        "price": 1200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -667,7 +667,7 @@
         "sku": "SKU-023",
         "name": "5000 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 2000,
+        "price": 2000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -680,7 +680,7 @@
         "sku": "SKU-024",
         "name": "5000 WALA SK",
         "category": "HAPPY CRACKERS",
-        "price": 3000,
+        "price": 3000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -693,7 +693,7 @@
         "sku": "SKU-025",
         "name": "10000 WALA",
         "category": "HAPPY CRACKERS",
-        "price": 4000,
+        "price": 4000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -706,7 +706,7 @@
         "sku": "SKU-026",
         "name": "10000 WALA SK",
         "category": "HAPPY CRACKERS",
-        "price": 6000,
+        "price": 6000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -719,7 +719,7 @@
         "sku": "SKU-027",
         "name": "ATOM BOMB BIG",
         "category": "BOMBS",
-        "price": 60,
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -732,7 +732,7 @@
         "sku": "SKU-028",
         "name": "HYDRO BOMB  GREEN",
         "category": "BOMBS",
-        "price": 70,
+        "price": 70.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -745,7 +745,7 @@
         "sku": "SKU-029",
         "name": "KING OF KING BOMB",
         "category": "BOMBS",
-        "price": 150,
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -758,7 +758,7 @@
         "sku": "SKU-030",
         "name": "CLASSIC BOMB",
         "category": "BOMBS",
-        "price": 200,
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -771,7 +771,7 @@
         "sku": "SKU-031",
         "name": "RED BIJILI(50 pcs)",
         "category": "BIJILI CRACKERS",
-        "price": 30,
+        "price": 30.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -784,7 +784,7 @@
         "sku": "SKU-032",
         "name": "RED BIJILI(100 pcs)",
         "category": "BIJILI CRACKERS",
-        "price": 60,
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -797,7 +797,7 @@
         "sku": "SKU-033",
         "name": "STRIPPED BIJILI(100 pcs)",
         "category": "BIJILI CRACKERS",
-        "price": 70,
+        "price": 70.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -810,7 +810,7 @@
         "sku": "SKU-034",
         "name": "GROUND CHAKKAR BIG",
         "category": "GROUND CHAKKARS",
-        "price": 80,
+        "price": 80.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -823,7 +823,7 @@
         "sku": "SKU-035",
         "name": "GROUND CHAKKAR ASHOKA",
         "category": "GROUND CHAKKARS",
-        "price": 140,
+        "price": 140.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -836,7 +836,7 @@
         "sku": "SKU-036",
         "name": "GROUND CHAKKAR SPECIAL",
         "category": "GROUND CHAKKARS",
-        "price": 180,
+        "price": 180.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -849,7 +849,7 @@
         "sku": "SKU-037",
         "name": "GROUND CHAKKAR DELUXE",
         "category": "GROUND CHAKKARS",
-        "price": 240,
+        "price": 240.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -862,7 +862,7 @@
         "sku": "SKU-038",
         "name": "FLOWER POTS SMALL",
         "category": "FLOWER POTS",
-        "price": 100,
+        "price": 100.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -875,7 +875,7 @@
         "sku": "SKU-039",
         "name": "FLOWER POTS BIG",
         "category": "FLOWER POTS",
-        "price": 150,
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -888,7 +888,7 @@
         "sku": "SKU-040",
         "name": "FLOWER POTS SPECIAL",
         "category": "FLOWER POTS",
-        "price": 200,
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -901,7 +901,7 @@
         "sku": "SKU-041",
         "name": "FLOWER POTS ASHOKA/GAINT",
         "category": "FLOWER POTS",
-        "price": 300,
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -914,7 +914,7 @@
         "sku": "SKU-042",
         "name": "FLOWER POTS DELUXE (5 pcs)",
         "category": "FLOWER POTS",
-        "price": 320,
+        "price": 320.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -927,7 +927,7 @@
         "sku": "SKU-043",
         "name": "FLOWER POTS SUPER DLX (2 pcs)",
         "category": "FLOWER POTS",
-        "price": 200,
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -940,7 +940,7 @@
         "sku": "SKU-044",
         "name": "MERI JAAN(2 pcs)",
         "category": "FLOWER POTS",
-        "price": 300,
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -948,12 +948,12 @@
     },
     {
         "id": 45,
-        "itemNo": "45",
-        "displaySno": "45",
+        "itemNo": "89",
+        "displaySno": "89",
         "sku": "SKU-045",
-        "name": "COLOUR SONG",
-        "category": "COLOUR FLOWERPOTS",
-        "price": 360,
+        "name": "GANAGA JAMUNA (5 pcs))",
+        "category": "FANCY CRACKERS",
+        "price": 160.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -961,12 +961,12 @@
     },
     {
         "id": 46,
-        "itemNo": "46",
-        "displaySno": "46",
+        "itemNo": "90",
+        "displaySno": "90",
         "sku": "SKU-046",
-        "name": "COLOUR KOTI/POT GIRL",
-        "category": "COLOUR FLOWERPOTS",
-        "price": 400,
+        "name": "PHOTOFLASH",
+        "category": "FANCY CRACKERS",
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -974,12 +974,12 @@
     },
     {
         "id": 47,
-        "itemNo": "47",
-        "displaySno": "47",
+        "itemNo": "91",
+        "displaySno": "91",
         "sku": "SKU-047",
-        "name": "COLOUR KOTI DELUXE",
-        "category": "COLOUR FLOWERPOTS",
-        "price": 800,
+        "name": "TIN BEER SMALL",
+        "category": "FANCY CRACKERS",
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -987,12 +987,12 @@
     },
     {
         "id": 48,
-        "itemNo": "48",
-        "displaySno": "48",
+        "itemNo": "92",
+        "displaySno": "92",
         "sku": "SKU-048",
-        "name": "BABY ROCKET",
-        "category": "ROCKETS",
-        "price": 60,
+        "name": "BUTTERFLY/PAMBARAM",
+        "category": "FANCY CRACKERS",
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1000,12 +1000,12 @@
     },
     {
         "id": 49,
-        "itemNo": "49",
-        "displaySno": "49",
+        "itemNo": "93",
+        "displaySno": "93",
         "sku": "SKU-049",
-        "name": "ROCKET BOMB",
-        "category": "ROCKETS",
-        "price": 150,
+        "name": "HELICOPTER",
+        "category": "FANCY CRACKERS",
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1013,12 +1013,12 @@
     },
     {
         "id": 50,
-        "itemNo": "50",
-        "displaySno": "50",
+        "itemNo": "94",
+        "displaySno": "94",
         "sku": "SKU-050",
-        "name": "COLOUR ROCKET",
-        "category": "ROCKETS",
-        "price": 150,
+        "name": "DANCING WHEEL",
+        "category": "FANCY CRACKERS",
+        "price": 200.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1026,12 +1026,12 @@
     },
     {
         "id": 51,
-        "itemNo": "51",
-        "displaySno": "51",
+        "itemNo": "95",
+        "displaySno": "95",
         "sku": "SKU-051",
-        "name": "LUNIC ROCKET",
-        "category": "ROCKETS",
-        "price": 250,
+        "name": "GYPSY",
+        "category": "FANCY CRACKERS",
+        "price": 250.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1039,12 +1039,12 @@
     },
     {
         "id": 52,
-        "itemNo": "52",
-        "displaySno": "52",
+        "itemNo": "96",
+        "displaySno": "96",
         "sku": "SKU-052",
-        "name": "WHISTELING ROCKET",
-        "category": "ROCKETS",
-        "price": 300,
+        "name": "JONE & JOKES(5 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 250.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1052,12 +1052,12 @@
     },
     {
         "id": 53,
-        "itemNo": "53",
-        "displaySno": "53",
+        "itemNo": "97",
+        "displaySno": "97",
         "sku": "SKU-053",
-        "name": "1\u00bd\" TWINKLING STAR",
-        "category": "TWINKLING STAR,PENCIL",
-        "price": 50,
+        "name": "KATHI",
+        "category": "FANCY CRACKERS",
+        "price": 250.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1065,12 +1065,12 @@
     },
     {
         "id": 54,
-        "itemNo": "54",
-        "displaySno": "54",
+        "itemNo": "98",
+        "displaySno": "98",
         "sku": "SKU-054",
-        "name": "4\" TWINKLING STAR",
-        "category": "TWINKLING STAR,PENCIL",
-        "price": 150,
+        "name": "SMOKE",
+        "category": "FANCY CRACKERS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1078,12 +1078,12 @@
     },
     {
         "id": 55,
-        "itemNo": "55",
-        "displaySno": "55",
+        "itemNo": "99",
+        "displaySno": "99",
         "sku": "SKU-055",
-        "name": "10\" PENCIL",
-        "category": "TWINKLING STAR,PENCIL",
-        "price": 130,
+        "name": "SIREN",
+        "category": "FANCY CRACKERS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1091,12 +1091,12 @@
     },
     {
         "id": 56,
-        "itemNo": "56",
-        "displaySno": "56",
+        "itemNo": "100",
+        "displaySno": "100",
         "sku": "SKU-056",
-        "name": "1 3/4\" FANCY SHOT(3PCS)",
-        "category": "AKASH WONDERS",
-        "price": 500,
+        "name": "SPARSHA GREEN",
+        "category": "FANCY CRACKERS",
+        "price": 350.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1104,12 +1104,12 @@
     },
     {
         "id": 57,
-        "itemNo": "57",
-        "displaySno": "57",
+        "itemNo": "101",
+        "displaySno": "101",
         "sku": "SKU-057",
-        "name": "2\" SINGLE FANCY SHOT",
-        "category": "AKASH WONDERS",
-        "price": 300,
+        "name": "KURKURE",
+        "category": "FANCY CRACKERS",
+        "price": 350.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1117,12 +1117,12 @@
     },
     {
         "id": 58,
-        "itemNo": "58",
-        "displaySno": "58",
+        "itemNo": "102",
+        "displaySno": "102",
         "sku": "SKU-058",
-        "name": "2 1/2 \" FANCY SHOT -3 STEP",
-        "category": "AKASH WONDERS",
-        "price": 500,
+        "name": "SMALL PEACOCK",
+        "category": "FANCY CRACKERS",
+        "price": 350.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1130,12 +1130,12 @@
     },
     {
         "id": 59,
-        "itemNo": "59",
-        "displaySno": "59",
+        "itemNo": "103",
+        "displaySno": "103",
         "sku": "SKU-059",
-        "name": "3 1/2 \" FANCY SHOT(1 PCS)",
-        "category": "AKASH WONDERS",
-        "price": 700,
+        "name": "COLOUR SONG",
+        "category": "FANCY CRACKERS",
+        "price": 360.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1143,12 +1143,12 @@
     },
     {
         "id": 60,
-        "itemNo": "60",
-        "displaySno": "60",
+        "itemNo": "104",
+        "displaySno": "104",
         "sku": "SKU-060",
-        "name": "74MM FANCY SHOT(1 PCS)",
-        "category": "AKASH WONDERS",
-        "price": 800,
+        "name": "TIN BEER BIG",
+        "category": "FANCY CRACKERS",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1156,12 +1156,12 @@
     },
     {
         "id": 61,
-        "itemNo": "61",
-        "displaySno": "61",
+        "itemNo": "105",
+        "displaySno": "105",
         "sku": "SKU-061",
-        "name": "7 SHOT",
-        "category": "AERIAL NOVELTIES",
-        "price": 160,
+        "name": "YOYO(5 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1169,12 +1169,12 @@
     },
     {
         "id": 62,
-        "itemNo": "62",
-        "displaySno": "62",
+        "itemNo": "106",
+        "displaySno": "106",
         "sku": "SKU-062",
-        "name": "12 SHOT",
-        "category": "AERIAL NOVELTIES",
-        "price": 300,
+        "name": "NACHOS(2 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1182,12 +1182,12 @@
     },
     {
         "id": 63,
-        "itemNo": "63",
-        "displaySno": "63",
+        "itemNo": "107",
+        "displaySno": "107",
         "sku": "SKU-063",
-        "name": "15 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 400,
+        "name": "EMU EGG",
+        "category": "FANCY CRACKERS",
+        "price": 450.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1195,12 +1195,12 @@
     },
     {
         "id": 64,
-        "itemNo": "64",
-        "displaySno": "64",
+        "itemNo": "108",
+        "displaySno": "108",
         "sku": "SKU-064",
-        "name": "25 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 700,
+        "name": "TOPGUN(5 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 450.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1208,12 +1208,12 @@
     },
     {
         "id": 65,
-        "itemNo": "65",
-        "displaySno": "65",
+        "itemNo": "109",
+        "displaySno": "109",
         "sku": "SKU-065",
-        "name": "30 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 700,
+        "name": "COCKTAIL(3 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 450.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1221,12 +1221,12 @@
     },
     {
         "id": 66,
-        "itemNo": "66",
-        "displaySno": "66",
+        "itemNo": "110",
+        "displaySno": "110",
         "sku": "SKU-066",
-        "name": "60 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 1500,
+        "name": "4 IN 1 ANDROID",
+        "category": "FANCY CRACKERS",
+        "price": 450.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1234,12 +1234,12 @@
     },
     {
         "id": 67,
-        "itemNo": "67",
-        "displaySno": "67",
+        "itemNo": "111",
+        "displaySno": "111",
         "sku": "SKU-067",
-        "name": "120 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 3000,
+        "name": "TROPICAL MUSHROOM",
+        "category": "FANCY CRACKERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1247,12 +1247,12 @@
     },
     {
         "id": 68,
-        "itemNo": "68",
-        "displaySno": "68",
+        "itemNo": "112",
+        "displaySno": "112",
         "sku": "SKU-068",
-        "name": "240 SHOT MULTICOLOUR",
-        "category": "AERIAL NOVELTIES",
-        "price": 6000,
+        "name": "3 STAR MIX",
+        "category": "FANCY CRACKERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1260,12 +1260,12 @@
     },
     {
         "id": 69,
-        "itemNo": "69",
-        "displaySno": "69",
+        "itemNo": "113",
+        "displaySno": "113",
         "sku": "SKU-069",
-        "name": "12CM ELECTRIC",
-        "category": "SPARKLERS",
-        "price": 50,
+        "name": "BLOSSOM/THOR/PINKIE PIE",
+        "category": "FANCY CRACKERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1273,12 +1273,12 @@
     },
     {
         "id": 70,
-        "itemNo": "70",
-        "displaySno": "70",
+        "itemNo": "114",
+        "displaySno": "114",
         "sku": "SKU-070",
-        "name": "12 CM COLOUR",
-        "category": "SPARKLERS",
-        "price": 55,
+        "name": "IPL MIX",
+        "category": "FANCY CRACKERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1286,12 +1286,12 @@
     },
     {
         "id": 71,
-        "itemNo": "71",
-        "displaySno": "71",
+        "itemNo": "115",
+        "displaySno": "115",
         "sku": "SKU-071",
-        "name": "12CM  GREEN",
-        "category": "SPARKLERS",
-        "price": 60,
+        "name": "BOOMER(10 pcs)",
+        "category": "FANCY CRACKERS",
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1299,12 +1299,12 @@
     },
     {
         "id": 72,
-        "itemNo": "72",
-        "displaySno": "72",
+        "itemNo": "116",
+        "displaySno": "116",
         "sku": "SKU-072",
-        "name": "12CM  RED",
-        "category": "SPARKLERS",
-        "price": 60,
+        "name": "LOVE SPARK FOUNTAIN",
+        "category": "FANCY CRACKERS",
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1312,12 +1312,12 @@
     },
     {
         "id": 73,
-        "itemNo": "73",
-        "displaySno": "73",
+        "itemNo": "117",
+        "displaySno": "117",
         "sku": "SKU-073",
-        "name": "15CM ELECTRIC",
-        "category": "SPARKLERS",
-        "price": 80,
+        "name": "BADA PEACOCK",
+        "category": "FANCY CRACKERS",
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1325,12 +1325,12 @@
     },
     {
         "id": 74,
-        "itemNo": "74",
-        "displaySno": "74",
+        "itemNo": "118",
+        "displaySno": "118",
         "sku": "SKU-074",
-        "name": "15 CM COLOUR",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "BADA PEACOCK MULTICOLOUR",
+        "category": "FANCY CRACKERS",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1338,12 +1338,12 @@
     },
     {
         "id": 75,
-        "itemNo": "75",
-        "displaySno": "75",
+        "itemNo": "119",
+        "displaySno": "119",
         "sku": "SKU-075",
-        "name": "15CM  GREEN",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "KULFI",
+        "category": "FANCY CRACKERS",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1351,12 +1351,12 @@
     },
     {
         "id": 76,
-        "itemNo": "76",
-        "displaySno": "76",
+        "itemNo": "120",
+        "displaySno": "120",
         "sku": "SKU-076",
-        "name": "15CM  RED",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "5 STAR TRI COLOUR FOUNTAIN",
+        "category": "FANCY CRACKERS",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1364,12 +1364,12 @@
     },
     {
         "id": 77,
-        "itemNo": "77",
-        "displaySno": "77",
+        "itemNo": "121",
+        "displaySno": "121",
         "sku": "SKU-077",
-        "name": "30CM ELECTRIC (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 60,
+        "name": "WELCOME SHOW",
+        "category": "FANCY CRACKERS",
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1377,12 +1377,12 @@
     },
     {
         "id": 78,
-        "itemNo": "78",
-        "displaySno": "78",
+        "itemNo": "122",
+        "displaySno": "122",
         "sku": "SKU-078",
-        "name": "30CM COLOUR (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "FANTASY LION/ELEPHANT",
+        "category": "FANCY CRACKERS",
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1390,12 +1390,12 @@
     },
     {
         "id": 79,
-        "itemNo": "79",
-        "displaySno": "79",
+        "itemNo": "123",
+        "displaySno": "123",
         "sku": "SKU-079",
-        "name": "30CM  GREEN (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "CAR BIG",
+        "category": "FANCY CRACKERS",
+        "price": 900.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1403,12 +1403,12 @@
     },
     {
         "id": 80,
-        "itemNo": "80",
-        "displaySno": "80",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-080",
-        "name": "30CM  RED (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 90,
+        "name": "ROLL CAPS",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 120.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1416,12 +1416,12 @@
     },
     {
         "id": 81,
-        "itemNo": "81",
-        "displaySno": "81",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-081",
-        "name": "50CM ELECTRIC (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 300,
+        "name": "SNAKE TABLETS BIG",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 50.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1429,12 +1429,12 @@
     },
     {
         "id": 82,
-        "itemNo": "82",
-        "displaySno": "82",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-082",
-        "name": "50CM COLOUR (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 330,
+        "name": "RED GREEN MATCHES ORD(10NO)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 20.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1442,12 +1442,12 @@
     },
     {
         "id": 83,
-        "itemNo": "83",
-        "displaySno": "83",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-083",
-        "name": "75CM ELECTRIC (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 450,
+        "name": "JILJIL MATCH(10NO)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 40.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1455,12 +1455,12 @@
     },
     {
         "id": 84,
-        "itemNo": "84",
-        "displaySno": "84",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-084",
-        "name": "75CM COLOUR (5 pcs)",
-        "category": "SPARKLERS",
-        "price": 500,
+        "name": "BLOOMS",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 140.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1468,12 +1468,12 @@
     },
     {
         "id": 85,
-        "itemNo": "85",
-        "displaySno": "85",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-085",
-        "name": "ADIYAL 1/4 KG",
-        "category": "PAPER BOMB",
-        "price": 120,
+        "name": "SUPER 6",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 130.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1481,12 +1481,12 @@
     },
     {
         "id": 86,
-        "itemNo": "86",
-        "displaySno": "86",
+        "itemNo": "125",
+        "displaySno": "125",
         "sku": "SKU-086",
-        "name": "ADIYAL 1/2 KG",
-        "category": "PAPER BOMB",
-        "price": 240,
+        "name": "NOKIO/ 10 IN 1",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1494,12 +1494,12 @@
     },
     {
         "id": 87,
-        "itemNo": "87",
-        "displaySno": "87",
+        "itemNo": "131",
+        "displaySno": "131",
         "sku": "SKU-087",
-        "name": "ADIYAL 1KG",
-        "category": "PAPER BOMB",
-        "price": 480,
+        "name": "GANESH (16 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1507,12 +1507,12 @@
     },
     {
         "id": 88,
-        "itemNo": "88",
-        "displaySno": "88",
+        "itemNo": "132",
+        "displaySno": "132",
         "sku": "SKU-088",
-        "name": "MONEY",
-        "category": "PAPER BOMB",
-        "price": 600,
+        "name": "TREAT (20 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1520,12 +1520,12 @@
     },
     {
         "id": 89,
-        "itemNo": "89",
-        "displaySno": "89",
+        "itemNo": "133",
+        "displaySno": "133",
         "sku": "SKU-089",
-        "name": "GANAGA JAMUNA (5 pcs))",
-        "category": "FANCY CRACKERS",
-        "price": 160,
+        "name": "LEO (25 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1533,12 +1533,12 @@
     },
     {
         "id": 90,
-        "itemNo": "90",
-        "displaySno": "90",
+        "itemNo": "134",
+        "displaySno": "134",
         "sku": "SKU-090",
-        "name": "PHOTOFLASH",
-        "category": "FANCY CRACKERS",
-        "price": 150,
+        "name": "LAXMI (31 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1546,12 +1546,12 @@
     },
     {
         "id": 91,
-        "itemNo": "91",
-        "displaySno": "91",
+        "itemNo": "135",
+        "displaySno": "135",
         "sku": "SKU-091",
-        "name": "TIN BEER SMALL",
-        "category": "FANCY CRACKERS",
-        "price": 200,
+        "name": "KGF (36 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 900.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1559,12 +1559,12 @@
     },
     {
         "id": 92,
-        "itemNo": "92",
-        "displaySno": "92",
+        "itemNo": "136",
+        "displaySno": "136",
         "sku": "SKU-092",
-        "name": "BUTTERFLY/PAMBARAM",
-        "category": "FANCY CRACKERS",
-        "price": 200,
+        "name": "PUBG (41 items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 1100.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1572,12 +1572,12 @@
     },
     {
         "id": 93,
-        "itemNo": "93",
-        "displaySno": "93",
+        "itemNo": "137",
+        "displaySno": "137",
         "sku": "SKU-093",
-        "name": "HELICOPTER",
-        "category": "FANCY CRACKERS",
-        "price": 200,
+        "name": "WHISTLE PODU (51 Items)",
+        "category": "MATCHES & ROLLCAPS",
+        "price": 1600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1585,12 +1585,12 @@
     },
     {
         "id": 94,
-        "itemNo": "94",
-        "displaySno": "94",
+        "itemNo": "45",
+        "displaySno": "45",
         "sku": "SKU-094",
-        "name": "DANCING WHEEL",
-        "category": "FANCY CRACKERS",
-        "price": 200,
+        "name": "COLOUR SONG",
+        "category": "COLOUR FLOWERPOTS",
+        "price": 360.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1598,12 +1598,12 @@
     },
     {
         "id": 95,
-        "itemNo": "95",
-        "displaySno": "95",
+        "itemNo": "46",
+        "displaySno": "46",
         "sku": "SKU-095",
-        "name": "GIPSY",
-        "category": "FANCY CRACKERS",
-        "price": 250,
+        "name": "COLOUR KOTI/POT GIRL",
+        "category": "COLOUR FLOWERPOTS",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1611,12 +1611,12 @@
     },
     {
         "id": 96,
-        "itemNo": "96",
-        "displaySno": "96",
+        "itemNo": "47",
+        "displaySno": "47",
         "sku": "SKU-096",
-        "name": "JONE & JOKES(5 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 250,
+        "name": "COLOUR KOTI DELUXE",
+        "category": "COLOUR FLOWERPOTS",
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1624,12 +1624,12 @@
     },
     {
         "id": 97,
-        "itemNo": "97",
-        "displaySno": "97",
+        "itemNo": "48",
+        "displaySno": "48",
         "sku": "SKU-097",
-        "name": "KATHI",
-        "category": "FANCY CRACKERS",
-        "price": 250,
+        "name": "BABY ROCKET",
+        "category": "ROCKETS",
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1637,12 +1637,12 @@
     },
     {
         "id": 98,
-        "itemNo": "98",
-        "displaySno": "98",
+        "itemNo": "49",
+        "displaySno": "49",
         "sku": "SKU-098",
-        "name": "SMOKE",
-        "category": "FANCY CRACKERS",
-        "price": 300,
+        "name": "ROCKET BOMB",
+        "category": "ROCKETS",
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1650,12 +1650,12 @@
     },
     {
         "id": 99,
-        "itemNo": "99",
-        "displaySno": "99",
+        "itemNo": "50",
+        "displaySno": "50",
         "sku": "SKU-099",
-        "name": "SIREN",
-        "category": "FANCY CRACKERS",
-        "price": 300,
+        "name": "COLOUR ROCKET",
+        "category": "ROCKETS",
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1663,12 +1663,12 @@
     },
     {
         "id": 100,
-        "itemNo": "100",
-        "displaySno": "100",
+        "itemNo": "51",
+        "displaySno": "51",
         "sku": "SKU-100",
-        "name": "SPARSHA GREEN",
-        "category": "FANCY CRACKERS",
-        "price": 350,
+        "name": "LUNIC ROCKET",
+        "category": "ROCKETS",
+        "price": 250.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1676,12 +1676,12 @@
     },
     {
         "id": 101,
-        "itemNo": "101",
-        "displaySno": "101",
+        "itemNo": "52",
+        "displaySno": "52",
         "sku": "SKU-101",
-        "name": "KURKURE",
-        "category": "FANCY CRACKERS",
-        "price": 350,
+        "name": "WHISTELING ROCKET",
+        "category": "ROCKETS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1689,12 +1689,12 @@
     },
     {
         "id": 102,
-        "itemNo": "102",
-        "displaySno": "102",
+        "itemNo": "53",
+        "displaySno": "53",
         "sku": "SKU-102",
-        "name": "SMALL PEACOCK",
-        "category": "FANCY CRACKERS",
-        "price": 350,
+        "name": "1\u00bd\" TWINKLING STAR",
+        "category": "TWINKLING STAR,PENCIL",
+        "price": 50.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1702,12 +1702,12 @@
     },
     {
         "id": 103,
-        "itemNo": "103",
-        "displaySno": "103",
+        "itemNo": "54",
+        "displaySno": "54",
         "sku": "SKU-103",
-        "name": "COLOUR SONG",
-        "category": "FANCY CRACKERS",
-        "price": 360,
+        "name": "4\" TWINKLING STAR",
+        "category": "TWINKLING STAR,PENCIL",
+        "price": 150.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1715,12 +1715,12 @@
     },
     {
         "id": 104,
-        "itemNo": "104",
-        "displaySno": "104",
+        "itemNo": "55",
+        "displaySno": "55",
         "sku": "SKU-104",
-        "name": "TIN BEER BIG",
-        "category": "FANCY CRACKERS",
-        "price": 400,
+        "name": "10\" PENCIL",
+        "category": "TWINKLING STAR,PENCIL",
+        "price": 130.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1728,12 +1728,12 @@
     },
     {
         "id": 105,
-        "itemNo": "105",
-        "displaySno": "105",
+        "itemNo": "56",
+        "displaySno": "56",
         "sku": "SKU-105",
-        "name": "5 STAR",
-        "category": "FANCY CRACKERS",
-        "price": 400,
+        "name": "1 3/4\" FANCY SHOT(3PCS)",
+        "category": "AKASH WONDERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1741,12 +1741,12 @@
     },
     {
         "id": 106,
-        "itemNo": "106",
-        "displaySno": "106",
+        "itemNo": "57",
+        "displaySno": "57",
         "sku": "SKU-106",
-        "name": "YOYO(5 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 400,
+        "name": "2\" SINGLE FANCY SHOT",
+        "category": "AKASH WONDERS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1754,12 +1754,12 @@
     },
     {
         "id": 107,
-        "itemNo": "107",
-        "displaySno": "107",
+        "itemNo": "58",
+        "displaySno": "58",
         "sku": "SKU-107",
-        "name": "NACHOS(2 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 400,
+        "name": "2 1/2 \" FANCY SHOT -3 STEP",
+        "category": "AKASH WONDERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1767,12 +1767,12 @@
     },
     {
         "id": 108,
-        "itemNo": "108",
-        "displaySno": "108",
+        "itemNo": "59",
+        "displaySno": "59",
         "sku": "SKU-108",
-        "name": "EMU EGG",
-        "category": "FANCY CRACKERS",
-        "price": 450,
+        "name": "3 1/2 \" FANCY SHOT(1 PCS)",
+        "category": "AKASH WONDERS",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1780,12 +1780,12 @@
     },
     {
         "id": 109,
-        "itemNo": "109",
-        "displaySno": "109",
+        "itemNo": "60",
+        "displaySno": "60",
         "sku": "SKU-109",
-        "name": "TOPGUN(5 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 450,
+        "name": "74MM FANCY SHOT(1 PCS)",
+        "category": "AKASH WONDERS",
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1793,12 +1793,12 @@
     },
     {
         "id": 110,
-        "itemNo": "110",
-        "displaySno": "110",
+        "itemNo": "61",
+        "displaySno": "61",
         "sku": "SKU-110",
-        "name": "COCKTAIL(3 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 450,
+        "name": "7 SHOT",
+        "category": "AERIAL NOVELTIES",
+        "price": 160.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1806,12 +1806,12 @@
     },
     {
         "id": 111,
-        "itemNo": "111",
-        "displaySno": "111",
+        "itemNo": "62",
+        "displaySno": "62",
         "sku": "SKU-111",
-        "name": "4 IN 1 ANDROID",
-        "category": "FANCY CRACKERS",
-        "price": 450,
+        "name": "12 SHOT",
+        "category": "AERIAL NOVELTIES",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1819,12 +1819,12 @@
     },
     {
         "id": 112,
-        "itemNo": "112",
-        "displaySno": "112",
+        "itemNo": "63",
+        "displaySno": "63",
         "sku": "SKU-112",
-        "name": "TROPICAL MUSHROOM",
-        "category": "FANCY CRACKERS",
-        "price": 500,
+        "name": "15 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 400.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1832,12 +1832,12 @@
     },
     {
         "id": 113,
-        "itemNo": "113",
-        "displaySno": "113",
+        "itemNo": "64",
+        "displaySno": "64",
         "sku": "SKU-113",
-        "name": "3 STAR MIX",
-        "category": "FANCY CRACKERS",
-        "price": 500,
+        "name": "25 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1845,12 +1845,12 @@
     },
     {
         "id": 114,
-        "itemNo": "114",
-        "displaySno": "114",
+        "itemNo": "65",
+        "displaySno": "65",
         "sku": "SKU-114",
-        "name": "BLOSSOM/THOR/PINKIE PIE",
-        "category": "FANCY CRACKERS",
-        "price": 500,
+        "name": "30 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 700.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1858,12 +1858,12 @@
     },
     {
         "id": 115,
-        "itemNo": "115",
-        "displaySno": "115",
+        "itemNo": "66",
+        "displaySno": "66",
         "sku": "SKU-115",
-        "name": "IPL MIX",
-        "category": "FANCY CRACKERS",
-        "price": 500,
+        "name": "60 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 1500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1871,12 +1871,12 @@
     },
     {
         "id": 116,
-        "itemNo": "116",
-        "displaySno": "116",
+        "itemNo": "67",
+        "displaySno": "67",
         "sku": "SKU-116",
-        "name": "BOOMER(10 pcs)",
-        "category": "FANCY CRACKERS",
-        "price": 600,
+        "name": "120 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 3000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1884,12 +1884,12 @@
     },
     {
         "id": 117,
-        "itemNo": "117",
-        "displaySno": "117",
+        "itemNo": "68",
+        "displaySno": "68",
         "sku": "SKU-117",
-        "name": "LOVE SPARK FOUNTAIN",
-        "category": "FANCY CRACKERS",
-        "price": 600,
+        "name": "240 SHOT MULTICOLOUR",
+        "category": "AERIAL NOVELTIES",
+        "price": 6000.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1897,12 +1897,12 @@
     },
     {
         "id": 118,
-        "itemNo": "118",
-        "displaySno": "118",
+        "itemNo": "69",
+        "displaySno": "69",
         "sku": "SKU-118",
-        "name": "BADA PEACOCK",
-        "category": "FANCY CRACKERS",
-        "price": 600,
+        "name": "12CM ELECTRIC",
+        "category": "SPARKLERS",
+        "price": 50.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1910,12 +1910,12 @@
     },
     {
         "id": 119,
-        "itemNo": "119",
-        "displaySno": "119",
+        "itemNo": "70",
+        "displaySno": "70",
         "sku": "SKU-119",
-        "name": "BADA PEACOCK MULTICOLOUR",
-        "category": "FANCY CRACKERS",
-        "price": 700,
+        "name": "12 CM COLOUR",
+        "category": "SPARKLERS",
+        "price": 55.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1923,12 +1923,12 @@
     },
     {
         "id": 120,
-        "itemNo": "120",
-        "displaySno": "120",
+        "itemNo": "71",
+        "displaySno": "71",
         "sku": "SKU-120",
-        "name": "KULFI",
-        "category": "FANCY CRACKERS",
-        "price": 700,
+        "name": "12CM  GREEN",
+        "category": "SPARKLERS",
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1936,12 +1936,12 @@
     },
     {
         "id": 121,
-        "itemNo": "121",
-        "displaySno": "121",
+        "itemNo": "72",
+        "displaySno": "72",
         "sku": "SKU-121",
-        "name": "5 STAR TRI COLOUR FOUNTAIN",
-        "category": "FANCY CRACKERS",
-        "price": 700,
+        "name": "12CM  RED",
+        "category": "SPARKLERS",
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1949,12 +1949,12 @@
     },
     {
         "id": 122,
-        "itemNo": "122",
-        "displaySno": "122",
+        "itemNo": "73",
+        "displaySno": "73",
         "sku": "SKU-122",
-        "name": "WELCOME SHOW",
-        "category": "FANCY CRACKERS",
-        "price": 800,
+        "name": "15CM ELECTRIC",
+        "category": "SPARKLERS",
+        "price": 80.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1962,12 +1962,12 @@
     },
     {
         "id": 123,
-        "itemNo": "123",
-        "displaySno": "123",
+        "itemNo": "74",
+        "displaySno": "74",
         "sku": "SKU-123",
-        "name": "FANTASY LION/ELEPHANT",
-        "category": "FANCY CRACKERS",
-        "price": 800,
+        "name": "15 CM COLOUR",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1975,12 +1975,12 @@
     },
     {
         "id": 124,
-        "itemNo": "124",
-        "displaySno": "124",
+        "itemNo": "75",
+        "displaySno": "75",
         "sku": "SKU-124",
-        "name": "CAR BIG",
-        "category": "FANCY CRACKERS",
-        "price": 900,
+        "name": "15CM  GREEN",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -1988,12 +1988,12 @@
     },
     {
         "id": 125,
-        "itemNo": "125",
-        "displaySno": "125",
+        "itemNo": "76",
+        "displaySno": "76",
         "sku": "SKU-125",
-        "name": "ROLL CAPS",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 120,
+        "name": "15CM  RED",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2001,12 +2001,12 @@
     },
     {
         "id": 126,
-        "itemNo": "126",
-        "displaySno": "126",
+        "itemNo": "77",
+        "displaySno": "77",
         "sku": "SKU-126",
-        "name": "SNAKE TABLETS BIG",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 50,
+        "name": "30CM ELECTRIC (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 60.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2014,12 +2014,12 @@
     },
     {
         "id": 127,
-        "itemNo": "127",
-        "displaySno": "127",
+        "itemNo": "78",
+        "displaySno": "78",
         "sku": "SKU-127",
-        "name": "RED GREEN MATCHES ORD(10NO)",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 20,
+        "name": "30CM COLOUR (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2027,12 +2027,12 @@
     },
     {
         "id": 128,
-        "itemNo": "128",
-        "displaySno": "128",
+        "itemNo": "79",
+        "displaySno": "79",
         "sku": "SKU-128",
-        "name": "JILJIL MATCH(10NO)",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 40,
+        "name": "30CM  GREEN (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2040,12 +2040,12 @@
     },
     {
         "id": 129,
-        "itemNo": "129",
-        "displaySno": "129",
+        "itemNo": "80",
+        "displaySno": "80",
         "sku": "SKU-129",
-        "name": "BLOOMS",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 140,
+        "name": "30CM  RED (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 90.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2053,12 +2053,12 @@
     },
     {
         "id": 130,
-        "itemNo": "130",
-        "displaySno": "130",
+        "itemNo": "81",
+        "displaySno": "81",
         "sku": "SKU-130",
-        "name": "SUPER 6",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 130,
+        "name": "50CM ELECTRIC (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2066,12 +2066,12 @@
     },
     {
         "id": 131,
-        "itemNo": "131",
-        "displaySno": "131",
+        "itemNo": "82",
+        "displaySno": "82",
         "sku": "SKU-131",
-        "name": "NOKIO/ 10 IN 1",
-        "category": "MATCHES & ROLLCAPS",
-        "price": 300,
+        "name": "50CM COLOUR (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 330.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2079,12 +2079,12 @@
     },
     {
         "id": 132,
-        "itemNo": "132",
-        "displaySno": "132",
+        "itemNo": "83",
+        "displaySno": "83",
         "sku": "SKU-132",
-        "name": "GANESH (16 items)",
-        "category": "GIFT BOXES",
-        "price": 400,
+        "name": "75CM ELECTRIC (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 450.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2092,12 +2092,12 @@
     },
     {
         "id": 133,
-        "itemNo": "133",
-        "displaySno": "133",
+        "itemNo": "84",
+        "displaySno": "84",
         "sku": "SKU-133",
-        "name": "TREAT (20 items)",
-        "category": "GIFT BOXES",
-        "price": 500,
+        "name": "75CM COLOUR (5 pcs)",
+        "category": "SPARKLERS",
+        "price": 500.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2105,12 +2105,12 @@
     },
     {
         "id": 134,
-        "itemNo": "134",
-        "displaySno": "134",
+        "itemNo": "85",
+        "displaySno": "85",
         "sku": "SKU-134",
-        "name": "LAXMI (30 items)",
-        "category": "GIFT BOXES",
-        "price": 800,
+        "name": "ADIYAL 1/4 KG",
+        "category": "PAPER BOMB",
+        "price": 120.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2118,12 +2118,12 @@
     },
     {
         "id": 135,
-        "itemNo": "135",
-        "displaySno": "135",
+        "itemNo": "86",
+        "displaySno": "86",
         "sku": "SKU-135",
-        "name": "KGF (36 items)",
-        "category": "GIFT BOXES",
-        "price": 900,
+        "name": "ADIYAL 1/2 KG",
+        "category": "PAPER BOMB",
+        "price": 240.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2131,12 +2131,12 @@
     },
     {
         "id": 136,
-        "itemNo": "136",
-        "displaySno": "136",
+        "itemNo": "87",
+        "displaySno": "87",
         "sku": "SKU-136",
-        "name": "PUBG (41 items)",
-        "category": "GIFT BOXES",
-        "price": 1100,
+        "name": "ADIYAL 1KG",
+        "category": "PAPER BOMB",
+        "price": 480.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2144,12 +2144,12 @@
     },
     {
         "id": 137,
-        "itemNo": "137",
-        "displaySno": "137",
+        "itemNo": "88",
+        "displaySno": "88",
         "sku": "SKU-137",
-        "name": "WHISTLE PODU (51 Items)",
-        "category": "GIFT BOXES",
-        "price": 1600,
+        "name": "MONEY",
+        "category": "PAPER BOMB",
+        "price": 600.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2162,7 +2162,7 @@
         "sku": "SKU-138",
         "name": "ST BOOM BOMB",
         "category": "STANDARD - ELECTRIC CRACKERS",
-        "price": 300,
+        "price": 300.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
@@ -2175,1022 +2175,11 @@
         "sku": "SKU-139",
         "name": "ST 1000 DIGITAL",
         "category": "STANDARD - ELECTRIC CRACKERS",
-        "price": 800,
+        "price": 800.0,
         "stock": 500,
         "unit": "BOX",
         "perUnit": 1,
         "brand": "STANDARD FIREWORKS"
     },
     {
-        "id": 140,
-        "itemNo": "ST-3",
-        "displaySno": "ST-3",
-        "sku": "SKU-140",
-        "name": "ST FLOWER POTS SMALL",
-        "category": "STANDARD - FLOWER POTS",
-        "price": 120,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 141,
-        "itemNo": "ST-4",
-        "displaySno": "ST-4",
-        "sku": "SKU-141",
-        "name": "ST FLOWER POTS SPECIAL",
-        "category": "STANDARD - FLOWER POTS",
-        "price": 300,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 142,
-        "itemNo": "ST-5",
-        "displaySno": "ST-5",
-        "sku": "SKU-142",
-        "name": "ST FLOWER POTS DELUXE",
-        "category": "STANDARD - FLOWER POTS",
-        "price": 400,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 143,
-        "itemNo": "ST-6",
-        "displaySno": "ST-6",
-        "sku": "SKU-143",
-        "name": "ST TRICOLOUR MILLENIUM",
-        "category": "STANDARD - FLOWER POTS",
-        "price": 800,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 144,
-        "itemNo": "ST-7",
-        "displaySno": "ST-7",
-        "sku": "SKU-144",
-        "name": "ST CHAVI ZAMIN CHAKKAR ASHOKA",
-        "category": "STANDARD - CHAKKARS",
-        "price": 150,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 145,
-        "itemNo": "ST-8",
-        "displaySno": "ST-8",
-        "sku": "SKU-145",
-        "name": "ST CHAVI ZAMIN CHAKKAR DELUXE",
-        "category": "STANDARD - CHAKKARS",
-        "price": 350,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 146,
-        "itemNo": "ST-9",
-        "displaySno": "ST-9",
-        "sku": "SKU-146",
-        "name": "ST 45CM TWINKLING STAR",
-        "category": "STANDARD - NOVELTY CRACKERS/SPARKLERS",
-        "price": 75,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 147,
-        "itemNo": "ST-10",
-        "displaySno": "ST-10",
-        "sku": "SKU-147",
-        "name": "ST 120 CM TWINKLING STAR",
-        "category": "STANDARD - NOVELTY CRACKERS/SPARKLERS",
-        "price": 240,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 148,
-        "itemNo": "ST-11",
-        "displaySno": "ST-11",
-        "sku": "SKU-148",
-        "name": "ST MULTI COLOUR CANDLE",
-        "category": "STANDARD - NOVELTY CRACKERS/SPARKLERS",
-        "price": 150,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 149,
-        "itemNo": "ST-12",
-        "displaySno": "ST-12",
-        "sku": "SKU-149",
-        "name": "ST 30 CM GOLD SPARKLER",
-        "category": "STANDARD - NOVELTY CRACKERS/SPARKLERS",
-        "price": 130,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 150,
-        "itemNo": "ST-13",
-        "displaySno": "ST-13",
-        "sku": "SKU-150",
-        "name": "ST 30CM COLOUR SPARKLER",
-        "category": "STANDARD - NOVELTY CRACKERS/SPARKLERS",
-        "price": 150,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 151,
-        "itemNo": "ST-14",
-        "displaySno": "ST-14",
-        "sku": "SKU-151",
-        "name": "ST SUN FLOWER 12 SHOT",
-        "category": "STANDARD - SHOTS",
-        "price": 400,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 152,
-        "itemNo": "ST-15",
-        "displaySno": "ST-15",
-        "sku": "SKU-152",
-        "name": "ST COLOUR MAGIC 16 SHOT",
-        "category": "STANDARD - SHOTS",
-        "price": 550,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 153,
-        "itemNo": "ST-16",
-        "displaySno": "ST-16",
-        "sku": "SKU-153",
-        "name": "ST 30 SHOT",
-        "category": "STANDARD - SHOTS",
-        "price": 1200,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 154,
-        "itemNo": "ST-17",
-        "displaySno": "ST-17",
-        "sku": "SKU-154",
-        "name": "ST 60 SHOT",
-        "category": "STANDARD - SHOTS",
-        "price": 2000,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 155,
-        "itemNo": "ST-18",
-        "displaySno": "ST-18",
-        "sku": "SKU-155",
-        "name": "ST 120 SHOT",
-        "category": "STANDARD - SHOTS",
-        "price": 3300,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 156,
-        "itemNo": "ST-19",
-        "displaySno": "ST-19",
-        "sku": "SKU-156",
-        "name": "ST CHAT CHAT",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 150,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 157,
-        "itemNo": "ST-20",
-        "displaySno": "ST-20",
-        "sku": "SKU-157",
-        "name": "ST SIGNAL LIGHTS",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 200,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 158,
-        "itemNo": "ST-21",
-        "displaySno": "ST-21",
-        "sku": "SKU-158",
-        "name": "ST COLOUR CHANGING BUTTERFLY",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 400,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 159,
-        "itemNo": "ST-22",
-        "displaySno": "ST-22",
-        "sku": "SKU-159",
-        "name": "ST DOLLAR WHEEL/POKER WHEEL",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 160,
-        "itemNo": "ST-23",
-        "displaySno": "ST-23",
-        "sku": "SKU-160",
-        "name": "ST POKER WHEEL",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 161,
-        "itemNo": "ST-24",
-        "displaySno": "ST-24",
-        "sku": "SKU-161",
-        "name": "ST MONEY PENNY",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 162,
-        "itemNo": "ST-25",
-        "displaySno": "ST-25",
-        "sku": "SKU-162",
-        "name": "ST MAGICAL WAND",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 163,
-        "itemNo": "ST-26",
-        "displaySno": "ST-26",
-        "sku": "SKU-163",
-        "name": "ST JIL JUNG JUK",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 164,
-        "itemNo": "ST-27",
-        "displaySno": "ST-27",
-        "sku": "SKU-164",
-        "name": "ST SUNDROPS",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 165,
-        "itemNo": "ST-28",
-        "displaySno": "ST-28",
-        "sku": "SKU-165",
-        "name": "ST DIAMOND MINE",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 500,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 166,
-        "itemNo": "ST-29",
-        "displaySno": "ST-29",
-        "sku": "SKU-166",
-        "name": "ST ARIEL OUT",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 550,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 167,
-        "itemNo": "ST-30",
-        "displaySno": "ST-30",
-        "sku": "SKU-167",
-        "name": "ST POPCORN FOUNTAIN",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 550,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 168,
-        "itemNo": "ST-31",
-        "displaySno": "ST-31",
-        "sku": "SKU-168",
-        "name": "ST LASER SHOW",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 600,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 169,
-        "itemNo": "ST-32",
-        "displaySno": "ST-32",
-        "sku": "SKU-169",
-        "name": "ST CRACKLING KING",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 800,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 170,
-        "itemNo": "ST-33",
-        "displaySno": "ST-33",
-        "sku": "SKU-170",
-        "name": "ST TREASURE BOX",
-        "category": "STANDARD - FANCY CRACKERS",
-        "price": 800,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 171,
-        "itemNo": "ST-34",
-        "displaySno": "ST-34",
-        "sku": "SKU-171",
-        "name": "ST RED BIJILI(50 pcs)",
-        "category": "STANDARD - BIJILI",
-        "price": 50,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 172,
-        "itemNo": "ST-35",
-        "displaySno": "ST-35",
-        "sku": "SKU-172",
-        "name": "ST RED BIJILI(100 pcs)",
-        "category": "STANDARD - BIJILI",
-        "price": 100,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    },
-    {
-        "id": 173,
-        "itemNo": "ST-36",
-        "displaySno": "ST-36",
-        "sku": "SKU-173",
-        "name": "ST ROLLCAPS",
-        "category": "STANDARD - ROLLCAPS",
-        "price": 150,
-        "stock": 500,
-        "unit": "BOX",
-        "perUnit": 1,
-        "brand": "STANDARD FIREWORKS"
-    }
-];
-
-        // Store aligned products into local storage key
-        localStorage.setItem('tpl_products_2026_aligned', JSON.stringify(NEW_2026_PRODUCTS));
-        let products = NEW_2026_PRODUCTS;
-        let cart = [];
-        let selectedPayment = 'CASH';
-        let isListening = false;
-        let recognition = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            populateCategories();
-            renderProducts();
-            updateCartUI();
-            initWebSpeech();
-        });
-
-        function populateCategories() {
-            const select = document.getElementById('categorySelect');
-            if (!select) return;
-            const cats = [...new Set(products.map(p => p.category))];
-            select.innerHTML = '<option value="ALL">All Categories (' + products.length + ' Items)</option>';
-            cats.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c;
-                opt.textContent = c;
-                select.appendChild(opt);
-            });
-        }
-
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
-            if (!grid) return;
-            const search = document.getElementById('searchInput').value.toLowerCase().trim();
-            const cat = document.getElementById('categorySelect').value;
-
-            const filtered = products.filter(p => {
-                const matchesSearch = p.name.toLowerCase().includes(search) || 
-                                      p.displaySno.toLowerCase().includes(search) || 
-                                      p.category.toLowerCase().includes(search);
-                const matchesCat = (cat === 'ALL' || p.category === cat);
-                return matchesSearch && matchesCat;
-            });
-
-            grid.innerHTML = '';
-
-            filtered.forEach(p => {
-                const card = document.createElement('div');
-                card.className = "bg-cardbg p-2.5 rounded-xl border border-slate-700 hover:border-brand-500 transition shadow flex flex-col justify-between space-y-2 cursor-pointer";
-                card.onclick = () => addToCart(p.id, 1);
-
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold mb-1">
-                            <span class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-400">#${p.displaySno}</span>
-                            <span class="${p.stock < 20 ? 'text-rose-400' : 'text-emerald-400'}">Stock: ${p.stock}</span>
-                        </div>
-                        <h4 class="font-bold text-xs text-slate-100 leading-snug line-clamp-2">${p.name}</h4>
-                        <div class="text-[10px] text-slate-400 mt-0.5">${p.brand}</div>
-                    </div>
-                    <div class="flex items-center justify-between pt-1 border-t border-slate-700/60">
-                        <span class="text-sm font-extrabold text-amber-400">₹${p.price}</span>
-                        <button onclick="event.stopPropagation(); addToCart(${p.id}, 1)" class="px-2 py-1 bg-brand-600 hover:bg-brand-700 text-white font-bold text-[10px] rounded transition">
-                            + Add
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function addToCart(productId, qty = 1) {
-            const prod = products.find(p => p.id === productId);
-            if (!prod) return;
-
-            const existing = cart.find(c => c.id === productId);
-            if (existing) {
-                existing.qty += qty;
-            } else {
-                cart.push({
-                    id: prod.id,
-                    name: prod.name,
-                    price: prod.price,
-                    qty: qty,
-                    displaySno: prod.displaySno,
-                    isCustom: false
-                });
-            }
-            updateCartUI();
-        }
-
-        // Custom / Other Item Addition
-        function addCustomItemToCart() {
-            const nameInput = document.getElementById('customItemName');
-            const priceInput = document.getElementById('customItemPrice');
-            const qtyInput = document.getElementById('customItemQty');
-
-            const name = nameInput.value.trim() || "Other Item (பிற பொருள்)";
-            const price = parseFloat(priceInput.value);
-            const qty = parseInt(qtyInput.value) || 1;
-
-            if (isNaN(price) || price <= 0) {
-                alert("Please enter a valid price for the custom item.");
-                return;
-            }
-
-            const customId = "custom_" + Date.now();
-            cart.push({
-                id: customId,
-                name: `[OTHER] ${name}`,
-                price: price,
-                qty: qty,
-                displaySno: "NEW",
-                isCustom: true
-            });
-
-            nameInput.value = "";
-            priceInput.value = "";
-            qtyInput.value = "1";
-
-            updateCartUI();
-        }
-
-        function handleQuickItemKey(e) {
-            if (e.key === 'Enter') addQuickItem();
-        }
-
-        function addQuickItem() {
-            const input = document.getElementById('quickItemInput');
-            const val = input.value.trim().toUpperCase();
-            if (!val) return;
-
-            let snoStr = val;
-            let qty = 1;
-
-            if (val.includes('*')) {
-                const parts = val.split('*');
-                snoStr = parts[0].trim();
-                qty = parseInt(parts[1]) || 1;
-            } else if (val.includes('X')) {
-                const parts = val.split('X');
-                snoStr = parts[0].trim();
-                qty = parseInt(parts[1]) || 1;
-            }
-
-            const prod = products.find(p => 
-                p.displaySno.toString().toUpperCase() === snoStr || 
-                p.itemNo.toString().toUpperCase() === snoStr ||
-                p.sku.toUpperCase() === snoStr
-            );
-
-            if (prod) {
-                addToCart(prod.id, qty);
-                input.value = '';
-            } else {
-                alert(`Item #${snoStr} not found in 2026 Price List!`);
-            }
-        }
-
-        function updateCartQty(cartId, delta) {
-            const item = cart.find(c => c.id === cartId);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) {
-                cart = cart.filter(c => c.id !== cartId);
-            }
-            updateCartUI();
-        }
-
-        function removeFromCart(cartId) {
-            cart = cart.filter(c => c.id !== cartId);
-            updateCartUI();
-        }
-
-        function clearCart() {
-            cart = [];
-            document.getElementById('custName').value = "";
-            document.getElementById('custPhone').value = "";
-            document.getElementById('discountValue').value = "";
-            updateCartUI();
-        }
-
-        function getDiscountAmount(subtotal) {
-            const type = document.getElementById('discountType').value;
-            const val = parseFloat(document.getElementById('discountValue').value) || 0;
-
-            if (val <= 0 || subtotal <= 0) return 0;
-
-            if (type === 'PERCENT') {
-                return (subtotal * (val / 100));
-            } else {
-                return Math.min(subtotal, val);
-            }
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cartItemsContainer');
-            if (!container) return;
-
-            container.innerHTML = '';
-            let subtotal = 0;
-            let count = 0;
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-slate-500 py-10">
-                        <i class="fa-solid fa-cart-flatbed text-3xl mb-2"></i>
-                        <p class="text-xs">No items in bill (பட்டியல் காலியாக உள்ளது)</p>
-                    </div>
-                `;
-            } else {
-                cart.forEach(item => {
-                    const itemTotal = item.price * item.qty;
-                    subtotal += itemTotal;
-                    count += item.qty;
-
-                    const row = document.createElement('div');
-                    row.className = "bg-slate-800/80 p-2 rounded-lg border border-slate-700 flex items-center justify-between text-xs space-x-2";
-                    row.innerHTML = `
-                        <div class="flex-1 min-w-0">
-                            <div class="font-bold text-slate-200 truncate">${item.name}</div>
-                            <div class="text-[10px] text-amber-400">#${item.displaySno} • ₹${item.price} x ${item.qty}</div>
-                        </div>
-                        <div class="flex items-center space-x-1.5">
-                            <button onclick="updateCartQty('${item.id}', -1)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-slate-200 font-bold text-xs">-</button>
-                            <span class="font-extrabold text-slate-100 text-xs px-1">${item.qty}</span>
-                            <button onclick="updateCartQty('${item.id}', 1)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-slate-200 font-bold text-xs">+</button>
-                            <span class="font-bold text-emerald-400 w-12 text-right">₹${itemTotal}</span>
-                            <button onclick="removeFromCart('${item.id}')" class="text-rose-400 hover:text-rose-300 pl-1">✕</button>
-                        </div>
-                    `;
-                    container.appendChild(row);
-                });
-            }
-
-            const discountAmount = getDiscountAmount(subtotal);
-            const netTotal = Math.max(0, subtotal - discountAmount);
-
-            document.getElementById('cartCount').textContent = count;
-            document.getElementById('cartSubtotal').textContent = `₹ ${subtotal.toFixed(2)}`;
-            document.getElementById('cartDiscountAmt').textContent = `- ₹ ${discountAmount.toFixed(2)}`;
-            document.getElementById('cartNetTotal').textContent = `₹ ${netTotal.toFixed(2)}`;
-        }
-
-        function selectPayment(mode) {
-            selectedPayment = mode;
-            ['payCashBtn', 'payUpiBtn', 'payCardBtn'].forEach(id => {
-                document.getElementById(id).className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-slate-600 bg-slate-700 text-slate-300";
-            });
-
-            if (mode === 'CASH') document.getElementById('payCashBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-emerald-500 bg-emerald-600 text-white";
-            if (mode === 'UPI') document.getElementById('payUpiBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-cyan-500 bg-cyan-600 text-white";
-            if (mode === 'CARD') document.getElementById('payCardBtn').className = "pay-btn py-1.5 text-xs font-bold rounded-lg border border-purple-500 bg-purple-600 text-white";
-        }
-
-        function checkoutOrder() {
-            if (cart.length === 0) {
-                alert("Cart is empty! Add products first.");
-                return;
-            }
-
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const discountAmt = getDiscountAmount(subtotal);
-            const netTotal = Math.max(0, subtotal - discountAmt);
-
-            const custNameVal = document.getElementById('custName').value.trim();
-            const custPhoneVal = document.getElementById('custPhone').value.trim();
-
-            const billNo = "SL-" + Math.floor(1000 + Math.random() * 9000);
-            const timestamp = new Date().toLocaleString();
-
-            function buildReceiptBlock(copyTitle) {
-                let itemsTableHtml = '';
-                cart.forEach(i => {
-                    itemsTableHtml += `
-                        <tr class="border-b border-slate-200/50">
-                            <td class="py-1 max-w-[120px] truncate">${i.name}</td>
-                            <td class="text-center">${i.qty}</td>
-                            <td class="text-right">₹${i.price}</td>
-                            <td class="text-right font-bold">₹${(i.price * i.qty).toFixed(2)}</td>
-                        </tr>
-                    `;
-                });
-
-                let customerBlock = '';
-                if (custNameVal || custPhoneVal) {
-                    customerBlock = `
-                        <div class="text-[10px] py-1 border-b border-dashed border-slate-400 font-semibold">
-                            ${custNameVal ? `<div>Customer: <b>${custNameVal}</b></div>` : ''}
-                            ${custPhoneVal ? `<div>Phone: <b>${custPhoneVal}</b></div>` : ''}
-                        </div>
-                    `;
-                }
-
-                let discountBlock = '';
-                if (discountAmt > 0) {
-                    discountBlock = `
-                        <div class="flex justify-between text-[11px] font-normal">
-                            <span>Subtotal:</span>
-                            <span>₹${subtotal.toFixed(2)}</span>
-                        </div>
-                        <div class="flex justify-between text-[11px] font-normal text-rose-700">
-                            <span>Discount:</span>
-                            <span>- ₹${discountAmt.toFixed(2)}</span>
-                        </div>
-                    `;
-                }
-
-                return `
-                    <div class="receipt-single-copy bg-white p-2 rounded border border-slate-300">
-                        <div class="text-center border-b border-dashed border-slate-400 pb-2">
-                            <span class="inline-block bg-slate-900 text-white font-bold text-[10px] px-2 py-0.5 rounded mb-1 uppercase tracking-wider">${copyTitle}</span>
-                            <h2 class="font-black text-sm uppercase">THOLILALAR PATTASU KADAI</h2>
-                            <p class="font-bold text-[11px]">SELVALAKSHMI AGENCY</p>
-                            <p class="text-[10px]">Avinashi Main Road, Peelamedu, Coimbatore - 641004</p>
-                            <p class="text-[10px]">Ph: 9894683113 / 8667010073</p>
-                        </div>
-
-                        <div class="flex justify-between text-[10px] py-1 border-b border-dashed border-slate-400">
-                            <span>Bill #: <b>${billNo}</b></span>
-                            <span>${timestamp}</span>
-                        </div>
-
-                        ${customerBlock}
-
-                        <table class="w-full text-left text-[11px] my-2">
-                            <thead>
-                                <tr class="border-b border-slate-300">
-                                    <th class="py-1">Item</th>
-                                    <th class="text-center">Qty</th>
-                                    <th class="text-right">Price</th>
-                                    <th class="text-right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${itemsTableHtml}
-                            </tbody>
-                        </table>
-
-                        <div class="border-t border-dashed border-slate-400 pt-2 space-y-1 text-xs font-bold">
-                            ${discountBlock}
-                            <div class="flex justify-between text-sm">
-                                <span>Net Payable Amount:</span>
-                                <span>₹${netTotal.toFixed(2)}</span>
-                            </div>
-                            <div class="flex justify-between text-[10px] font-normal text-slate-700">
-                                <span>Payment Method:</span>
-                                <span>${selectedPayment}</span>
-                            </div>
-                        </div>
-
-                        <div class="text-center border-t border-dashed border-slate-400 pt-2 text-[10px] mt-2">
-                            <p>*** No Exchange ***</p>
-                            <p class="font-bold mt-1">இனிய தீபாவளி நல்வாழ்த்துக்கள்!</p>
-                            <p>Thank You! Visit Again!</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            const printArea = document.getElementById('receiptPrintArea');
-            printArea.innerHTML = `
-                ${buildReceiptBlock('👤 CUSTOMER COPY / வாடிக்கையாளர் நகல்')}
-                
-                <div class="text-center text-[10px] my-3 border-b-2 border-dashed border-slate-500 py-1 font-bold text-slate-700">
-                    ✂️ - - - - - CUT HERE (வெட்டவும்) - - - - - ✂️
-                </div>
-
-                ${buildReceiptBlock('🏪 MERCHANT COPY / கடை நகல்')}
-            `;
-
-            let salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
-            salesHistory.push({
-                billNo: billNo,
-                timestamp: timestamp,
-                amount: netTotal,
-                customer: custNameVal ? `${custNameVal} (${custPhoneVal || 'No Phone'})` : 'Walk-in',
-                payment: selectedPayment,
-                itemCount: cart.length
-            });
-            localStorage.setItem('tpl_sales_history', JSON.stringify(salesHistory));
-
-            cart.forEach(ci => {
-                if (!ci.isCustom) {
-                    const p = products.find(prod => prod.id === ci.id);
-                    if (p) p.stock = Math.max(0, p.stock - ci.qty);
-                }
-            });
-
-            document.getElementById('receiptModal').classList.remove('hidden');
-        }
-
-        function closeReceiptModal() {
-            document.getElementById('receiptModal').classList.add('hidden');
-            clearCart();
-            renderProducts();
-        }
-
-        function openInventoryModal() {
-            renderInventoryTable();
-            document.getElementById('inventoryModal').classList.remove('hidden');
-        }
-        function closeInventoryModal() {
-            document.getElementById('inventoryModal').classList.add('hidden');
-        }
-
-        function renderInventoryTable() {
-            const search = document.getElementById('invSearchInput').value.toLowerCase().trim();
-            const tbody = document.getElementById('inventoryTableBody');
-            tbody.innerHTML = '';
-
-            products.filter(p => p.name.toLowerCase().includes(search) || p.displaySno.toLowerCase().includes(search)).forEach(p => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-2 font-bold text-amber-400">#${p.displaySno}</td>
-                    <td class="p-2 font-medium">${p.name}</td>
-                    <td class="p-2">₹${p.price}</td>
-                    <td class="p-2 text-center font-bold ${p.stock < 20 ? 'text-rose-400' : 'text-emerald-400'}">${p.stock}</td>
-                    <td class="p-2 text-right">
-                        <button onclick="updateStockDirect(${p.id})" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-xs rounded text-amber-300">
-                            Edit
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateStockDirect(prodId) {
-            const prod = products.find(p => p.id === prodId);
-            if (!prod) return;
-            const newStock = prompt(`Update stock for ${prod.name}:`, prod.stock);
-            if (newStock !== null && !isNaN(parseInt(newStock))) {
-                prod.stock = parseInt(newStock);
-                renderInventoryTable();
-                renderProducts();
-            }
-        }
-
-        function openSalesModal() {
-            const salesHistory = JSON.parse(localStorage.getItem('tpl_sales_history') || '[]');
-            let totalRev = 0, cashRev = 0, upiRev = 0, cardRev = 0;
-
-            const dateSummary = {};
-
-            salesHistory.forEach(s => {
-                const amt = s.amount || 0;
-                const pay = (s.payment || 'CASH').toUpperCase();
-                
-                totalRev += amt;
-                if (pay === 'CASH') cashRev += amt;
-                else if (pay === 'UPI') upiRev += amt;
-                else if (pay === 'CARD') cardRev += amt;
-
-                let dateKey = 'Today';
-                if (s.timestamp) {
-                    dateKey = s.timestamp.split(',')[0].trim();
-                }
-
-                if (!dateSummary[dateKey]) {
-                    dateSummary[dateKey] = { CASH: 0, UPI: 0, CARD: 0, TOTAL: 0, COUNT: 0 };
-                }
-
-                dateSummary[dateKey][pay] = (dateSummary[dateKey][pay] || 0) + amt;
-                dateSummary[dateKey].TOTAL += amt;
-                dateSummary[dateKey].COUNT += 1;
-            });
-
-            document.getElementById('salesTotalRev').textContent = `₹${totalRev.toFixed(0)}`;
-            document.getElementById('salesCashRev').textContent = `₹${cashRev.toFixed(0)}`;
-            document.getElementById('salesUpiRev').textContent = `₹${upiRev.toFixed(0)}`;
-            document.getElementById('salesCardRev').textContent = `₹${cardRev.toFixed(0)}`;
-
-            const datewiseBody = document.getElementById('datewiseSalesBody');
-            datewiseBody.innerHTML = '';
-
-            const dateKeys = Object.keys(dateSummary).reverse();
-            if (dateKeys.length === 0) {
-                datewiseBody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-500">No sales recorded yet.</td></tr>`;
-            } else {
-                dateKeys.forEach(dk => {
-                    const row = dateSummary[dk];
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="p-2 font-bold text-amber-400">${dk}</td>
-                        <td class="p-2 text-center font-medium">${row.COUNT}</td>
-                        <td class="p-2 text-right font-semibold text-emerald-400">₹${row.CASH.toFixed(2)}</td>
-                        <td class="p-2 text-right font-semibold text-cyan-400">₹${row.UPI.toFixed(2)}</td>
-                        <td class="p-2 text-right font-semibold text-purple-400">₹${row.CARD.toFixed(2)}</td>
-                        <td class="p-2 text-right font-extrabold text-amber-400">₹${row.TOTAL.toFixed(2)}</td>
-                    `;
-                    datewiseBody.appendChild(tr);
-                });
-            }
-
-            const tbody = document.getElementById('salesTableBody');
-            tbody.innerHTML = '';
-
-            if (salesHistory.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-500">No transaction logs available.</td></tr>`;
-            } else {
-                salesHistory.slice().reverse().forEach(s => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td class="p-2 font-bold text-amber-400">${s.billNo}</td>
-                        <td class="p-2 text-[10px]">${s.timestamp}</td>
-                        <td class="p-2 text-xs text-slate-300">${s.customer || 'Walk-in'}</td>
-                        <td class="p-2 font-semibold text-xs">${s.payment}</td>
-                        <td class="p-2 text-right font-extrabold text-emerald-400">₹${(s.amount || 0).toFixed(2)}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            document.getElementById('salesModal').classList.remove('hidden');
-        }
-        function closeSalesModal() {
-            document.getElementById('salesModal').classList.add('hidden');
-        }
-
-        function initWebSpeech() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return;
-
-            recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = false;
-
-            recognition.onresult = (event) => {
-                const last = event.results.length - 1;
-                const text = event.results[last][0].transcript.trim().toLowerCase();
-                document.getElementById('voiceStatusText').textContent = `🎤 Heard: "${text}"`;
-
-                const match = products.find(p => text.includes(p.name.toLowerCase()) || text.includes(p.displaySno.toLowerCase()));
-                if (match) {
-                    addToCart(match.id, 1);
-                }
-            };
-
-            recognition.onerror = () => stopVoice();
-            recognition.onend = () => { if (isListening) recognition.start(); };
-        }
-
-        function toggleVoiceRecognition() {
-            if (isListening) stopVoice();
-            else startVoice();
-        }
-
-        function startVoice() {
-            if (!recognition) {
-                alert("Web Speech API is not supported in this browser. Please use Chrome or Edge.");
-                return;
-            }
-            const lang = document.getElementById('voiceLangSelect').value;
-            recognition.lang = lang;
-            recognition.start();
-            isListening = true;
-            document.getElementById('micBtn').className = "px-3 py-1.5 bg-emerald-600 text-white text-xs sm:text-sm font-semibold rounded-lg transition flex items-center gap-1.5 animate-pulse";
-            document.getElementById('voiceStatusBanner').classList.remove('hidden');
-        }
-
-        function stopVoice() {
-            if (recognition) recognition.stop();
-            isListening = false;
-            document.getElementById('micBtn').className = "px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold rounded-lg transition flex items-center gap-1.5 shadow";
-            document.getElementById('voiceStatusBanner').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+        "

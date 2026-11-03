@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THOLILALAR PATTASU KADAI - Thermal POS (SC588 Ready)</title>
+    <title>THOLILALAR PATTASU KADAI - Thermal POS (SC588 & RawBT Ready)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Thermal Receipt 58mm Print Styling */
         @media print {
             @page {
                 size: 58mm auto;
@@ -60,7 +61,7 @@
             <div class="flex items-center gap-2">
                 <button onclick="connectSC588Printer()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-lg transition flex items-center gap-1.5 shadow">
                     <i class="fa-solid fa-bluetooth"></i>
-                    <span>Pair SC588</span>
+                    <span>Pair SC588 Printer</span>
                 </button>
                 <button onclick="openInventoryModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs rounded-lg transition flex items-center gap-1.5 border border-slate-600">
                     <i class="fa-solid fa-boxes-stacked"></i>
@@ -77,14 +78,14 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        <!-- Left Section: Search & Product Catalog -->
+        <!-- Left Section: Search & Product Catalog (7 Cols) -->
         <section class="lg:col-span-7 flex flex-col gap-4">
             
             <!-- Search & Quick Entry Bar -->
             <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-md flex flex-col sm:flex-row gap-2">
                 <div class="relative flex-1">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
-                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search by name or code (#45, ST-1, 45*5)..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-8 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search item (#45, ST-1, 45*5, Laxmi)..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-8 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
                     <button onclick="clearSearch()" class="absolute right-2 top-2 text-slate-500 hover:text-slate-300 text-xs px-1">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -112,7 +113,7 @@
             </div>
         </section>
 
-        <!-- Right Section: Cart & Checkout -->
+        <!-- Right Section: Cart & Checkout (5 Cols) -->
         <section class="lg:col-span-5 flex flex-col bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden h-[calc(100vh-100px)] sticky top-20">
             
             <!-- Cart Header & Customer Inputs -->
@@ -177,7 +178,7 @@
                     </button>
                     <button onclick="printDirectToSC588()" class="py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-lg shadow-lg flex items-center justify-center gap-2 transition">
                         <i class="fa-solid fa-bolt"></i>
-                        <span>Direct SC588</span>
+                        <span>Direct Thermal Print</span>
                     </button>
                 </div>
             </div>
@@ -199,7 +200,7 @@
                 </button>
                 <button onclick="printViaRawBT()" class="py-2 bg-emerald-600 text-white font-bold text-xs rounded hover:bg-emerald-700 flex items-center justify-center gap-1.5 shadow">
                     <i class="fa-solid fa-mobile-screen"></i>
-                    <span>RawBT Print</span>
+                    <span>RawBT App Print</span>
                 </button>
                 <button onclick="window.print()" class="py-2 bg-slate-700 text-white font-bold text-xs rounded hover:bg-slate-800 flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-print"></i>
@@ -279,72 +280,1047 @@
 
     <!-- Application JavaScript Engine -->
     <script>
-        // 174 Items Catalog Data (#1 - #137 & #ST-1 - #ST-37)
+        // Full Product Catalog Data (161 Items)
         const INITIAL_PRODUCTS = [
-            { id: "1", code: "1", name: "2 ¾\" BIRD", price: 15 },
-            { id: "2", code: "2", name: "3 ½\" LAKSHMI", price: 20 },
-            { id: "3", code: "3", name: "4\" LAKSHMI", price: 25 },
-            { id: "4", code: "4", name: "4\" LAKSHMI DELUXE", price: 35 },
-            { id: "5", code: "5", name: "4\" SPECIAL LAKSHMI", price: 40 },
-            { id: "6", code: "6", name: "5\" LAKSHMI BOMB", price: 50 },
-            { id: "7", code: "7", name: "TWO SOUND CRACKERS", price: 60 },
-            { id: "8", code: "8", name: "28 CHORSA", price: 35 },
-            { id: "9", code: "9", name: "28 GIANT CRACKERS", price: 70 },
-            { id: "10", code: "10", name: "50 DELUXE CRACKERS", price: 180 },
-            { id: "11", code: "11", name: "100 GIANT CRACKERS", price: 250 },
-            { id: "12", code: "12", name: "100 DELTA DELUXE CRACKERS", price: 600 },
-            { id: "13", code: "13", name: "100 WALA", price: 80 },
-            { id: "14", code: "14", name: "100 WALA SK", price: 100 },
-            { id: "15", code: "15", name: "600 WALA", price: 450 },
-            { id: "16", code: "16", name: "1000 WALA SK", price: 650 },
-            { id: "17", code: "17", name: "2000 WALA SK", price: 1300 },
-            { id: "18", code: "18", name: "3000 WALA SK", price: 1950 },
-            { id: "19", code: "19", name: "5000 WALA SK", price: 3000 },
-            { id: "20", code: "20", name: "10000 WALA SK", price: 6000 },
-            { id: "25", code: "25", name: "BULLET BOMB", price: 60 },
-            { id: "26", code: "26", name: "HYDRO BOMB", price: 100 },
-            { id: "27", code: "27", name: "KING OF BOMB", price: 150 },
-            { id: "28", code: "28", name: "CLASSIC BOMB", price: 200 },
-            { id: "30", code: "30", name: "RED BIJILI 50 pcs", price: 30 },
-            { id: "31", code: "31", name: "RED BIJILI 100 pcs", price: 60 },
-            { id: "32", code: "32", name: "STRIPPED BIJILI 100 pcs", price: 70 },
-            { id: "33", code: "33", name: "GROUND CHAKKAR BIG", price: 80 },
-            { id: "34", code: "34", name: "GROUND CHAKKAR SPECIAL", price: 120 },
-            { id: "35", code: "35", name: "GROUND CHAKKAR DELUXE", price: 240 },
-            { id: "37", code: "37", name: "FLOWER POTS SMALL", price: 100 },
-            { id: "38", code: "38", name: "FLOWER POTS BIG", price: 140 },
-            { id: "39", code: "39", name: "FLOWER POTS SPECIAL", price: 200 },
-            { id: "40", code: "40", name: "COLOUR KOTI", price: 300 },
-            { id: "41", code: "41", name: "COLOUR KOTI DELUXE", price: 800 },
-            { id: "45", code: "45", name: "BABY ROCKET", price: 60 },
-            { id: "46", code: "46", name: "BOMB ROCKET", price: 120 },
-            { id: "47", code: "47", name: "LAKSHMI ROCKET", price: 150 },
-            { id: "48", code: "48", name: "WHISTELING ROCKET", price: 300 },
-            { id: "50", code: "50", name: "1½\" TWINKLING STAR", price: 50 },
-            { id: "51", code: "51", name: "4\" TWINKLING STAR", price: 100 },
-            { id: "52", code: "52", name: "10\" PENCIL", price: 130 },
-            { id: "58", code: "58", name: "7 SHOT", price: 160 },
-            { id: "59", code: "59", name: "12 SHOT RIDER", price: 300 },
-            { id: "60", code: "60", name: "30 SHOT MULTICOLOUR", price: 800 },
-            { id: "61", code: "61", name: "60 SHOT MULTICOLOUR", price: 1600 },
-            { id: "62", code: "62", name: "120 SHOT MULTICOLOUR", price: 3200 },
-            { id: "63", code: "63", name: "240 SHOT MULTICOLOUR", price: 6000 },
-            { id: "65", code: "65", name: "10CM ELECTRIC SPARKLER", price: 30 },
-            { id: "66", code: "66", name: "10CM COLOUR SPARKLER", price: 35 },
-            { id: "67", code: "67", name: "15CM ELECTRIC SPARKLER", price: 65 },
-            { id: "68", code: "68", name: "15CM COLOUR SPARKLER", price: 75 },
-            { id: "69", code: "69", name: "15CM GREEN SPARKLER", price: 85 },
-            { id: "70", code: "70", name: "30CM ELECTRIC SPARKLER", price: 150 },
-            { id: "71", code: "71", name: "30CM COLOUR SPARKLER", price: 170 },
-            { id: "72", code: "72", name: "50CM ELECTRIC SPARKLER", price: 350 },
-            { id: "ST-1", code: "ST-1", name: "ST BOOM BOMB", price: 300 },
-            { id: "ST-2", code: "ST-2", name: "ST 1000 DIGITAL", price: 800 },
-            { id: "ST-3", code: "ST-3", name: "ST FLOWER POTS SMALL", price: 120 },
-            { id: "ST-10", code: "ST-10", name: "ST 45CM TWINKLING STAR", price: 75 },
-            { id: "ST-15", code: "ST-15", name: "ST SUN FLOWER 12 SHOT", price: 400 },
-            { id: "ST-35", code: "ST-35", name: "ST RED BIJILI 50 pcs", price: 50 },
-            { id: "ST-37", code: "ST-37", name: "ST ROLLCAPS", price: 150 }
-        ];
+            {
+                        "id": "1",
+                        "code": "1",
+                        "name": "2 \u00be\" BIRD",
+                        "price": 15
+            },
+            {
+                        "id": "2",
+                        "code": "2",
+                        "name": "3 \u00bd\" CRACKERS LAKSHMI",
+                        "price": 25
+            },
+            {
+                        "id": "3",
+                        "code": "3",
+                        "name": "4\" LAXMI",
+                        "price": 35
+            },
+            {
+                        "id": "4",
+                        "code": "4",
+                        "name": "4\" DELUXE LAKSHMI",
+                        "price": 65
+            },
+            {
+                        "id": "5",
+                        "code": "5",
+                        "name": "4\" GOLD LAKSHMI",
+                        "price": 70
+            },
+            {
+                        "id": "6",
+                        "code": "6",
+                        "name": "5\" KOMBEN",
+                        "price": 70
+            },
+            {
+                        "id": "7",
+                        "code": "7",
+                        "name": "TWO SOUND CRACKERS",
+                        "price": 60
+            },
+            {
+                        "id": "8",
+                        "code": "8",
+                        "name": "28 CHORSA",
+                        "price": 35
+            },
+            {
+                        "id": "9",
+                        "code": "9",
+                        "name": "56 CHORSA",
+                        "price": 65
+            },
+            {
+                        "id": "10",
+                        "code": "10",
+                        "name": "24 DELUXE CRACKERS",
+                        "price": 100
+            },
+            {
+                        "id": "11",
+                        "code": "11",
+                        "name": "50 DELUXE CRACKERS",
+                        "price": 230
+            },
+            {
+                        "id": "12",
+                        "code": "12",
+                        "name": "100 DELTA DELUXE CRACKERS",
+                        "price": 600
+            },
+            {
+                        "id": "13",
+                        "code": "13",
+                        "name": "100 WALA",
+                        "price": 80
+            },
+            {
+                        "id": "14",
+                        "code": "14",
+                        "name": "200 WALA",
+                        "price": 160
+            },
+            {
+                        "id": "15",
+                        "code": "15",
+                        "name": "300 WALA",
+                        "price": 320
+            },
+            {
+                        "id": "16",
+                        "code": "16",
+                        "name": "600 WALA",
+                        "price": 480
+            },
+            {
+                        "id": "17",
+                        "code": "17",
+                        "name": "1000 WALA",
+                        "price": 400
+            },
+            {
+                        "id": "18",
+                        "code": "18",
+                        "name": "1000 WALA SK",
+                        "price": 600
+            },
+            {
+                        "id": "19",
+                        "code": "19",
+                        "name": "2000 WALA",
+                        "price": 800
+            },
+            {
+                        "id": "20",
+                        "code": "20",
+                        "name": "2000 WALA SK",
+                        "price": 1200
+            },
+            {
+                        "id": "21",
+                        "code": "21",
+                        "name": "5000 WALA",
+                        "price": 2000
+            },
+            {
+                        "id": "22",
+                        "code": "22",
+                        "name": "5000 WALA SK",
+                        "price": 3000
+            },
+            {
+                        "id": "23",
+                        "code": "23",
+                        "name": "10000 WALA",
+                        "price": 4000
+            },
+            {
+                        "id": "24",
+                        "code": "24",
+                        "name": "10000 WALA SK",
+                        "price": 6000
+            },
+            {
+                        "id": "25",
+                        "code": "25",
+                        "name": "BULLET BOMB",
+                        "price": 60
+            },
+            {
+                        "id": "26",
+                        "code": "26",
+                        "name": "ATOM BOMB BIG",
+                        "price": 60
+            },
+            {
+                        "id": "27",
+                        "code": "27",
+                        "name": "HYDRO BOMB GREEN",
+                        "price": 70
+            },
+            {
+                        "id": "28",
+                        "code": "28",
+                        "name": "KING OF KING BOMB",
+                        "price": 150
+            },
+            {
+                        "id": "29",
+                        "code": "29",
+                        "name": "CLASSIC BOMB",
+                        "price": 200
+            },
+            {
+                        "id": "30",
+                        "code": "30",
+                        "name": "RED BIJILI(50 pcs)",
+                        "price": 30
+            },
+            {
+                        "id": "31",
+                        "code": "31",
+                        "name": "RED BIJILI(100 pcs)",
+                        "price": 60
+            },
+            {
+                        "id": "32",
+                        "code": "32",
+                        "name": "STRIPPED BIJILI(100 pcs)",
+                        "price": 70
+            },
+            {
+                        "id": "33",
+                        "code": "33",
+                        "name": "GROUND CHAKKAR BIG",
+                        "price": 80
+            },
+            {
+                        "id": "34",
+                        "code": "34",
+                        "name": "GROUND CHAKKAR ASHOKA",
+                        "price": 140
+            },
+            {
+                        "id": "35",
+                        "code": "35",
+                        "name": "GROUND CHAKKAR SPECIAL",
+                        "price": 180
+            },
+            {
+                        "id": "36",
+                        "code": "36",
+                        "name": "GROUND CHAKKAR DELUXE",
+                        "price": 240
+            },
+            {
+                        "id": "37",
+                        "code": "37",
+                        "name": "FLOWER POTS SMALL",
+                        "price": 100
+            },
+            {
+                        "id": "38",
+                        "code": "38",
+                        "name": "FLOWER POTS BIG",
+                        "price": 150
+            },
+            {
+                        "id": "39",
+                        "code": "39",
+                        "name": "FLOWER POTS SPECIAL",
+                        "price": 200
+            },
+            {
+                        "id": "40",
+                        "code": "40",
+                        "name": "FLOWER POTS ASHOKA/GAINT",
+                        "price": 300
+            },
+            {
+                        "id": "41",
+                        "code": "41",
+                        "name": "FLOWER POTS DELUXE (5 pcs)",
+                        "price": 320
+            },
+            {
+                        "id": "42",
+                        "code": "42",
+                        "name": "FLOWER POTS SUPER DLX (2 pcs)",
+                        "price": 200
+            },
+            {
+                        "id": "43",
+                        "code": "43",
+                        "name": "COLOUR KOTI/POT GIRL",
+                        "price": 400
+            },
+            {
+                        "id": "44",
+                        "code": "44",
+                        "name": "COLOUR KOTI DELUXE",
+                        "price": 800
+            },
+            {
+                        "id": "45",
+                        "code": "45",
+                        "name": "BABY ROCKET",
+                        "price": 60
+            },
+            {
+                        "id": "46",
+                        "code": "46",
+                        "name": "ROCKET BOMB",
+                        "price": 150
+            },
+            {
+                        "id": "47",
+                        "code": "47",
+                        "name": "COLOUR ROCKET",
+                        "price": 150
+            },
+            {
+                        "id": "48",
+                        "code": "48",
+                        "name": "LUNIC ROCKET",
+                        "price": 250
+            },
+            {
+                        "id": "49",
+                        "code": "49",
+                        "name": "WHISTELING ROCKET",
+                        "price": 300
+            },
+            {
+                        "id": "50",
+                        "code": "50",
+                        "name": "1\u00bd\" TWINKLING STAR",
+                        "price": 50
+            },
+            {
+                        "id": "51",
+                        "code": "51",
+                        "name": "4\" TWINKLING STAR",
+                        "price": 150
+            },
+            {
+                        "id": "52",
+                        "code": "52",
+                        "name": "10\" PENCIL",
+                        "price": 130
+            },
+            {
+                        "id": "53",
+                        "code": "53",
+                        "name": "1 3/4\" FANCY SHOT(3PCS)",
+                        "price": 500
+            },
+            {
+                        "id": "54",
+                        "code": "54",
+                        "name": "2\" SINGLE FANCY SHOT",
+                        "price": 300
+            },
+            {
+                        "id": "55",
+                        "code": "55",
+                        "name": "2 1/2 \" FANCY SHOT -3 STEP",
+                        "price": 500
+            },
+            {
+                        "id": "56",
+                        "code": "56",
+                        "name": "3 1/2 \" FANCY SHOT(1 PCS)",
+                        "price": 700
+            },
+            {
+                        "id": "57",
+                        "code": "57",
+                        "name": "74MM FANCY SHOT(1 PCS)",
+                        "price": 800
+            },
+            {
+                        "id": "58",
+                        "code": "58",
+                        "name": "7 SHOT",
+                        "price": 160
+            },
+            {
+                        "id": "59",
+                        "code": "59",
+                        "name": "12 SHOT",
+                        "price": 300
+            },
+            {
+                        "id": "60",
+                        "code": "60",
+                        "name": "15 SHOT MULTICOLOUR",
+                        "price": 400
+            },
+            {
+                        "id": "61",
+                        "code": "61",
+                        "name": "30 SHOT MULTICOLOUR",
+                        "price": 700
+            },
+            {
+                        "id": "62",
+                        "code": "62",
+                        "name": "60 SHOT MULTICOLOUR",
+                        "price": 1500
+            },
+            {
+                        "id": "63",
+                        "code": "63",
+                        "name": "120 SHOT MULTICOLOUR",
+                        "price": 3000
+            },
+            {
+                        "id": "64",
+                        "code": "64",
+                        "name": "240 SHOT MULTICOLOUR",
+                        "price": 6000
+            },
+            {
+                        "id": "65",
+                        "code": "65",
+                        "name": "10CM ELECTRIC",
+                        "price": 30
+            },
+            {
+                        "id": "66",
+                        "code": "66",
+                        "name": "10 CM COLOUR",
+                        "price": 40
+            },
+            {
+                        "id": "67",
+                        "code": "67",
+                        "name": "10CM GREEN",
+                        "price": 40
+            },
+            {
+                        "id": "68",
+                        "code": "68",
+                        "name": "10CM RED",
+                        "price": 40
+            },
+            {
+                        "id": "69",
+                        "code": "69",
+                        "name": "12CM ELECTRIC",
+                        "price": 50
+            },
+            {
+                        "id": "70",
+                        "code": "70",
+                        "name": "12 CM COLOUR",
+                        "price": 55
+            },
+            {
+                        "id": "71",
+                        "code": "71",
+                        "name": "12CM YELLOW",
+                        "price": 60
+            },
+            {
+                        "id": "72",
+                        "code": "72",
+                        "name": "12CM RED",
+                        "price": 60
+            },
+            {
+                        "id": "73",
+                        "code": "73",
+                        "name": "15CM ELECTRIC",
+                        "price": 80
+            },
+            {
+                        "id": "74",
+                        "code": "74",
+                        "name": "15 CM COLOUR",
+                        "price": 90
+            },
+            {
+                        "id": "75",
+                        "code": "75",
+                        "name": "15CM GREEN",
+                        "price": 90
+            },
+            {
+                        "id": "76",
+                        "code": "76",
+                        "name": "15CM RED",
+                        "price": 90
+            },
+            {
+                        "id": "77",
+                        "code": "77",
+                        "name": "30CM ELECTRIC (5 pcs)",
+                        "price": 60
+            },
+            {
+                        "id": "78",
+                        "code": "78",
+                        "name": "30CM COLOUR (5 pcs)",
+                        "price": 90
+            },
+            {
+                        "id": "79",
+                        "code": "79",
+                        "name": "30CM YELLOW (5 pcs)",
+                        "price": 90
+            },
+            {
+                        "id": "80",
+                        "code": "80",
+                        "name": "30CM RED (5 pcs)",
+                        "price": 90
+            },
+            {
+                        "id": "81",
+                        "code": "81",
+                        "name": "50CM ELECTRIC (5 pcs)",
+                        "price": 300
+            },
+            {
+                        "id": "82",
+                        "code": "82",
+                        "name": "50CM COLOUR (5 pcs)",
+                        "price": 330
+            },
+            {
+                        "id": "83",
+                        "code": "83",
+                        "name": "75CM ELECTRIC (5 pcs)",
+                        "price": 450
+            },
+            {
+                        "id": "84",
+                        "code": "84",
+                        "name": "75CM COLOUR (5 pcs)",
+                        "price": 500
+            },
+            {
+                        "id": "85",
+                        "code": "85",
+                        "name": "ADIYAL 1/4 KG",
+                        "price": 120
+            },
+            {
+                        "id": "86",
+                        "code": "86",
+                        "name": "ADIYAL 1/2 KG",
+                        "price": 240
+            },
+            {
+                        "id": "87",
+                        "code": "87",
+                        "name": "ADIYAL 1KG",
+                        "price": 480
+            },
+            {
+                        "id": "88",
+                        "code": "88",
+                        "name": "MONEY",
+                        "price": 600
+            },
+            {
+                        "id": "89",
+                        "code": "89",
+                        "name": "GANAGA JAMUNA (5 pcs))",
+                        "price": 160
+            },
+            {
+                        "id": "90",
+                        "code": "90",
+                        "name": "PHOTOFLASH",
+                        "price": 150
+            },
+            {
+                        "id": "91",
+                        "code": "91",
+                        "name": "TIN BEER SMALL",
+                        "price": 200
+            },
+            {
+                        "id": "92",
+                        "code": "92",
+                        "name": "BUTTERFLY/PAMBARAM",
+                        "price": 200
+            },
+            {
+                        "id": "93",
+                        "code": "93",
+                        "name": "HELICOPTER",
+                        "price": 200
+            },
+            {
+                        "id": "94",
+                        "code": "94",
+                        "name": "DANCING WHEEL",
+                        "price": 200
+            },
+            {
+                        "id": "95",
+                        "code": "95",
+                        "name": "SPLASH LIGHT",
+                        "price": 220
+            },
+            {
+                        "id": "96",
+                        "code": "96",
+                        "name": "GIPSY",
+                        "price": 250
+            },
+            {
+                        "id": "97",
+                        "code": "97",
+                        "name": "JONE & JOKES(2 pcs)",
+                        "price": 250
+            },
+            {
+                        "id": "98",
+                        "code": "98",
+                        "name": "KATHI",
+                        "price": 250
+            },
+            {
+                        "id": "99",
+                        "code": "99",
+                        "name": "MERI JAAN(2 pcs)",
+                        "price": 300
+            },
+            {
+                        "id": "100",
+                        "code": "100",
+                        "name": "SMOKE",
+                        "price": 300
+            },
+            {
+                        "id": "101",
+                        "code": "101",
+                        "name": "SIREN",
+                        "price": 300
+            },
+            {
+                        "id": "102",
+                        "code": "102",
+                        "name": "SPARSHA GREEN",
+                        "price": 350
+            },
+            {
+                        "id": "103",
+                        "code": "103",
+                        "name": "KURKURE",
+                        "price": 350
+            },
+            {
+                        "id": "104",
+                        "code": "104",
+                        "name": "SMALL PEACOCK",
+                        "price": 350
+            },
+            {
+                        "id": "105",
+                        "code": "105",
+                        "name": "COLOUR SONG",
+                        "price": 360
+            },
+            {
+                        "id": "106",
+                        "code": "106",
+                        "name": "TIN BEER BIG",
+                        "price": 400
+            },
+            {
+                        "id": "107",
+                        "code": "107",
+                        "name": "5 STAR",
+                        "price": 400
+            },
+            {
+                        "id": "108",
+                        "code": "108",
+                        "name": "YOYO(5 pcs)",
+                        "price": 400
+            },
+            {
+                        "id": "109",
+                        "code": "109",
+                        "name": "NACHOS(2 pcs)",
+                        "price": 400
+            },
+            {
+                        "id": "110",
+                        "code": "110",
+                        "name": "EMU EGG",
+                        "price": 450
+            },
+            {
+                        "id": "111",
+                        "code": "111",
+                        "name": "TOPGUN(5 pcs)",
+                        "price": 450
+            },
+            {
+                        "id": "112",
+                        "code": "112",
+                        "name": "COCKTAIL(3 pcs)",
+                        "price": 450
+            },
+            {
+                        "id": "113",
+                        "code": "113",
+                        "name": "4 IN 1 ANDROID",
+                        "price": 450
+            },
+            {
+                        "id": "114",
+                        "code": "114",
+                        "name": "TROPICAL MUSHROOM",
+                        "price": 500
+            },
+            {
+                        "id": "115",
+                        "code": "115",
+                        "name": "STAR MIX",
+                        "price": 500
+            },
+            {
+                        "id": "116",
+                        "code": "116",
+                        "name": "BLOSSOM",
+                        "price": 500
+            },
+            {
+                        "id": "117",
+                        "code": "117",
+                        "name": "IPL MIX",
+                        "price": 500
+            },
+            {
+                        "id": "118",
+                        "code": "118",
+                        "name": "BOOMER(10 pcs)",
+                        "price": 600
+            },
+            {
+                        "id": "119",
+                        "code": "119",
+                        "name": "LOVE SPARK FOUNTAIN",
+                        "price": 600
+            },
+            {
+                        "id": "120",
+                        "code": "120",
+                        "name": "BADA PEACOCK",
+                        "price": 600
+            },
+            {
+                        "id": "121",
+                        "code": "121",
+                        "name": "BADA PEACOCK MULTICOLOUR",
+                        "price": 700
+            },
+            {
+                        "id": "122",
+                        "code": "122",
+                        "name": "KULFI",
+                        "price": 700
+            },
+            {
+                        "id": "123",
+                        "code": "123",
+                        "name": "WELCOME SHOW",
+                        "price": 800
+            },
+            {
+                        "id": "124",
+                        "code": "124",
+                        "name": "FANTASY LION/ELEPHANT",
+                        "price": 800
+            },
+            {
+                        "id": "125",
+                        "code": "125",
+                        "name": "CAR BIG",
+                        "price": 900
+            },
+            {
+                        "id": "126",
+                        "code": "126",
+                        "name": "ROLL CAPS",
+                        "price": 120
+            },
+            {
+                        "id": "127",
+                        "code": "127",
+                        "name": "SNAKE TABLATS BIG",
+                        "price": 50
+            },
+            {
+                        "id": "128",
+                        "code": "128",
+                        "name": "RED GREEN MATCHES ORD(10NO)",
+                        "price": 20
+            },
+            {
+                        "id": "129",
+                        "code": "129",
+                        "name": "JILJIL MATCH(10NO)",
+                        "price": 40
+            },
+            {
+                        "id": "130",
+                        "code": "130",
+                        "name": "BLOOMS",
+                        "price": 140
+            },
+            {
+                        "id": "131",
+                        "code": "131",
+                        "name": "SUPER 6",
+                        "price": 130
+            },
+            {
+                        "id": "132",
+                        "code": "132",
+                        "name": "NOKIO/ 10 IN 1",
+                        "price": 300
+            },
+            {
+                        "id": "133",
+                        "code": "133",
+                        "name": "GANESH 16 items",
+                        "price": 410
+            },
+            {
+                        "id": "134",
+                        "code": "134",
+                        "name": "TREAT 20 items",
+                        "price": 460
+            },
+            {
+                        "id": "135",
+                        "code": "135",
+                        "name": "KGF 36 items",
+                        "price": 900
+            },
+            {
+                        "id": "136",
+                        "code": "136",
+                        "name": "PUBG 41 items",
+                        "price": 1000
+            },
+            {
+                        "id": "137",
+                        "code": "137",
+                        "name": "BIG BOSS 51 Items",
+                        "price": 1600
+            },
+            {
+                        "id": "ST-1",
+                        "code": "ST-1",
+                        "name": "ST BOOM BOMB",
+                        "price": 300
+            },
+            {
+                        "id": "ST-2",
+                        "code": "ST-2",
+                        "name": "ST 1000 DIGITAL",
+                        "price": 800
+            },
+            {
+                        "id": "ST-3",
+                        "code": "ST-3",
+                        "name": "ST FLOWER POTS SMALL",
+                        "price": 120
+            },
+            {
+                        "id": "ST-4",
+                        "code": "ST-4",
+                        "name": "ST FLOWER POTS SPECIAL",
+                        "price": 300
+            },
+            {
+                        "id": "ST-5",
+                        "code": "ST-5",
+                        "name": "ST FLOWER POTS DELUXE",
+                        "price": 400
+            },
+            {
+                        "id": "ST-6",
+                        "code": "ST-6",
+                        "name": "ST TRICOLOUR FOUNTAIN",
+                        "price": 650
+            },
+            {
+                        "id": "ST-7",
+                        "code": "ST-7",
+                        "name": "ST TRICOLOUR MILLENIUM",
+                        "price": 800
+            },
+            {
+                        "id": "ST-8",
+                        "code": "ST-8",
+                        "name": "ST CHAVI ZAMIN CHAKKAR ASHOKA",
+                        "price": 150
+            },
+            {
+                        "id": "ST-9",
+                        "code": "ST-9",
+                        "name": "ST CHAVI ZAMIN CHAKKAR DELUXE",
+                        "price": 350
+            },
+            {
+                        "id": "ST-10",
+                        "code": "ST-10",
+                        "name": "ST 45CM TWINKLING STAR",
+                        "price": 75
+            },
+            {
+                        "id": "ST-11",
+                        "code": "ST-11",
+                        "name": "ST 120 CM TWINKLING STAR",
+                        "price": 240
+            },
+            {
+                        "id": "ST-12",
+                        "code": "ST-12",
+                        "name": "ST MULTI COLOUR CANDLE",
+                        "price": 150
+            },
+            {
+                        "id": "ST-13",
+                        "code": "ST-13",
+                        "name": "ST 30 CM GOLD SPARKLER",
+                        "price": 130
+            },
+            {
+                        "id": "ST-14",
+                        "code": "ST-14",
+                        "name": "ST 30CM COLOUR SPARKLER",
+                        "price": 150
+            },
+            {
+                        "id": "ST-15",
+                        "code": "ST-15",
+                        "name": "ST SUN FLOWER 12 SHOT",
+                        "price": 400
+            },
+            {
+                        "id": "ST-16",
+                        "code": "ST-16",
+                        "name": "ST COLOUR MAGIC 16 SHOT",
+                        "price": 550
+            },
+            {
+                        "id": "ST-17",
+                        "code": "ST-17",
+                        "name": "ST 30 SHOT",
+                        "price": 1200
+            },
+            {
+                        "id": "ST-18",
+                        "code": "ST-18",
+                        "name": "ST 60 SHOT",
+                        "price": 2000
+            },
+            {
+                        "id": "ST-19",
+                        "code": "ST-19",
+                        "name": "ST 120 SHOT",
+                        "price": 3300
+            },
+            {
+                        "id": "ST-20",
+                        "code": "ST-20",
+                        "name": "ST CHAT CHAT",
+                        "price": 150
+            },
+            {
+                        "id": "ST-21",
+                        "code": "ST-21",
+                        "name": "ST SIGNAL LIGHTS",
+                        "price": 200
+            },
+            {
+                        "id": "ST-22",
+                        "code": "ST-22",
+                        "name": "ST COLOUR CHANGING BUTTERFLY",
+                        "price": 400
+            },
+            {
+                        "id": "ST-23",
+                        "code": "ST-23",
+                        "name": "ST DOLLAR WHEEL",
+                        "price": 500
+            },
+            {
+                        "id": "ST-24",
+                        "code": "ST-24",
+                        "name": "ST POKER WHEEL",
+                        "price": 500
+            },
+            {
+                        "id": "ST-25",
+                        "code": "ST-25",
+                        "name": "ST CRACKLING CANDY",
+                        "price": 500
+            },
+            {
+                        "id": "ST-26",
+                        "code": "ST-26",
+                        "name": "ST SIGNAL LIGHTS",
+                        "price": 200
+            },
+            {
+                        "id": "ST-27",
+                        "code": "ST-27",
+                        "name": "ST MONEY PENNY",
+                        "price": 500
+            },
+            {
+                        "id": "ST-28",
+                        "code": "ST-28",
+                        "name": "ST JIL JUNG JUK",
+                        "price": 500
+            },
+            {
+                        "id": "ST-29",
+                        "code": "ST-29",
+                        "name": "ST SUNDROPS",
+                        "price": 500
+            },
+            {
+                        "id": "ST-30",
+                        "code": "ST-30",
+                        "name": "ST DIAMOND MINE",
+                        "price": 500
+            },
+            {
+                        "id": "ST-31",
+                        "code": "ST-31",
+                        "name": "ST ARIEL OUT",
+                        "price": 550
+            },
+            {
+                        "id": "ST-32",
+                        "code": "ST-32",
+                        "name": "ST POPCORN FOUNTAIN",
+                        "price": 550
+            },
+            {
+                        "id": "ST-33",
+                        "code": "ST-33",
+                        "name": "ST TREASURE BOX",
+                        "price": 800
+            },
+            {
+                        "id": "ST-34",
+                        "code": "ST-34",
+                        "name": "ST RED BIJILI(50 pcs)",
+                        "price": 50
+            },
+            {
+                        "id": "ST-35",
+                        "code": "ST-35",
+                        "name": "ST RED BIJILI(100 pcs)",
+                        "price": 100
+            },
+            {
+                        "id": "ST-36",
+                        "code": "ST-36",
+                        "name": "ST ROLLCAPS",
+                        "price": 150
+            }
+];
 
         // State Variables
         let products = [...INITIAL_PRODUCTS];
@@ -652,7 +1628,7 @@
 
         async function sendESCPOSToSC588(buffer) {
             if (!sc588Characteristic) {
-                alert("Please tap 'Pair SC588' first to connect your printer via Bluetooth.");
+                alert("Please tap 'Pair SC588 Printer' first to connect your printer via Bluetooth.");
                 return;
             }
             const CHUNK_SIZE = 100;

@@ -1,1581 +1,700 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THOLILALAR PATTASU KADAI - Thermal POS (SC588 & RawBT Ready)</title>
+    <title>THOLILALAR PATTASU KADAI, SELVALAKSHMI AGENCY - POS</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            900: '#881337',
+                        },
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Thermal Receipt 58mm Print Styling */
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* 58mm Thermal Printer Styling for SC588 */
         @media print {
             @page {
                 size: 58mm auto;
                 margin: 0;
             }
-            html, body {
-                width: 58mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: #ffffff !important;
-                color: #000000 !important;
-                font-family: 'Courier New', Courier, monospace !important;
-                font-size: 10px !important;
-                line-height: 1.2 !important;
-            }
             body * {
-                visibility: hidden !important;
+                visibility: hidden;
             }
             #receiptPrintArea, #receiptPrintArea * {
-                visibility: visible !important;
+                visibility: visible;
             }
             #receiptPrintArea {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 58mm !important;
-                max-width: 58mm !important;
-                padding: 1mm 2mm !important;
-                margin: 0 !important;
-                box-sizing: border-box !important;
-                color: #000000 !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 58mm;
+                padding: 2mm;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 11px;
+                line-height: 1.2;
+                color: #000 !important;
+                background: #fff !important;
             }
-            #receiptModalButtons, header, main, .no-print, nav, button {
+            .no-print {
                 display: none !important;
+            }
+            .page-break {
+                page-break-after: always;
+                break-after: page;
+                margin: 12px 0;
+                border-bottom: 2px dashed #000;
             }
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+<body class="bg-darkbg text-slate-100 min-h-screen font-sans flex flex-col">
 
-    <!-- Header Navigation -->
-    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+    <!-- Top Navigation Header -->
+    <header class="bg-cardbg border-b border-slate-700 px-4 py-3 flex flex-wrap justify-between items-center gap-2 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="bg-brand-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-xl shadow">
+                ★
+            </div>
             <div>
-                <h1 class="text-xl font-black text-amber-400 tracking-wide uppercase">THOLILALAR PATTASU KADAI</h1>
-                <p class="text-xs text-slate-400 font-medium">SELVALAKSHMI AGENCY | Peelamedu, Coimbatore</p>
+                <h1 class="font-extrabold text-lg tracking-wide text-amber-400">THOLILALAR PATTASU KADAI</h1>
+                <p class="text-xs text-slate-400 font-medium">SELVALAKSHMI AGENCY • PEELAMEDU, COIMBATORE</p>
             </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="connectSC588Printer()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-lg transition flex items-center gap-1.5 shadow">
-                    <i class="fa-solid fa-bluetooth"></i>
-                    <span>Pair SC588 Printer</span>
-                </button>
-                <button onclick="openInventoryModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs rounded-lg transition flex items-center gap-1.5 border border-slate-600">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                    <span>Stock</span>
-                </button>
-                <button onclick="openSalesModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs rounded-lg transition flex items-center gap-1.5 border border-slate-600">
-                    <i class="fa-solid fa-chart-line text-emerald-400"></i>
-                    <span>Sales Summary</span>
-                </button>
-            </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="openInventoryModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg border border-slate-600 flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-boxes-stacked text-amber-400"></i>
+                <span>இருப்பு (Stock)</span>
+            </button>
+            <button onclick="openSalesSummaryModal()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg border border-slate-600 flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                <span>விற்பனை (Sales)</span>
+            </button>
+            <select id="voiceLangSelect" class="bg-slate-800 border border-slate-600 text-xs text-slate-200 rounded-lg px-2 py-1.5 outline-none focus:border-brand-500">
+                <option value="ta-IN">தமிழ் (ta-IN)</option>
+                <option value="en-IN">English (en-IN)</option>
+            </select>
+            <button id="voiceBtn" onclick="toggleVoiceRecognition()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow transition">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="voiceBtnText">Voice Bill</span>
+            </button>
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+    <!-- Main Workspace -->
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1700px] w-full mx-auto">
         
-        <!-- Left Section: Search & Product Catalog (7 Cols) -->
-        <section class="lg:col-span-7 flex flex-col gap-4">
+        <!-- Left Product Catalog Area (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col gap-3">
             
-            <!-- Search & Quick Entry Bar -->
-            <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-md flex flex-col sm:flex-row gap-2">
-                <div class="relative flex-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
-                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search item (#45, ST-1, 45*5, Laxmi)..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-8 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
-                    <button onclick="clearSearch()" class="absolute right-2 top-2 text-slate-500 hover:text-slate-300 text-xs px-1">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+            <!-- Quick Search Bar & Direct Code Add -->
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                <div class="sm:col-span-5 flex gap-1">
+                    <input type="text" id="quickCodeInput" placeholder="Type Item # (e.g. 45, ST-10, 45*5)..." 
+                        onkeydown="if(event.key==='Enter') handleQuickAdd()" 
+                        class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-500">
+                    <button onclick="handleQuickAdd()" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-3 rounded-lg">Add</button>
                 </div>
-                
-                <!-- Voice Billing Button -->
-                <button id="voiceBtn" onclick="toggleVoiceBilling()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-amber-400 font-bold text-xs rounded-lg border border-slate-600 flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-microphone"></i>
-                    <span id="voiceLabel">Voice Billing</span>
-                </button>
+                <div class="sm:col-span-7 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Search product name or SKU..." 
+                        class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-500">
+                </div>
             </div>
 
-            <!-- Custom / Other Item Adding Bar -->
-            <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-md flex flex-col sm:flex-row gap-2 items-center">
-                <input type="text" id="customItemName" placeholder="Custom / Misc Item Name" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
-                <input type="number" id="customItemPrice" placeholder="Price (₹)" class="w-24 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
-                <button onclick="addCustomItemToCart()" class="w-full sm:w-auto px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-plus"></i> Add Item
-                </button>
+            <!-- Category Filter Bar -->
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400 font-semibold whitespace-nowrap">Category:</span>
+                <select id="categoryFilter" onchange="filterProducts()" class="w-full bg-slate-800 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-brand-500">
+                    <option value="ALL">All Categories</option>
+                </select>
             </div>
 
-            <!-- Products Catalog Grid -->
-            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[calc(100vh-250px)] pr-1">
-                <!-- Products dynamically rendered here -->
+            <!-- Custom / Other Item Widget -->
+            <div class="bg-slate-800/80 border border-amber-500/30 rounded-lg p-2.5 flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-amber-400">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <span>Add Custom / Other Item (புதிய / பிற பொருள்)</span>
+                </div>
+                <div class="flex flex-1 min-w-[280px] gap-2">
+                    <input type="text" id="customName" placeholder="Item Name (e.g. Special Box)" class="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 outline-none focus:border-amber-500">
+                    <input type="number" id="customPrice" placeholder="Price (₹)" class="w-24 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 outline-none focus:border-amber-500">
+                    <input type="number" id="customQty" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 text-center outline-none focus:border-amber-500">
+                    <button onclick="addCustomItemToCart()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-3 py-1 rounded">Add</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[560px] overflow-y-auto pr-1">
+                <!-- Dynamically Rendered -->
             </div>
         </section>
 
-        <!-- Right Section: Cart & Checkout (5 Cols) -->
-        <section class="lg:col-span-5 flex flex-col bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden h-[calc(100vh-100px)] sticky top-20">
-            
-            <!-- Cart Header & Customer Inputs -->
-            <div class="p-3 border-b border-slate-700 bg-slate-800/80 space-y-2">
-                <div class="flex justify-between items-center">
-                    <h2 class="font-bold text-slate-200 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-cart-shopping text-amber-400"></i> Current Cart
-                    </h2>
-                    <button onclick="clearCart()" class="text-xs text-rose-400 hover:text-rose-300 font-medium">Clear All</button>
-                </div>
-                
-                <!-- Optional Customer Info Inputs -->
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <input type="text" id="custName" placeholder="Customer Name (Opt)" class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
-                    <input type="tel" id="custPhone" placeholder="Phone Number (Opt)" class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
-                </div>
-            </div>
-
-            <!-- Cart Table Items List -->
-            <div class="flex-1 overflow-y-auto p-3 space-y-2" id="cartList">
-                <!-- Cart items populated dynamically -->
-            </div>
-
-            <!-- Cart Footer & Billing Summary -->
-            <div class="p-3 border-t border-slate-700 bg-slate-900 space-y-3">
-                
-                <!-- Discount Selector (% or ₹) -->
-                <div class="flex items-center gap-2 bg-slate-800 p-2 rounded-lg border border-slate-700">
-                    <span class="text-xs text-slate-400 font-medium">Discount:</span>
-                    <input type="number" id="discountValue" min="0" value="0" oninput="updateCartUI()" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 text-center font-bold">
-                    <select id="discountType" onchange="updateCartUI()" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100">
-                        <option value="rupee">₹ Rupee</option>
-                        <option value="percent">% Percent</option>
-                    </select>
-                    <span id="calculatedDiscountText" class="text-xs text-rose-400 font-semibold ml-auto">- ₹0.00</span>
-                </div>
-
-                <!-- Subtotal & Net Payable -->
-                <div class="space-y-1 pt-1 text-xs">
-                    <div class="flex justify-between text-slate-400">
-                        <span>Subtotal:</span>
-                        <span id="subtotalText" class="font-semibold text-slate-200">₹0.00</span>
-                    </div>
-                    <div class="flex justify-between text-base font-black text-amber-400 border-t border-slate-800 pt-1">
-                        <span>Net Payable:</span>
-                        <span id="netTotalText">₹0.00</span>
-                    </div>
-                </div>
-
-                <!-- Payment Method Selection -->
-                <div class="grid grid-cols-3 gap-1.5 pt-1">
-                    <button type="button" onclick="setPaymentMethod('Cash')" id="payCash" class="pay-method-btn py-1.5 text-xs font-bold rounded-md bg-amber-500 text-slate-950 border border-amber-400">Cash</button>
-                    <button type="button" onclick="setPaymentMethod('UPI / GPay')" id="payUPI" class="pay-method-btn py-1.5 text-xs font-bold rounded-md bg-slate-800 text-slate-300 border border-slate-700">UPI / GPay</button>
-                    <button type="button" onclick="setPaymentMethod('Card')" id="payCard" class="pay-method-btn py-1.5 text-xs font-bold rounded-md bg-slate-800 text-slate-300 border border-slate-700">Card</button>
-                </div>
-
-                <!-- Checkout Action Buttons -->
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <button onclick="checkoutOrder()" class="py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-lg shadow-lg flex items-center justify-center gap-2 transition">
+        <!-- Right Cart & Billing Area (5 Cols) -->
+        <section class="lg:col-span-5 bg-cardbg border border-slate-700 rounded-xl p-4 flex flex-col justify-between shadow-xl">
+            <div>
+                <!-- Bill Header -->
+                <div class="flex justify-between items-center pb-3 border-b border-slate-700">
+                    <h2 class="font-extrabold text-amber-400 text-sm flex items-center gap-2">
                         <i class="fa-solid fa-receipt"></i>
-                        <span>Generate Bill</span>
-                    </button>
-                    <button onclick="printDirectToSC588()" class="py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-lg shadow-lg flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Direct Thermal Print</span>
+                        <span>Active Bill (நடப்பு பில்)</span>
+                    </h2>
+                    <button onclick="clearCart()" class="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Clear</span>
                     </button>
                 </div>
+
+                <!-- Customer Info Inputs -->
+                <div class="grid grid-cols-2 gap-2 my-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-2.5 top-2 text-slate-500 text-xs"></i>
+                        <input type="text" id="custName" placeholder="Customer Name (Optional)" class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-7 pr-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-500">
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-2.5 top-2 text-slate-500 text-xs"></i>
+                        <input type="text" id="custPhone" placeholder="Phone No. (Optional)" class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-7 pr-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-500">
+                    </div>
+                </div>
+
+                <!-- Cart Table Items -->
+                <div class="max-h-[300px] overflow-y-auto border border-slate-700/60 rounded-lg p-2 bg-slate-900/50">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-700/80 pb-1">
+                                <th class="py-1">Item</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-right">Price</th>
+                                <th class="text-right">Total</th>
+                                <th class="text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartTableBody" class="divide-y divide-slate-800">
+                            <!-- Dynamically Rendered -->
+                        </tbody>
+                    </table>
+                    <div id="emptyCartMsg" class="text-center py-8 text-slate-500 text-xs flex flex-col items-center gap-2">
+                        <i class="fa-solid fa-cart-shopping text-3xl opacity-40"></i>
+                        <span>No items in bill (பட்டியல் காலியாக உள்ளது)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bill Calculations & Payment -->
+            <div class="mt-4 pt-3 border-t border-slate-700 space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Total Items:</span>
+                    <span id="totalItemsCount" class="font-bold text-white">0</span>
+                </div>
+
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Subtotal Amount:</span>
+                    <span class="font-bold text-white">₹ <span id="subtotalAmount">0.00</span></span>
+                </div>
+
+                <!-- Discount Selector -->
+                <div class="flex justify-between items-center text-xs">
+                    <label class="text-slate-300">Discount (தள்ளுபடி):</label>
+                    <div class="flex items-center gap-1">
+                        <select id="discountType" onchange="calculateBillTotals()" class="bg-slate-800 border border-slate-700 text-amber-400 text-xs rounded px-1.5 py-1 outline-none">
+                            <option value="RUPEES">₹ (Rupees)</option>
+                            <option value="PERCENT">% (Percent)</option>
+                        </select>
+                        <input type="number" id="discountValue" value="0" min="0" oninput="calculateBillTotals()" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 text-right outline-none focus:border-brand-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-between text-xs text-rose-400">
+                    <span>Discount Amount:</span>
+                    <span>- ₹ <span id="discountAmtDisplay">0.00</span></span>
+                </div>
+
+                <div class="flex justify-between items-center text-sm font-extrabold pt-2 border-t border-slate-700/80">
+                    <span class="text-amber-400 text-base">Net Amount:</span>
+                    <span class="text-amber-400 text-xl">₹ <span id="netAmountDisplay">0.00</span></span>
+                </div>
+
+                <!-- Payment Method Buttons -->
+                <div class="grid grid-cols-3 gap-2 pt-1">
+                    <button onclick="setPaymentMethod('CASH')" id="payBtnCASH" class="py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg shadow">💵 CASH</button>
+                    <button onclick="setPaymentMethod('UPI')" id="payBtnUPI" class="py-1.5 bg-slate-700 text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-600">📱 UPI/GPay</button>
+                    <button onclick="setPaymentMethod('CARD')" id="payBtnCARD" class="py-1.5 bg-slate-700 text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-600">💳 CARD</button>
+                </div>
+
+                <!-- Checkout Button -->
+                <button onclick="checkoutOrder()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-black text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 mt-2 transition">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Complete Order & Print Dual Bill</span>
+                </button>
             </div>
         </section>
     </main>
 
-    <!-- Modal: Receipt Preview & Printing Options -->
+    <!-- Receipt Modal (Dual Receipt Screen View) -->
     <div id="receiptModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             
-            <div id="receiptPrintArea" class="font-mono text-xs text-slate-900 space-y-2">
-                <!-- Receipt text generated dynamically -->
+            <div id="receiptPrintArea" class="font-mono text-xs text-slate-900 space-y-4 overflow-y-auto pr-1">
+                <!-- Customer & Merchant Copies rendered here -->
             </div>
 
-            <div id="receiptModalButtons" class="mt-4 grid grid-cols-2 gap-2 pt-2 border-t border-slate-200">
-                <button onclick="printDirectToSC588()" class="py-2 bg-blue-600 text-white font-bold text-xs rounded hover:bg-blue-700 flex items-center justify-center gap-1.5 shadow">
+            <!-- Modal Action Buttons for SC588 Thermal & Standard Print -->
+            <div id="receiptModalButtons" class="mt-4 flex flex-wrap gap-2 pt-2 border-t border-slate-200 no-print">
+                <button onclick="connectSC588Printer()" class="flex-1 min-w-[110px] py-2 bg-blue-600 text-white font-bold text-xs rounded-lg hover:bg-blue-700 flex items-center justify-center gap-1">
                     <i class="fa-solid fa-bluetooth"></i>
-                    <span>Direct Bluetooth</span>
+                    <span>Pair SC588</span>
                 </button>
-                <button onclick="printViaRawBT()" class="py-2 bg-emerald-600 text-white font-bold text-xs rounded hover:bg-emerald-700 flex items-center justify-center gap-1.5 shadow">
+                <button onclick="printDualSC588()" class="flex-1 min-w-[130px] py-2 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>SC588 Direct</span>
+                </button>
+                <button onclick="printRawBT()" class="flex-1 min-w-[110px] py-2 bg-purple-600 text-white font-bold text-xs rounded-lg hover:bg-purple-700 flex items-center justify-center gap-1">
                     <i class="fa-solid fa-mobile-screen"></i>
-                    <span>RawBT App Print</span>
+                    <span>RawBT Print</span>
                 </button>
-                <button onclick="window.print()" class="py-2 bg-slate-700 text-white font-bold text-xs rounded hover:bg-slate-800 flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Browser Print</span>
+                <button onclick="window.print()" class="flex-1 min-w-[90px] py-2 bg-slate-700 text-white font-bold text-xs rounded-lg hover:bg-slate-800">
+                    Browser
                 </button>
-                <button onclick="closeReceiptModal()" class="py-2 bg-slate-200 text-slate-800 font-bold text-xs rounded hover:bg-slate-300">
+                <button onclick="closeReceiptModal()" class="flex-1 min-w-[70px] py-2 bg-slate-200 text-slate-800 font-bold text-xs rounded-lg hover:bg-slate-300">
                     Close
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal: Stock Inventory Management -->
+    <!-- Inventory Stock Management Modal -->
     <div id="inventoryModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 text-slate-100 rounded-xl p-4 max-w-3xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
+        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center pb-3 border-b border-slate-700">
-                <h3 class="font-bold text-lg text-amber-400">Stock Inventory Management</h3>
-                <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-bold text-amber-400 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Stock Management (இருப்பு மேலாண்மை)</span>
+                </h3>
+                <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white">✕</button>
             </div>
-            <div class="flex-1 overflow-y-auto my-3 pr-1">
-                <table class="w-full text-xs text-left">
-                    <thead class="bg-slate-900 text-slate-400 sticky top-0">
+            <div class="my-3 flex gap-2">
+                <input type="text" id="stockSearchInput" oninput="filterStockTable()" placeholder="Search stock item..." class="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 outline-none">
+            </div>
+            <div class="flex-1 overflow-y-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-800 sticky top-0 text-slate-400">
                         <tr>
-                            <th class="p-2">Code</th>
+                            <th class="p-2">#</th>
                             <th class="p-2">Item Name</th>
-                            <th class="p-2 text-right">Price (₹)</th>
-                            <th class="p-2 text-center">Stock Status</th>
+                            <th class="p-2 text-right">Price</th>
+                            <th class="p-2 text-center">Stock</th>
+                            <th class="p-2 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="inventoryTableBody" class="divide-y divide-slate-700">
-                        <!-- Populated dynamically -->
+                    <tbody id="stockTableBody" class="divide-y divide-slate-800">
+                        <!-- Rendered via JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Modal: Date-Wise Sales Breakdown Dashboard -->
-    <div id="salesModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
+    <!-- Daily Sales Summary Modal -->
+    <div id="salesSummaryModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center pb-3 border-b border-slate-700">
-                <h3 class="font-bold text-lg text-emerald-400">Sales Breakdown Summary</h3>
-                <button onclick="closeSalesModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-bold text-emerald-400 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Sales History (விற்பனை விவரம்)</span>
+                </h3>
+                <button onclick="closeSalesSummaryModal()" class="text-slate-400 hover:text-white">✕</button>
             </div>
-            <div class="flex-1 overflow-y-auto my-3">
-                <div class="grid grid-cols-3 gap-2 mb-4 text-center">
-                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700">
-                        <div class="text-[10px] text-slate-400">Total Sales</div>
-                        <div id="totalSalesVal" class="text-sm font-black text-amber-400">₹0.00</div>
-                    </div>
-                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700">
-                        <div class="text-[10px] text-slate-400">Total Bills</div>
-                        <div id="totalBillsVal" class="text-sm font-black text-slate-200">0</div>
-                    </div>
-                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700">
-                        <div class="text-[10px] text-slate-400">Cash / UPI Ratio</div>
-                        <div id="paymentRatioVal" class="text-xs font-bold text-emerald-400">0 / 0</div>
-                    </div>
-                </div>
-                <table class="w-full text-xs text-left">
-                    <thead class="bg-slate-900 text-slate-400">
+            <div class="my-3 flex justify-between items-center text-xs">
+                <span>Total Bills Saved: <b id="summaryCount">0</b></span>
+                <span class="text-emerald-400 font-bold">Total Sales Revenue: ₹ <span id="summaryRevenue">0.00</span></span>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-800 sticky top-0 text-slate-400">
                         <tr>
                             <th class="p-2">Bill #</th>
-                            <th class="p-2">Time</th>
+                            <th class="p-2">Date & Time</th>
                             <th class="p-2">Customer</th>
-                            <th class="p-2">Mode</th>
-                            <th class="p-2 text-right">Amount (₹)</th>
+                            <th class="p-2 text-right">Net Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="salesTableBody" class="divide-y divide-slate-700">
-                        <!-- Populated dynamically -->
+                    <tbody id="salesTableBody" class="divide-y divide-slate-800">
+                        <!-- Rendered via JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Application JavaScript Engine -->
+    <!-- JavaScript Application Logic -->
     <script>
-        // Full Product Catalog Data (161 Items)
-        const INITIAL_PRODUCTS = [
-            {
-                        "id": "1",
-                        "code": "1",
-                        "name": "2 \u00be\" BIRD",
-                        "price": 15
-            },
-            {
-                        "id": "2",
-                        "code": "2",
-                        "name": "3 \u00bd\" CRACKERS LAKSHMI",
-                        "price": 25
-            },
-            {
-                        "id": "3",
-                        "code": "3",
-                        "name": "4\" LAXMI",
-                        "price": 35
-            },
-            {
-                        "id": "4",
-                        "code": "4",
-                        "name": "4\" DELUXE LAKSHMI",
-                        "price": 65
-            },
-            {
-                        "id": "5",
-                        "code": "5",
-                        "name": "4\" GOLD LAKSHMI",
-                        "price": 70
-            },
-            {
-                        "id": "6",
-                        "code": "6",
-                        "name": "5\" KOMBEN",
-                        "price": 70
-            },
-            {
-                        "id": "7",
-                        "code": "7",
-                        "name": "TWO SOUND CRACKERS",
-                        "price": 60
-            },
-            {
-                        "id": "8",
-                        "code": "8",
-                        "name": "28 CHORSA",
-                        "price": 35
-            },
-            {
-                        "id": "9",
-                        "code": "9",
-                        "name": "56 CHORSA",
-                        "price": 65
-            },
-            {
-                        "id": "10",
-                        "code": "10",
-                        "name": "24 DELUXE CRACKERS",
-                        "price": 100
-            },
-            {
-                        "id": "11",
-                        "code": "11",
-                        "name": "50 DELUXE CRACKERS",
-                        "price": 230
-            },
-            {
-                        "id": "12",
-                        "code": "12",
-                        "name": "100 DELTA DELUXE CRACKERS",
-                        "price": 600
-            },
-            {
-                        "id": "13",
-                        "code": "13",
-                        "name": "100 WALA",
-                        "price": 80
-            },
-            {
-                        "id": "14",
-                        "code": "14",
-                        "name": "200 WALA",
-                        "price": 160
-            },
-            {
-                        "id": "15",
-                        "code": "15",
-                        "name": "300 WALA",
-                        "price": 320
-            },
-            {
-                        "id": "16",
-                        "code": "16",
-                        "name": "600 WALA",
-                        "price": 480
-            },
-            {
-                        "id": "17",
-                        "code": "17",
-                        "name": "1000 WALA",
-                        "price": 400
-            },
-            {
-                        "id": "18",
-                        "code": "18",
-                        "name": "1000 WALA SK",
-                        "price": 600
-            },
-            {
-                        "id": "19",
-                        "code": "19",
-                        "name": "2000 WALA",
-                        "price": 800
-            },
-            {
-                        "id": "20",
-                        "code": "20",
-                        "name": "2000 WALA SK",
-                        "price": 1200
-            },
-            {
-                        "id": "21",
-                        "code": "21",
-                        "name": "5000 WALA",
-                        "price": 2000
-            },
-            {
-                        "id": "22",
-                        "code": "22",
-                        "name": "5000 WALA SK",
-                        "price": 3000
-            },
-            {
-                        "id": "23",
-                        "code": "23",
-                        "name": "10000 WALA",
-                        "price": 4000
-            },
-            {
-                        "id": "24",
-                        "code": "24",
-                        "name": "10000 WALA SK",
-                        "price": 6000
-            },
-            {
-                        "id": "25",
-                        "code": "25",
-                        "name": "BULLET BOMB",
-                        "price": 60
-            },
-            {
-                        "id": "26",
-                        "code": "26",
-                        "name": "ATOM BOMB BIG",
-                        "price": 60
-            },
-            {
-                        "id": "27",
-                        "code": "27",
-                        "name": "HYDRO BOMB GREEN",
-                        "price": 70
-            },
-            {
-                        "id": "28",
-                        "code": "28",
-                        "name": "KING OF KING BOMB",
-                        "price": 150
-            },
-            {
-                        "id": "29",
-                        "code": "29",
-                        "name": "CLASSIC BOMB",
-                        "price": 200
-            },
-            {
-                        "id": "30",
-                        "code": "30",
-                        "name": "RED BIJILI(50 pcs)",
-                        "price": 30
-            },
-            {
-                        "id": "31",
-                        "code": "31",
-                        "name": "RED BIJILI(100 pcs)",
-                        "price": 60
-            },
-            {
-                        "id": "32",
-                        "code": "32",
-                        "name": "STRIPPED BIJILI(100 pcs)",
-                        "price": 70
-            },
-            {
-                        "id": "33",
-                        "code": "33",
-                        "name": "GROUND CHAKKAR BIG",
-                        "price": 80
-            },
-            {
-                        "id": "34",
-                        "code": "34",
-                        "name": "GROUND CHAKKAR ASHOKA",
-                        "price": 140
-            },
-            {
-                        "id": "35",
-                        "code": "35",
-                        "name": "GROUND CHAKKAR SPECIAL",
-                        "price": 180
-            },
-            {
-                        "id": "36",
-                        "code": "36",
-                        "name": "GROUND CHAKKAR DELUXE",
-                        "price": 240
-            },
-            {
-                        "id": "37",
-                        "code": "37",
-                        "name": "FLOWER POTS SMALL",
-                        "price": 100
-            },
-            {
-                        "id": "38",
-                        "code": "38",
-                        "name": "FLOWER POTS BIG",
-                        "price": 150
-            },
-            {
-                        "id": "39",
-                        "code": "39",
-                        "name": "FLOWER POTS SPECIAL",
-                        "price": 200
-            },
-            {
-                        "id": "40",
-                        "code": "40",
-                        "name": "FLOWER POTS ASHOKA/GAINT",
-                        "price": 300
-            },
-            {
-                        "id": "41",
-                        "code": "41",
-                        "name": "FLOWER POTS DELUXE (5 pcs)",
-                        "price": 320
-            },
-            {
-                        "id": "42",
-                        "code": "42",
-                        "name": "FLOWER POTS SUPER DLX (2 pcs)",
-                        "price": 200
-            },
-            {
-                        "id": "43",
-                        "code": "43",
-                        "name": "COLOUR KOTI/POT GIRL",
-                        "price": 400
-            },
-            {
-                        "id": "44",
-                        "code": "44",
-                        "name": "COLOUR KOTI DELUXE",
-                        "price": 800
-            },
-            {
-                        "id": "45",
-                        "code": "45",
-                        "name": "BABY ROCKET",
-                        "price": 60
-            },
-            {
-                        "id": "46",
-                        "code": "46",
-                        "name": "ROCKET BOMB",
-                        "price": 150
-            },
-            {
-                        "id": "47",
-                        "code": "47",
-                        "name": "COLOUR ROCKET",
-                        "price": 150
-            },
-            {
-                        "id": "48",
-                        "code": "48",
-                        "name": "LUNIC ROCKET",
-                        "price": 250
-            },
-            {
-                        "id": "49",
-                        "code": "49",
-                        "name": "WHISTELING ROCKET",
-                        "price": 300
-            },
-            {
-                        "id": "50",
-                        "code": "50",
-                        "name": "1\u00bd\" TWINKLING STAR",
-                        "price": 50
-            },
-            {
-                        "id": "51",
-                        "code": "51",
-                        "name": "4\" TWINKLING STAR",
-                        "price": 150
-            },
-            {
-                        "id": "52",
-                        "code": "52",
-                        "name": "10\" PENCIL",
-                        "price": 130
-            },
-            {
-                        "id": "53",
-                        "code": "53",
-                        "name": "1 3/4\" FANCY SHOT(3PCS)",
-                        "price": 500
-            },
-            {
-                        "id": "54",
-                        "code": "54",
-                        "name": "2\" SINGLE FANCY SHOT",
-                        "price": 300
-            },
-            {
-                        "id": "55",
-                        "code": "55",
-                        "name": "2 1/2 \" FANCY SHOT -3 STEP",
-                        "price": 500
-            },
-            {
-                        "id": "56",
-                        "code": "56",
-                        "name": "3 1/2 \" FANCY SHOT(1 PCS)",
-                        "price": 700
-            },
-            {
-                        "id": "57",
-                        "code": "57",
-                        "name": "74MM FANCY SHOT(1 PCS)",
-                        "price": 800
-            },
-            {
-                        "id": "58",
-                        "code": "58",
-                        "name": "7 SHOT",
-                        "price": 160
-            },
-            {
-                        "id": "59",
-                        "code": "59",
-                        "name": "12 SHOT",
-                        "price": 300
-            },
-            {
-                        "id": "60",
-                        "code": "60",
-                        "name": "15 SHOT MULTICOLOUR",
-                        "price": 400
-            },
-            {
-                        "id": "61",
-                        "code": "61",
-                        "name": "30 SHOT MULTICOLOUR",
-                        "price": 700
-            },
-            {
-                        "id": "62",
-                        "code": "62",
-                        "name": "60 SHOT MULTICOLOUR",
-                        "price": 1500
-            },
-            {
-                        "id": "63",
-                        "code": "63",
-                        "name": "120 SHOT MULTICOLOUR",
-                        "price": 3000
-            },
-            {
-                        "id": "64",
-                        "code": "64",
-                        "name": "240 SHOT MULTICOLOUR",
-                        "price": 6000
-            },
-            {
-                        "id": "65",
-                        "code": "65",
-                        "name": "10CM ELECTRIC",
-                        "price": 30
-            },
-            {
-                        "id": "66",
-                        "code": "66",
-                        "name": "10 CM COLOUR",
-                        "price": 40
-            },
-            {
-                        "id": "67",
-                        "code": "67",
-                        "name": "10CM GREEN",
-                        "price": 40
-            },
-            {
-                        "id": "68",
-                        "code": "68",
-                        "name": "10CM RED",
-                        "price": 40
-            },
-            {
-                        "id": "69",
-                        "code": "69",
-                        "name": "12CM ELECTRIC",
-                        "price": 50
-            },
-            {
-                        "id": "70",
-                        "code": "70",
-                        "name": "12 CM COLOUR",
-                        "price": 55
-            },
-            {
-                        "id": "71",
-                        "code": "71",
-                        "name": "12CM YELLOW",
-                        "price": 60
-            },
-            {
-                        "id": "72",
-                        "code": "72",
-                        "name": "12CM RED",
-                        "price": 60
-            },
-            {
-                        "id": "73",
-                        "code": "73",
-                        "name": "15CM ELECTRIC",
-                        "price": 80
-            },
-            {
-                        "id": "74",
-                        "code": "74",
-                        "name": "15 CM COLOUR",
-                        "price": 90
-            },
-            {
-                        "id": "75",
-                        "code": "75",
-                        "name": "15CM GREEN",
-                        "price": 90
-            },
-            {
-                        "id": "76",
-                        "code": "76",
-                        "name": "15CM RED",
-                        "price": 90
-            },
-            {
-                        "id": "77",
-                        "code": "77",
-                        "name": "30CM ELECTRIC (5 pcs)",
-                        "price": 60
-            },
-            {
-                        "id": "78",
-                        "code": "78",
-                        "name": "30CM COLOUR (5 pcs)",
-                        "price": 90
-            },
-            {
-                        "id": "79",
-                        "code": "79",
-                        "name": "30CM YELLOW (5 pcs)",
-                        "price": 90
-            },
-            {
-                        "id": "80",
-                        "code": "80",
-                        "name": "30CM RED (5 pcs)",
-                        "price": 90
-            },
-            {
-                        "id": "81",
-                        "code": "81",
-                        "name": "50CM ELECTRIC (5 pcs)",
-                        "price": 300
-            },
-            {
-                        "id": "82",
-                        "code": "82",
-                        "name": "50CM COLOUR (5 pcs)",
-                        "price": 330
-            },
-            {
-                        "id": "83",
-                        "code": "83",
-                        "name": "75CM ELECTRIC (5 pcs)",
-                        "price": 450
-            },
-            {
-                        "id": "84",
-                        "code": "84",
-                        "name": "75CM COLOUR (5 pcs)",
-                        "price": 500
-            },
-            {
-                        "id": "85",
-                        "code": "85",
-                        "name": "ADIYAL 1/4 KG",
-                        "price": 120
-            },
-            {
-                        "id": "86",
-                        "code": "86",
-                        "name": "ADIYAL 1/2 KG",
-                        "price": 240
-            },
-            {
-                        "id": "87",
-                        "code": "87",
-                        "name": "ADIYAL 1KG",
-                        "price": 480
-            },
-            {
-                        "id": "88",
-                        "code": "88",
-                        "name": "MONEY",
-                        "price": 600
-            },
-            {
-                        "id": "89",
-                        "code": "89",
-                        "name": "GANAGA JAMUNA (5 pcs))",
-                        "price": 160
-            },
-            {
-                        "id": "90",
-                        "code": "90",
-                        "name": "PHOTOFLASH",
-                        "price": 150
-            },
-            {
-                        "id": "91",
-                        "code": "91",
-                        "name": "TIN BEER SMALL",
-                        "price": 200
-            },
-            {
-                        "id": "92",
-                        "code": "92",
-                        "name": "BUTTERFLY/PAMBARAM",
-                        "price": 200
-            },
-            {
-                        "id": "93",
-                        "code": "93",
-                        "name": "HELICOPTER",
-                        "price": 200
-            },
-            {
-                        "id": "94",
-                        "code": "94",
-                        "name": "DANCING WHEEL",
-                        "price": 200
-            },
-            {
-                        "id": "95",
-                        "code": "95",
-                        "name": "SPLASH LIGHT",
-                        "price": 220
-            },
-            {
-                        "id": "96",
-                        "code": "96",
-                        "name": "GIPSY",
-                        "price": 250
-            },
-            {
-                        "id": "97",
-                        "code": "97",
-                        "name": "JONE & JOKES(2 pcs)",
-                        "price": 250
-            },
-            {
-                        "id": "98",
-                        "code": "98",
-                        "name": "KATHI",
-                        "price": 250
-            },
-            {
-                        "id": "99",
-                        "code": "99",
-                        "name": "MERI JAAN(2 pcs)",
-                        "price": 300
-            },
-            {
-                        "id": "100",
-                        "code": "100",
-                        "name": "SMOKE",
-                        "price": 300
-            },
-            {
-                        "id": "101",
-                        "code": "101",
-                        "name": "SIREN",
-                        "price": 300
-            },
-            {
-                        "id": "102",
-                        "code": "102",
-                        "name": "SPARSHA GREEN",
-                        "price": 350
-            },
-            {
-                        "id": "103",
-                        "code": "103",
-                        "name": "KURKURE",
-                        "price": 350
-            },
-            {
-                        "id": "104",
-                        "code": "104",
-                        "name": "SMALL PEACOCK",
-                        "price": 350
-            },
-            {
-                        "id": "105",
-                        "code": "105",
-                        "name": "COLOUR SONG",
-                        "price": 360
-            },
-            {
-                        "id": "106",
-                        "code": "106",
-                        "name": "TIN BEER BIG",
-                        "price": 400
-            },
-            {
-                        "id": "107",
-                        "code": "107",
-                        "name": "5 STAR",
-                        "price": 400
-            },
-            {
-                        "id": "108",
-                        "code": "108",
-                        "name": "YOYO(5 pcs)",
-                        "price": 400
-            },
-            {
-                        "id": "109",
-                        "code": "109",
-                        "name": "NACHOS(2 pcs)",
-                        "price": 400
-            },
-            {
-                        "id": "110",
-                        "code": "110",
-                        "name": "EMU EGG",
-                        "price": 450
-            },
-            {
-                        "id": "111",
-                        "code": "111",
-                        "name": "TOPGUN(5 pcs)",
-                        "price": 450
-            },
-            {
-                        "id": "112",
-                        "code": "112",
-                        "name": "COCKTAIL(3 pcs)",
-                        "price": 450
-            },
-            {
-                        "id": "113",
-                        "code": "113",
-                        "name": "4 IN 1 ANDROID",
-                        "price": 450
-            },
-            {
-                        "id": "114",
-                        "code": "114",
-                        "name": "TROPICAL MUSHROOM",
-                        "price": 500
-            },
-            {
-                        "id": "115",
-                        "code": "115",
-                        "name": "STAR MIX",
-                        "price": 500
-            },
-            {
-                        "id": "116",
-                        "code": "116",
-                        "name": "BLOSSOM",
-                        "price": 500
-            },
-            {
-                        "id": "117",
-                        "code": "117",
-                        "name": "IPL MIX",
-                        "price": 500
-            },
-            {
-                        "id": "118",
-                        "code": "118",
-                        "name": "BOOMER(10 pcs)",
-                        "price": 600
-            },
-            {
-                        "id": "119",
-                        "code": "119",
-                        "name": "LOVE SPARK FOUNTAIN",
-                        "price": 600
-            },
-            {
-                        "id": "120",
-                        "code": "120",
-                        "name": "BADA PEACOCK",
-                        "price": 600
-            },
-            {
-                        "id": "121",
-                        "code": "121",
-                        "name": "BADA PEACOCK MULTICOLOUR",
-                        "price": 700
-            },
-            {
-                        "id": "122",
-                        "code": "122",
-                        "name": "KULFI",
-                        "price": 700
-            },
-            {
-                        "id": "123",
-                        "code": "123",
-                        "name": "WELCOME SHOW",
-                        "price": 800
-            },
-            {
-                        "id": "124",
-                        "code": "124",
-                        "name": "FANTASY LION/ELEPHANT",
-                        "price": 800
-            },
-            {
-                        "id": "125",
-                        "code": "125",
-                        "name": "CAR BIG",
-                        "price": 900
-            },
-            {
-                        "id": "126",
-                        "code": "126",
-                        "name": "ROLL CAPS",
-                        "price": 120
-            },
-            {
-                        "id": "127",
-                        "code": "127",
-                        "name": "SNAKE TABLATS BIG",
-                        "price": 50
-            },
-            {
-                        "id": "128",
-                        "code": "128",
-                        "name": "RED GREEN MATCHES ORD(10NO)",
-                        "price": 20
-            },
-            {
-                        "id": "129",
-                        "code": "129",
-                        "name": "JILJIL MATCH(10NO)",
-                        "price": 40
-            },
-            {
-                        "id": "130",
-                        "code": "130",
-                        "name": "BLOOMS",
-                        "price": 140
-            },
-            {
-                        "id": "131",
-                        "code": "131",
-                        "name": "SUPER 6",
-                        "price": 130
-            },
-            {
-                        "id": "132",
-                        "code": "132",
-                        "name": "NOKIO/ 10 IN 1",
-                        "price": 300
-            },
-            {
-                        "id": "133",
-                        "code": "133",
-                        "name": "GANESH 16 items",
-                        "price": 410
-            },
-            {
-                        "id": "134",
-                        "code": "134",
-                        "name": "TREAT 20 items",
-                        "price": 460
-            },
-            {
-                        "id": "135",
-                        "code": "135",
-                        "name": "KGF 36 items",
-                        "price": 900
-            },
-            {
-                        "id": "136",
-                        "code": "136",
-                        "name": "PUBG 41 items",
-                        "price": 1000
-            },
-            {
-                        "id": "137",
-                        "code": "137",
-                        "name": "BIG BOSS 51 Items",
-                        "price": 1600
-            },
-            {
-                        "id": "ST-1",
-                        "code": "ST-1",
-                        "name": "ST BOOM BOMB",
-                        "price": 300
-            },
-            {
-                        "id": "ST-2",
-                        "code": "ST-2",
-                        "name": "ST 1000 DIGITAL",
-                        "price": 800
-            },
-            {
-                        "id": "ST-3",
-                        "code": "ST-3",
-                        "name": "ST FLOWER POTS SMALL",
-                        "price": 120
-            },
-            {
-                        "id": "ST-4",
-                        "code": "ST-4",
-                        "name": "ST FLOWER POTS SPECIAL",
-                        "price": 300
-            },
-            {
-                        "id": "ST-5",
-                        "code": "ST-5",
-                        "name": "ST FLOWER POTS DELUXE",
-                        "price": 400
-            },
-            {
-                        "id": "ST-6",
-                        "code": "ST-6",
-                        "name": "ST TRICOLOUR FOUNTAIN",
-                        "price": 650
-            },
-            {
-                        "id": "ST-7",
-                        "code": "ST-7",
-                        "name": "ST TRICOLOUR MILLENIUM",
-                        "price": 800
-            },
-            {
-                        "id": "ST-8",
-                        "code": "ST-8",
-                        "name": "ST CHAVI ZAMIN CHAKKAR ASHOKA",
-                        "price": 150
-            },
-            {
-                        "id": "ST-9",
-                        "code": "ST-9",
-                        "name": "ST CHAVI ZAMIN CHAKKAR DELUXE",
-                        "price": 350
-            },
-            {
-                        "id": "ST-10",
-                        "code": "ST-10",
-                        "name": "ST 45CM TWINKLING STAR",
-                        "price": 75
-            },
-            {
-                        "id": "ST-11",
-                        "code": "ST-11",
-                        "name": "ST 120 CM TWINKLING STAR",
-                        "price": 240
-            },
-            {
-                        "id": "ST-12",
-                        "code": "ST-12",
-                        "name": "ST MULTI COLOUR CANDLE",
-                        "price": 150
-            },
-            {
-                        "id": "ST-13",
-                        "code": "ST-13",
-                        "name": "ST 30 CM GOLD SPARKLER",
-                        "price": 130
-            },
-            {
-                        "id": "ST-14",
-                        "code": "ST-14",
-                        "name": "ST 30CM COLOUR SPARKLER",
-                        "price": 150
-            },
-            {
-                        "id": "ST-15",
-                        "code": "ST-15",
-                        "name": "ST SUN FLOWER 12 SHOT",
-                        "price": 400
-            },
-            {
-                        "id": "ST-16",
-                        "code": "ST-16",
-                        "name": "ST COLOUR MAGIC 16 SHOT",
-                        "price": 550
-            },
-            {
-                        "id": "ST-17",
-                        "code": "ST-17",
-                        "name": "ST 30 SHOT",
-                        "price": 1200
-            },
-            {
-                        "id": "ST-18",
-                        "code": "ST-18",
-                        "name": "ST 60 SHOT",
-                        "price": 2000
-            },
-            {
-                        "id": "ST-19",
-                        "code": "ST-19",
-                        "name": "ST 120 SHOT",
-                        "price": 3300
-            },
-            {
-                        "id": "ST-20",
-                        "code": "ST-20",
-                        "name": "ST CHAT CHAT",
-                        "price": 150
-            },
-            {
-                        "id": "ST-21",
-                        "code": "ST-21",
-                        "name": "ST SIGNAL LIGHTS",
-                        "price": 200
-            },
-            {
-                        "id": "ST-22",
-                        "code": "ST-22",
-                        "name": "ST COLOUR CHANGING BUTTERFLY",
-                        "price": 400
-            },
-            {
-                        "id": "ST-23",
-                        "code": "ST-23",
-                        "name": "ST DOLLAR WHEEL",
-                        "price": 500
-            },
-            {
-                        "id": "ST-24",
-                        "code": "ST-24",
-                        "name": "ST POKER WHEEL",
-                        "price": 500
-            },
-            {
-                        "id": "ST-25",
-                        "code": "ST-25",
-                        "name": "ST CRACKLING CANDY",
-                        "price": 500
-            },
-            {
-                        "id": "ST-26",
-                        "code": "ST-26",
-                        "name": "ST SIGNAL LIGHTS",
-                        "price": 200
-            },
-            {
-                        "id": "ST-27",
-                        "code": "ST-27",
-                        "name": "ST MONEY PENNY",
-                        "price": 500
-            },
-            {
-                        "id": "ST-28",
-                        "code": "ST-28",
-                        "name": "ST JIL JUNG JUK",
-                        "price": 500
-            },
-            {
-                        "id": "ST-29",
-                        "code": "ST-29",
-                        "name": "ST SUNDROPS",
-                        "price": 500
-            },
-            {
-                        "id": "ST-30",
-                        "code": "ST-30",
-                        "name": "ST DIAMOND MINE",
-                        "price": 500
-            },
-            {
-                        "id": "ST-31",
-                        "code": "ST-31",
-                        "name": "ST ARIEL OUT",
-                        "price": 550
-            },
-            {
-                        "id": "ST-32",
-                        "code": "ST-32",
-                        "name": "ST POPCORN FOUNTAIN",
-                        "price": 550
-            },
-            {
-                        "id": "ST-33",
-                        "code": "ST-33",
-                        "name": "ST TREASURE BOX",
-                        "price": 800
-            },
-            {
-                        "id": "ST-34",
-                        "code": "ST-34",
-                        "name": "ST RED BIJILI(50 pcs)",
-                        "price": 50
-            },
-            {
-                        "id": "ST-35",
-                        "code": "ST-35",
-                        "name": "ST RED BIJILI(100 pcs)",
-                        "price": 100
-            },
-            {
-                        "id": "ST-36",
-                        "code": "ST-36",
-                        "name": "ST ROLLCAPS",
-                        "price": 150
-            }
-];
+        // Catalog Products (Default List)
+        const DEFAULT_PRODUCTS = [
+            {"id": 1, "itemNo": 1, "sku": "SKU-001", "name": "2 ¾\" BIRD", "category": "SOUND CRACKERS", "price": 15.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 2, "itemNo": 2, "sku": "SKU-002", "name": "3 ½\" CRACKERS LAKSHMI", "category": "SOUND CRACKERS", "price": 25.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 3, "itemNo": 3, "sku": "SKU-003", "name": "4\" LAXMI", "category": "SOUND CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 4, "itemNo": 4, "sku": "SKU-004", "name": "4\" DELUXE LAKSHMI", "category": "SOUND CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 5, "itemNo": 5, "sku": "SKU-005", "name": "4\" GOLD LAKSHMI", "category": "SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 6, "itemNo": 6, "sku": "SKU-006", "name": "5\" KOMBEN", "category": "SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 7, "itemNo": 7, "sku": "SKU-007", "name": "TWO SOUND CRACKERS", "category": "SOUND CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 8, "itemNo": 8, "sku": "SKU-008", "name": "28 CHORSA", "category": "GARLAND CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 9, "itemNo": 9, "sku": "SKU-009", "name": "56 CHORSA", "category": "GARLAND CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 10, "itemNo": 10, "sku": "SKU-010", "name": "28 GAINT", "category": "GARLAND CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 11, "itemNo": 11, "sku": "SKU-011", "name": "56 GAINT", "category": "GARLAND CRACKERS", "price": 120.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 12, "itemNo": 12, "sku": "SKU-012", "name": "24 DELUXE CRACKERS", "category": "GARLAND CRACKERS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 13, "itemNo": 13, "sku": "SKU-013", "name": "100 GAINT CRACKERS", "category": "GARLAND CRACKERS", "price": 240.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
+            {"id": 14, "itemNo": 14, "sku": "SKU-014", "name": "100 DELUXE CRACKERS", "category": "GARLAND CRACKERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"}
+        ];
 
-        // State Variables
-        let products = [...INITIAL_PRODUCTS];
+        // Global POS State
+        let products = JSON.parse(localStorage.getItem('pos_products')) || DEFAULT_PRODUCTS;
         let cart = [];
-        let salesHistory = JSON.parse(localStorage.getItem('pos_sales_history') || '[]');
-        let selectedPayment = "Cash";
+        let selectedPaymentMethod = 'CASH';
+        let salesHistory = JSON.parse(localStorage.getItem('pos_sales_history')) || [];
+        let lastGeneratedBill = null;
 
-        // Bluetooth Global State
-        let sc588Device = null;
-        let sc588Characteristic = null;
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCategories();
+            renderProductGrid(products);
+            renderCart();
+        });
 
-        // Initialize UI on Load
-        window.onload = function() {
-            renderProducts(products);
-            updateCartUI();
-        };
-
-        // Render Product Catalog Cards
-        function renderProducts(items) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
-            items.forEach(p => {
-                grid.innerHTML += `
-                    <div onclick="addToCart('${p.id}')" class="bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-2.5 rounded-xl cursor-pointer transition shadow hover:shadow-amber-500/10 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start gap-1">
-                                <span class="bg-slate-900 text-amber-400 font-mono text-[10px] px-1.5 py-0.5 rounded border border-slate-700">#${p.code}</span>
-                                <span class="font-bold text-slate-100 text-xs">₹${p.price}</span>
-                            </div>
-                            <h4 class="font-bold text-xs text-slate-200 mt-1.5 line-clamp-2">${p.name}</h4>
-                        </div>
-                        <button class="mt-2 w-full py-1 bg-slate-700 hover:bg-amber-500 hover:text-slate-950 text-slate-300 font-bold text-[11px] rounded transition flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-plus text-[10px]"></i> Add
-                        </button>
-                    </div>
-                `;
-            });
+        function populateCategories() {
+            const categories = ['ALL', ...new Set(products.map(p => p.category))];
+            const select = document.getElementById('categoryFilter');
+            select.innerHTML = categories.map(c => `<option value="${c}">${c === 'ALL' ? 'All Categories (' + products.length + ' Items)' : c}</option>`).join('');
         }
 
-        // Search & Quick Expression Filtering (#45, ST-10, 45*5)
-        function filterProducts() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!query) {
-                renderProducts(products);
+        function renderProductGrid(itemsToRender) {
+            const grid = document.getElementById('productGrid');
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-slate-500 text-xs">No items found</div>`;
                 return;
             }
 
-            // Quick Expression Parsing (e.g. 45*5)
-            if (query.includes('*')) {
-                const parts = query.split('*');
-                const codePart = parts[0].trim();
-                const qtyPart = parseInt(parts[1]) || 1;
-                const match = products.find(p => p.code.toLowerCase() === codePart);
-                if (match) {
-                    addToCart(match.id, qtyPart);
-                    clearSearch();
-                    return;
-                }
+            grid.innerHTML = itemsToRender.map(item => `
+                <div class="bg-cardbg border border-slate-700/70 rounded-xl p-3 flex flex-col justify-between hover:border-slate-500 transition shadow">
+                    <div>
+                        <div class="flex justify-between items-start text-[10px] text-slate-400 font-mono mb-1">
+                            <span class="font-bold text-amber-400">#${item.itemNo || item.id}</span>
+                            <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">Stock: ${item.stock}</span>
+                        </div>
+                        <h4 class="font-bold text-xs text-slate-100 leading-snug line-clamp-2">${item.name}</h4>
+                        <p class="text-[10px] text-slate-400 truncate mt-0.5">${item.brand || 'PATTASU'}</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-3 pt-2 border-t border-slate-700/50">
+                        <span class="font-extrabold text-amber-400 text-sm">₹${item.price}</span>
+                        <button onclick="addToCart(${item.id})" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-2.5 py-1 rounded-lg flex items-center gap-1 shadow">
+                            <span>+ Add</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const category = document.getElementById('categoryFilter').value;
+
+            const filtered = products.filter(p => {
+                const matchesQuery = p.name.toLowerCase().includes(query) || 
+                                     (p.sku && p.sku.toLowerCase().includes(query)) ||
+                                     String(p.itemNo) === query;
+                const matchesCat = category === 'ALL' || p.category === category;
+                return matchesQuery && matchesCat;
+            });
+
+            renderProductGrid(filtered);
+        }
+
+        function handleQuickAdd() {
+            const rawVal = document.getElementById('quickCodeInput').value.trim();
+            if (!rawVal) return;
+
+            let itemNoStr = rawVal;
+            let qty = 1;
+
+            if (rawVal.includes('*')) {
+                const parts = rawVal.split('*');
+                itemNoStr = parts[0].trim();
+                qty = parseInt(parts[1].trim()) || 1;
             }
 
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(query) || 
-                p.code.toLowerCase().includes(query)
-            );
-            renderProducts(filtered);
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            renderProducts(products);
-        }
-
-        // Cart Actions
-        function addToCart(productId, qty = 1) {
-            const item = products.find(p => p.id === productId);
-            if (!item) return;
-
-            const existing = cart.find(c => c.id === productId);
-            if (existing) {
-                existing.qty += qty;
+            const found = products.find(p => String(p.itemNo) === itemNoStr || String(p.id) === itemNoStr);
+            if (found) {
+                addToCart(found.id, qty);
+                document.getElementById('quickCodeInput').value = '';
             } else {
-                cart.push({ ...item, qty: qty });
+                alert(`Item #${itemNoStr} not found!`);
             }
-            updateCartUI();
         }
 
         function addCustomItemToCart() {
-            const name = document.getElementById('customItemName').value.trim();
-            const price = parseFloat(document.getElementById('customItemPrice').value);
+            const name = document.getElementById('customName').value.trim();
+            const price = parseFloat(document.getElementById('customPrice').value);
+            const qty = parseInt(document.getElementById('customQty').value) || 1;
 
             if (!name || isNaN(price) || price <= 0) {
-                alert("Please enter a valid Custom Item Name and Price.");
+                alert("Please enter a valid custom item name and price.");
                 return;
             }
 
-            const customId = "CUSTOM-" + Date.now();
-            cart.push({ id: customId, code: "MISC", name: name, price: price, qty: 1 });
-            document.getElementById('customItemName').value = '';
-            document.getElementById('customItemPrice').value = '';
-            updateCartUI();
+            const customId = 'custom_' + Date.now();
+            cart.push({
+                id: customId,
+                name: name,
+                price: price,
+                qty: qty,
+                isCustom: true
+            });
+
+            document.getElementById('customName').value = '';
+            document.getElementById('customPrice').value = '';
+            document.getElementById('customQty').value = '1';
+
+            renderCart();
         }
 
-        function changeQty(productId, delta) {
-            const item = cart.find(c => c.id === productId);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) {
-                cart = cart.filter(c => c.id !== productId);
+        function addToCart(productId, qtyToAdd = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(c => c.id === productId);
+            if (existing) {
+                existing.qty += qtyToAdd;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    qty: qtyToAdd
+                });
             }
-            updateCartUI();
+            renderCart();
+        }
+
+        function updateCartQty(id, newQty) {
+            if (newQty <= 0) {
+                cart = cart.filter(c => c.id !== id);
+            } else {
+                const item = cart.find(c => c.id === id);
+                if (item) item.qty = newQty;
+            }
+            renderCart();
         }
 
         function clearCart() {
             cart = [];
-            updateCartUI();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('discountValue').value = '0';
+            renderCart();
         }
 
-        function getCartSubtotal() {
-            return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        }
+        function renderCart() {
+            const tbody = document.getElementById('cartTableBody');
+            const emptyMsg = document.getElementById('emptyCartMsg');
 
-        function getDiscountAmount(subtotal) {
-            const val = parseFloat(document.getElementById('discountValue').value) || 0;
-            const type = document.getElementById('discountType').value;
-            if (type === 'percent') {
-                return (subtotal * val) / 100;
+            if (cart.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                tbody.innerHTML = cart.map(item => `
+                    <tr class="text-slate-200">
+                        <td class="py-1.5 font-medium max-w-[120px] truncate">${item.name}</td>
+                        <td class="text-center">
+                            <div class="inline-flex items-center gap-1 bg-slate-800 rounded px-1">
+                                <button onclick="updateCartQty('${item.id}', ${item.qty - 1})" class="text-slate-400 hover:text-white px-1">-</button>
+                                <span class="font-bold text-xs">${item.qty}</span>
+                                <button onclick="updateCartQty('${item.id}', ${item.qty + 1})" class="text-slate-400 hover:text-white px-1">+</button>
+                            </div>
+                        </td>
+                        <td class="text-right">₹${item.price}</td>
+                        <td class="text-right font-bold text-amber-400">₹${(item.price * item.qty).toFixed(2)}</td>
+                        <td class="text-center pl-1">
+                            <button onclick="updateCartQty('${item.id}', 0)" class="text-slate-500 hover:text-rose-400">✕</button>
+                        </td>
+                    </tr>
+                `).join('');
             }
-            return Math.min(subtotal, val);
+
+            calculateBillTotals();
         }
 
-        function getCartNetTotal() {
-            const subtotal = getCartSubtotal();
-            const disc = getDiscountAmount(subtotal);
-            return Math.max(0, subtotal - disc);
-        }
+        function calculateBillTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
 
-        function updateCartUI() {
-            const list = document.getElementById('cartList');
-            list.innerHTML = '';
+            const discType = document.getElementById('discountType').value;
+            const discInput = parseFloat(document.getElementById('discountValue').value) || 0;
 
-            cart.forEach(item => {
-                list.innerHTML += `
-                    <div class="bg-slate-900 border border-slate-700/80 p-2 rounded-lg flex items-center justify-between text-xs">
-                        <div class="flex-1 pr-2">
-                            <div class="font-bold text-slate-200 line-clamp-1">${item.name}</div>
-                            <div class="text-[10px] text-slate-400">₹${item.price} x ${item.qty}</div>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <button onclick="changeQty('${item.id}', -1)" class="w-5 h-5 bg-slate-800 text-slate-300 rounded font-bold hover:bg-slate-700">-</button>
-                            <span class="w-6 text-center font-bold text-amber-400 text-xs">${item.qty}</span>
-                            <button onclick="changeQty('${item.id}', 1)" class="w-5 h-5 bg-slate-800 text-slate-300 rounded font-bold hover:bg-slate-700">+</button>
-                        </div>
-                        <div class="font-bold text-slate-100 ml-3 min-w-[50px] text-right">₹${(item.price * item.qty).toFixed(2)}</div>
-                    </div>
-                `;
-            });
+            let discountAmt = 0;
+            if (discType === 'PERCENT') {
+                discountAmt = (subtotal * discInput) / 100;
+            } else {
+                discountAmt = discInput;
+            }
 
-            const subtotal = getCartSubtotal();
-            const discAmt = getDiscountAmount(subtotal);
-            const netTotal = Math.max(0, subtotal - discAmt);
+            if (discountAmt > subtotal) discountAmt = subtotal;
+            const netAmount = subtotal - discountAmt;
 
-            document.getElementById('subtotalText').innerText = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('calculatedDiscountText').innerText = `- ₹${discAmt.toFixed(2)}`;
-            document.getElementById('netTotalText').innerText = `₹${netTotal.toFixed(2)}`;
+            document.getElementById('totalItemsCount').innerText = totalItems;
+            document.getElementById('subtotalAmount').innerText = subtotal.toFixed(2);
+            document.getElementById('discountAmtDisplay').innerText = discountAmt.toFixed(2);
+            document.getElementById('netAmountDisplay').innerText = netAmount.toFixed(2);
         }
 
         function setPaymentMethod(method) {
-            selectedPayment = method;
-            document.querySelectorAll('.pay-method-btn').forEach(btn => {
-                btn.className = "pay-method-btn py-1.5 text-xs font-bold rounded-md bg-slate-800 text-slate-300 border border-slate-700";
+            selectedPaymentMethod = method;
+            ['CASH', 'UPI', 'CARD'].forEach(m => {
+                const btn = document.getElementById(`payBtn${m}`);
+                if (m === method) {
+                    btn.className = 'py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg shadow';
+                } else {
+                    btn.className = 'py-1.5 bg-slate-700 text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-600';
+                }
             });
-            if (method === 'Cash') document.getElementById('payCash').className = "pay-method-btn py-1.5 text-xs font-bold rounded-md bg-amber-500 text-slate-950 border border-amber-400";
-            if (method === 'UPI / GPay') document.getElementById('payUPI').className = "pay-method-btn py-1.5 text-xs font-bold rounded-md bg-amber-500 text-slate-950 border border-amber-400";
-            if (method === 'Card') document.getElementById('payCard').className = "pay-method-btn py-1.5 text-xs font-bold rounded-md bg-amber-500 text-slate-950 border border-amber-400";
         }
 
-        // Modal Controls & Checkout
+        // Checkout & Build Dual Receipt
         function checkoutOrder() {
             if (cart.length === 0) {
-                alert("Cart is empty! Please add products first.");
+                alert("Cart is empty! Please add items before printing.");
                 return;
             }
 
-            const billNo = "SL-" + Math.floor(1000 + Math.random() * 9000);
-            const custNameVal = document.getElementById('custName').value.trim();
-            const custPhoneVal = document.getElementById('custPhone').value.trim();
-            const subtotal = getCartSubtotal();
-            const discAmt = getDiscountAmount(subtotal);
-            const netTotal = Math.max(0, subtotal - discAmt);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const discType = document.getElementById('discountType').value;
+            const discInput = parseFloat(document.getElementById('discountValue').value) || 0;
+            let discountAmt = discType === 'PERCENT' ? (subtotal * discInput) / 100 : discInput;
+            const netTotal = subtotal - discountAmt;
 
-            // Record Sales Entry
-            salesHistory.push({
-                billNo: billNo,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                date: new Date().toLocaleDateString(),
-                customer: custNameVal || "Walk-in",
-                mode: selectedPayment,
-                amount: netTotal
+            lastGeneratedBill = {
+                billNo: "SL-" + Math.floor(10000 + Math.random() * 90000),
+                dateStr: new Date().toLocaleString(),
+                custName: document.getElementById('custName').value.trim(),
+                phone: document.getElementById('custPhone').value.trim(),
+                items: [...cart],
+                subtotal: subtotal,
+                discount: discountAmt,
+                netTotal: netTotal,
+                paymentMode: selectedPaymentMethod
+            };
+
+            // Deduct Stock
+            cart.forEach(c => {
+                if (!c.isCustom) {
+                    const prod = products.find(p => p.id === c.id);
+                    if (prod && prod.stock >= c.qty) prod.stock -= c.qty;
+                }
             });
+            localStorage.setItem('pos_products', JSON.stringify(products));
+
+            // Save Sales Record
+            salesHistory.unshift(lastGeneratedBill);
             localStorage.setItem('pos_sales_history', JSON.stringify(salesHistory));
 
-            // Render Printable Receipt HTML in Modal
-            const area = document.getElementById('receiptPrintArea');
-            area.innerHTML = `
-                <div class="text-center border-b border-dashed border-slate-400 pb-2">
-                    <h2 class="font-black text-sm uppercase">THOLILALAR PATTASU KADAI</h2>
-                    <p class="font-bold text-[10px]">SELVALAKSHMI AGENCY</p>
-                    <p class="text-[9px]">Avinashi Main Road, Peelamedu, Coimbatore</p>
-                    <p class="text-[9px]">Ph: 9894683113 / 8667010073</p>
+            renderProductGrid(products);
+            renderDualReceiptModal(lastGeneratedBill);
+        }
+
+        function renderDualReceiptModal(bill) {
+            const printArea = document.getElementById('receiptPrintArea');
+
+            const renderCopy = (headerLabel) => `
+                <div class="text-center">
+                    <h2 class="font-extrabold text-sm">THOLILALAR PATTASU KADAI</h2>
+                    <p class="text-[10px]">SELVALAKSHMI AGENCY</p>
+                    <p class="text-[10px]">Peelamedu, Coimbatore</p>
+                    <p class="text-[10px]">Ph: 9894683113 / 8667010073</p>
+                    <div class="border-b border-dashed border-slate-900 my-1"></div>
+                    <p class="font-bold text-xs uppercase">*** ${headerLabel} ***</p>
+                    <div class="border-b border-dashed border-slate-900 my-1"></div>
                 </div>
-
-                <div class="flex justify-between text-[10px] py-1 border-b border-dashed border-slate-400">
-                    <span>Bill #: <b>${billNo}</b></span>
-                    <span>${new Date().toLocaleDateString()}</span>
+                <div class="text-[10px] space-y-0.5">
+                    <div class="flex justify-between"><span>Bill #: <b>${bill.billNo}</b></span><span>Mode: <b>${bill.paymentMode}</b></span></div>
+                    <div>Date: ${bill.dateStr}</div>
+                    ${bill.custName ? `<div>Cust: <b>${bill.custName}</b></div>` : ''}
+                    ${bill.phone ? `<div>Phone: <b>${bill.phone}</b></div>` : ''}
                 </div>
-
-                ${custNameVal ? `<div class="text-[10px] py-0.5 font-bold">Cust: ${custNameVal} ${custPhoneVal ? `(${custPhoneVal})` : ''}</div>` : ''}
-
-                <table class="w-full text-left text-[10px] my-1">
+                <div class="border-b border-slate-900 my-1"></div>
+                <table class="w-full text-[10px]">
                     <thead>
                         <tr class="border-b border-slate-400">
-                            <th>Item</th>
+                            <th class="text-left">Item</th>
                             <th class="text-center">Qty</th>
-                            <th class="text-right">Price</th>
                             <th class="text-right">Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${cart.map(i => `
-                            <tr class="border-b border-slate-200">
-                                <td class="py-0.5 truncate max-w-[100px]">${i.name}</td>
+                        ${bill.items.map(i => `
+                            <tr>
+                                <td class="truncate max-w-[130px]">${i.name}</td>
                                 <td class="text-center">${i.qty}</td>
-                                <td class="text-right">₹${i.price}</td>
-                                <td class="text-right font-bold">₹${(i.price * i.qty).toFixed(2)}</td>
+                                <td class="text-right">₹${(i.price * i.qty).toFixed(2)}</td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
-
-                <div class="border-t border-dashed border-slate-400 pt-1 space-y-0.5 text-[10px]">
-                    ${discAmt > 0 ? `<div class="flex justify-between"><span>Subtotal:</span><span>₹${subtotal.toFixed(2)}</span></div>
-                    <div class="flex justify-between text-rose-700"><span>Discount:</span><span>- ₹${discAmt.toFixed(2)}</span></div>` : ''}
-                    <div class="flex justify-between font-black text-xs border-t border-slate-300 pt-0.5">
+                <div class="border-b border-slate-900 my-1"></div>
+                <div class="text-[10px] space-y-0.5">
+                    ${bill.discount > 0 ? `
+                        <div class="flex justify-between"><span>Subtotal:</span><span>₹${bill.subtotal.toFixed(2)}</span></div>
+                        <div class="flex justify-between"><span>Discount:</span><span>-₹${bill.discount.toFixed(2)}</span></div>
+                    ` : ''}
+                    <div class="flex justify-between font-bold text-xs pt-1 border-t border-dashed border-slate-900">
                         <span>NET PAYABLE:</span>
-                        <span>₹${netTotal.toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between text-[9px] pt-0.5">
-                        <span>Payment:</span>
-                        <span>${selectedPayment}</span>
+                        <span>₹${bill.netTotal.toFixed(2)}</span>
                     </div>
                 </div>
+                <div class="text-center text-[10px] mt-2">
+                    <p>Thank You! Visit Again!</p>
+                </div>
+            `;
 
-                <div class="text-center text-[9px] pt-2 border-t border-dashed border-slate-400">
-                    *** Thank You! Visit Again! ***
+            printArea.innerHTML = `
+                <div>${renderCopy("CUSTOMER COPY")}</div>
+                <div class="page-break border-t-2 border-dashed border-slate-900 my-3 pt-2 text-center text-[9px] font-bold">
+                    ✂ - - - - - CUT HERE - - - - - ✂
                 </div>
+                <div>${renderCopy("MERCHANT COPY")}</div>
             `;
 
             document.getElementById('receiptModal').classList.remove('hidden');
@@ -1583,9 +702,13 @@
 
         function closeReceiptModal() {
             document.getElementById('receiptModal').classList.add('hidden');
+            clearCart();
         }
 
-        // Web Bluetooth SC588 Printer Integration
+        // --- Bluetooth Thermal ESC/POS Engine for SC588 ---
+        let sc588Device = null;
+        let sc588Characteristic = null;
+
         async function connectSC588Printer() {
             try {
                 sc588Device = await navigator.bluetooth.requestDevice({
@@ -1593,7 +716,8 @@
                         { namePrefix: 'SC588' },
                         { namePrefix: 'Smart Bill' },
                         { namePrefix: 'SRS' },
-                        { namePrefix: 'CX588' }
+                        { namePrefix: 'CX588' },
+                        { namePrefix: 'MPT-II' }
                     ],
                     optionalServices: [
                         '000018f0-0000-1000-8000-00805f9b34fb',
@@ -1605,6 +729,7 @@
 
                 const server = await sc588Device.gatt.connect();
                 const services = await server.getPrimaryServices();
+
                 for (const service of services) {
                     const characteristics = await service.getCharacteristics();
                     for (const char of characteristics) {
@@ -1619,7 +744,7 @@
                 if (sc588Characteristic) {
                     alert(`Connected to SC588 (${sc588Device.name})!`);
                 } else {
-                    alert("Connected to device, but serial write characteristic was not found.");
+                    alert("Connected, but Bluetooth write characteristic was not found.");
                 }
             } catch (error) {
                 alert("Bluetooth connection error: " + error.message);
@@ -1628,7 +753,7 @@
 
         async function sendESCPOSToSC588(buffer) {
             if (!sc588Characteristic) {
-                alert("Please tap 'Pair SC588 Printer' first to connect your printer via Bluetooth.");
+                alert("Please tap 'Pair SC588' first to pair your Bluetooth thermal printer.");
                 return;
             }
             const CHUNK_SIZE = 100;
@@ -1643,7 +768,7 @@
             }
         }
 
-        function generateSC588ESCPOSTdata(billData) {
+        function generateDualSC588Bytes(billData) {
             const encoder = new TextEncoder();
             let bytes = [];
 
@@ -1653,6 +778,7 @@
             const boldOn = () => bytes.push(0x1B, 0x45, 0x01);
             const boldOff = () => bytes.push(0x1B, 0x45, 0x00);
             const lineFeed = (n = 1) => { for (let i = 0; i < n; i++) bytes.push(0x0A); };
+
             const addText = (str) => {
                 const encoded = encoder.encode(str + "\n");
                 bytes.push(...encoded);
@@ -1667,168 +793,213 @@
                 addText(truncatedName + spaces + totalStr);
             };
 
-            initPrinter();
+            const renderCopyBytes = (copyHeader) => {
+                initPrinter();
+                alignCenter();
+                boldOn();
+                addText("THOLILALAR PATTASU KADAI");
+                boldOff();
+                addText("SELVALAKSHMI AGENCY");
+                addText("Peelamedu, Coimbatore");
+                addText("Ph: 9894683113 / 8667010073");
+                addText("=".repeat(32));
 
+                boldOn();
+                addText(`*** ${copyHeader.toUpperCase()} ***`);
+                boldOff();
+                addText("-".repeat(32));
+
+                alignLeft();
+                addText(`Bill #: ${billData.billNo}`);
+                addText(`Date  : ${billData.dateStr}`);
+                if (billData.custName) addText(`Cust  : ${billData.custName}`);
+                if (billData.phone) addText(`Phone : ${billData.phone}`);
+                addText("-".repeat(32));
+
+                boldOn();
+                addLineItem("Item", 0);
+                boldOff();
+                addText("-".repeat(32));
+
+                if (Array.isArray(billData.items)) {
+                    billData.items.forEach(item => {
+                        addLineItem(`${item.name} x${item.qty}`, item.price * item.qty);
+                    });
+                }
+
+                addText("-".repeat(32));
+
+                if (billData.discount > 0) {
+                    addLineItem("Subtotal", billData.subtotal);
+                    addLineItem("Discount", -billData.discount);
+                    addText("-".repeat(32));
+                }
+
+                boldOn();
+                addLineItem("NET PAYABLE", billData.netTotal);
+                boldOff();
+                addText("=".repeat(32));
+
+                alignCenter();
+                addText("Thank You! Visit Again!");
+                lineFeed(3);
+            };
+
+            renderCopyBytes("CUSTOMER COPY");
             alignCenter();
-            boldOn();
-            addText("THOLILALAR PATTASU KADAI");
-            boldOff();
-            addText("SELVALAKSHMI AGENCY");
-            addText("Peelamedu, Coimbatore");
-            addText("Ph: 9894683113 / 8667010073");
-            addText("-".repeat(32));
-
-            alignLeft();
-            addText(`Bill #: ${billData.billNo || 'SL-1001'}`);
-            addText(`Date  : ${new Date().toLocaleString()}`);
-            if (billData.custName) addText(`Cust  : ${billData.custName}`);
-            addText("-".repeat(32));
-
-            boldOn();
-            addLineItem("Item", 0);
-            boldOff();
-            addText("-".repeat(32));
-
-            if (Array.isArray(cart)) {
-                cart.forEach(item => {
-                    addLineItem(`${item.name} x${item.qty}`, item.price * item.qty);
-                });
-            }
-
-            addText("-".repeat(32));
-
-            const subtotal = getCartSubtotal();
-            const netTotal = getCartNetTotal();
-
-            boldOn();
-            addLineItem("NET PAYABLE", netTotal);
-            boldOff();
-            addText("-".repeat(32));
-
-            alignCenter();
-            addText("Thank You! Visit Again!");
+            addText("✂ - - - - - - - - - - - - - - ✂");
+            lineFeed(2);
+            renderCopyBytes("MERCHANT COPY");
             lineFeed(4);
 
             return new Uint8Array(bytes);
         }
 
-        async function printDirectToSC588() {
-            if (cart.length === 0) {
-                alert("Cart is empty! Add products before printing.");
-                return;
-            }
+        async function printDualSC588() {
+            if (!lastGeneratedBill) return;
             if (!sc588Characteristic) {
                 await connectSC588Printer();
             }
             if (!sc588Characteristic) return;
 
-            const currentBill = {
-                billNo: "SL-" + Math.floor(1000 + Math.random() * 9000),
-                custName: document.getElementById('custName')?.value || "",
-                subtotal: getCartSubtotal(),
-                netTotal: getCartNetTotal()
-            };
-
-            const bytes = generateSC588ESCPOSTdata(currentBill);
+            const bytes = generateDualSC588Bytes(lastGeneratedBill);
             await sendESCPOSToSC588(bytes);
         }
 
-        function printViaRawBT() {
-            const printArea = document.getElementById('receiptPrintArea');
-            if (!printArea) return;
-            const textContent = printArea.innerText;
-            const encoded = encodeURIComponent(textContent);
-            window.location.href = `rawbt:data/text/plain;charset=utf-8,${encoded}`;
-        }
-
-        // Inventory & Sales Modal Functions
-        function openInventoryModal() {
-            const tbody = document.getElementById('inventoryTableBody');
-            tbody.innerHTML = '';
-            products.forEach(p => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="p-2 font-mono text-amber-400">#${p.code}</td>
-                        <td class="p-2 font-bold">${p.name}</td>
-                        <td class="p-2 text-right">₹${p.price}</td>
-                        <td class="p-2 text-center text-emerald-400 font-semibold">In Stock</td>
-                    </tr>
-                `;
+        // RawBT Mobile App Printing Integration
+        function printRawBT() {
+            if (!lastGeneratedBill) return;
+            const b = lastGeneratedBill;
+            let receiptText = `THOLILALAR PATTASU KADAI\nSELVALAKSHMI AGENCY\nPeelamedu, Coimbatore\n*** CUSTOMER COPY ***\nBill: ${b.billNo}\nDate: ${b.dateStr}\n--------------------------------\n`;
+            b.items.forEach(i => {
+                receiptText += `${i.name} x${i.qty} = Rs.${(i.price*i.qty).toFixed(2)}\n`;
             });
-            document.getElementById('inventoryModal').classList.remove('hidden');
+            receiptText += `--------------------------------\nNET PAYABLE: Rs.${b.netTotal.toFixed(2)}\n\n✂ - - - CUT HERE - - - ✂\n\n`;
+            receiptText += `THOLILALAR PATTASU KADAI\n*** MERCHANT COPY ***\nBill: ${b.billNo}\nNET PAYABLE: Rs.${b.netTotal.toFixed(2)}\n\n`;
+
+            const rawBtUrl = "intent:#Intent;scheme=rawbt;package=ru.a4service.rawbtprinter;S.intent.extra.TEXT=" + encodeURIComponent(receiptText) + ";end;";
+            window.location.href = rawBtUrl;
         }
 
-        function closeInventoryModal() {
-            document.getElementById('inventoryModal').classList.add('hidden');
-        }
-
-        function openSalesModal() {
-            const tbody = document.getElementById('salesTableBody');
-            tbody.innerHTML = '';
-            let totalAmount = 0;
-            let cashCount = 0;
-            let upiCount = 0;
-
-            salesHistory.forEach(s => {
-                totalAmount += s.amount;
-                if (s.mode === 'Cash') cashCount++;
-                else upiCount++;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="p-2 font-mono text-amber-400">${s.billNo}</td>
-                        <td class="p-2 text-slate-400">${s.time}</td>
-                        <td class="p-2 font-semibold">${s.customer}</td>
-                        <td class="p-2 text-slate-300">${s.mode}</td>
-                        <td class="p-2 text-right font-bold text-emerald-400">₹${s.amount.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('totalSalesVal').innerText = `₹${totalAmount.toFixed(2)}`;
-            document.getElementById('totalBillsVal').innerText = salesHistory.length;
-            document.getElementById('paymentRatioVal').innerText = `${cashCount} Cash / ${upiCount} Digital`;
-
-            document.getElementById('salesModal').classList.remove('hidden');
-        }
-
-        function closeSalesModal() {
-            document.getElementById('salesModal').classList.add('hidden');
-        }
-
-        // Voice Billing (Tamil / English)
+        // Tamil & English Voice Recognition Engine
         let recognition = null;
-        function toggleVoiceBilling() {
+        let isListening = false;
+
+        function toggleVoiceRecognition() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Speech recognition is not supported in this browser. Please use Chrome on Mobile or Desktop.");
+                alert("Voice billing is not supported on this browser. Please use Google Chrome.");
                 return;
             }
 
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!recognition) {
-                recognition = new SpeechRecognition();
-                recognition.lang = 'ta-IN';
-                recognition.continuous = false;
-                recognition.interimResults = false;
-
-                recognition.onstart = function() {
-                    document.getElementById('voiceLabel').innerText = "Listening...";
-                    document.getElementById('voiceBtn').classList.add('animate-pulse', 'bg-amber-500', 'text-slate-950');
-                };
-
-                recognition.onend = function() {
-                    document.getElementById('voiceLabel').innerText = "Voice Billing";
-                    document.getElementById('voiceBtn').classList.remove('animate-pulse', 'bg-amber-500', 'text-slate-950');
-                };
-
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript.toLowerCase();
-                    document.getElementById('searchInput').value = transcript;
-                    filterProducts();
-                };
+            if (isListening) {
+                stopVoiceRecognition();
+            } else {
+                startVoiceRecognition();
             }
+        }
+
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = document.getElementById('voiceLangSelect').value;
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isListening = true;
+                document.getElementById('voiceBtn').className = "px-3 py-1.5 bg-amber-500 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 animate-pulse";
+                document.getElementById('voiceBtnText').innerText = "Listening...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                processVoiceCommand(transcript);
+            };
+
+            recognition.onerror = () => stopVoiceRecognition();
+            recognition.onend = () => stopVoiceRecognition();
 
             recognition.start();
+        }
+
+        function stopVoiceRecognition() {
+            isListening = false;
+            if (recognition) recognition.stop();
+            document.getElementById('voiceBtn').className = "px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow transition";
+            document.getElementById('voiceBtnText').innerText = "Voice Bill";
+        }
+
+        function processVoiceCommand(text) {
+            let foundMatch = false;
+            products.forEach(p => {
+                if (text.includes(p.name.toLowerCase())) {
+                    addToCart(p.id, 1);
+                    foundMatch = true;
+                }
+            });
+            if (!foundMatch) {
+                alert(`Voice command heard: "${text}". No matching item found.`);
+            }
+        }
+
+        // Modals Logic
+        function openInventoryModal() {
+            renderStockTable(products);
+            document.getElementById('inventoryModal').classList.remove('hidden');
+        }
+        function closeInventoryModal() {
+            document.getElementById('inventoryModal').classList.add('hidden');
+        }
+        function renderStockTable(items) {
+            document.getElementById('stockTableBody').innerHTML = items.map(p => `
+                <tr class="border-b border-slate-800">
+                    <td class="p-2 font-mono text-amber-400">#${p.itemNo || p.id}</td>
+                    <td class="p-2">${p.name}</td>
+                    <td class="p-2 text-right">₹${p.price}</td>
+                    <td class="p-2 text-center font-bold">${p.stock}</td>
+                    <td class="p-2 text-center">
+                        <button onclick="addStockPrompt(${p.id})" class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px]">+ Stock</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        function filterStockTable() {
+            const q = document.getElementById('stockSearchInput').value.toLowerCase();
+            renderStockTable(products.filter(p => p.name.toLowerCase().includes(q) || String(p.itemNo) === q));
+        }
+        function addStockPrompt(id) {
+            const qty = parseInt(prompt("Enter stock quantity to add:"));
+            if (qty && qty > 0) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    p.stock += qty;
+                    localStorage.setItem('pos_products', JSON.stringify(products));
+                    renderStockTable(products);
+                    renderProductGrid(products);
+                }
+            }
+        }
+
+        function openSalesSummaryModal() {
+            const tbody = document.getElementById('salesTableBody');
+            const totalRev = salesHistory.reduce((sum, b) => sum + b.netTotal, 0);
+
+            document.getElementById('summaryCount').innerText = salesHistory.length;
+            document.getElementById('summaryRevenue').innerText = totalRev.toFixed(2);
+
+            tbody.innerHTML = salesHistory.map(s => `
+                <tr class="border-b border-slate-800">
+                    <td class="p-2 font-mono text-amber-400">${s.billNo}</td>
+                    <td class="p-2 text-[10px] text-slate-400">${s.dateStr}</td>
+                    <td class="p-2">${s.custName || 'Walk-in'}</td>
+                    <td class="p-2 text-right font-bold text-emerald-400">₹${s.netTotal.toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('salesSummaryModal').classList.remove('hidden');
+        }
+        function closeSalesSummaryModal() {
+            document.getElementById('salesSummaryModal').classList.add('hidden');
         }
     </script>
 </body>

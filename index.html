@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -42,11 +41,8 @@
             background: #334155;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
 
-        /* 58mm Thermal Printer Styling for SC588 */
+        /* 58mm SC588 Thermal Printer Styling */
         @media print {
             @page {
                 size: 58mm auto;
@@ -84,7 +80,7 @@
 </head>
 <body class="bg-darkbg text-slate-100 min-h-screen font-sans flex flex-col">
 
-    <!-- Top Navigation Header -->
+    <!-- Header Navigation -->
     <header class="bg-cardbg border-b border-slate-700 px-4 py-3 flex flex-wrap justify-between items-center gap-2 shadow-md">
         <div class="flex items-center gap-3">
             <div class="bg-brand-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-xl shadow">
@@ -116,13 +112,13 @@
         </div>
     </header>
 
-    <!-- Main Workspace -->
+    <!-- Main POS Interface -->
     <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1700px] w-full mx-auto">
         
-        <!-- Left Product Catalog Area (7 Cols) -->
+        <!-- Catalog & Quick Entry (7 Cols) -->
         <section class="lg:col-span-7 flex flex-col gap-3">
             
-            <!-- Quick Search Bar & Direct Code Add -->
+            <!-- Quick Item Number Entry & Search -->
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
                 <div class="sm:col-span-5 flex gap-1">
                     <input type="text" id="quickCodeInput" placeholder="Type Item # (e.g. 45, ST-10, 45*5)..." 
@@ -137,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Category Filter Bar -->
+            <!-- Category Filter -->
             <div class="flex items-center gap-2">
                 <span class="text-xs text-slate-400 font-semibold whitespace-nowrap">Category:</span>
                 <select id="categoryFilter" onchange="filterProducts()" class="w-full bg-slate-800 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-brand-500">
@@ -145,7 +141,7 @@
                 </select>
             </div>
 
-            <!-- Custom / Other Item Widget -->
+            <!-- Custom Item Entry -->
             <div class="bg-slate-800/80 border border-amber-500/30 rounded-lg p-2.5 flex flex-wrap items-center gap-2">
                 <div class="flex items-center gap-1.5 text-xs font-bold text-amber-400">
                     <i class="fa-solid fa-circle-plus"></i>
@@ -159,16 +155,15 @@
                 </div>
             </div>
 
-            <!-- Product Grid -->
+            <!-- 173-Product Catalog Grid -->
             <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[560px] overflow-y-auto pr-1">
-                <!-- Dynamically Rendered -->
+                <!-- Dynamically populated -->
             </div>
         </section>
 
-        <!-- Right Cart & Billing Area (5 Cols) -->
+        <!-- Cart & Checkout Area (5 Cols) -->
         <section class="lg:col-span-5 bg-cardbg border border-slate-700 rounded-xl p-4 flex flex-col justify-between shadow-xl">
             <div>
-                <!-- Bill Header -->
                 <div class="flex justify-between items-center pb-3 border-b border-slate-700">
                     <h2 class="font-extrabold text-amber-400 text-sm flex items-center gap-2">
                         <i class="fa-solid fa-receipt"></i>
@@ -180,7 +175,7 @@
                     </button>
                 </div>
 
-                <!-- Customer Info Inputs -->
+                <!-- Customer Details -->
                 <div class="grid grid-cols-2 gap-2 my-3">
                     <div class="relative">
                         <i class="fa-solid fa-user absolute left-2.5 top-2 text-slate-500 text-xs"></i>
@@ -192,7 +187,7 @@
                     </div>
                 </div>
 
-                <!-- Cart Table Items -->
+                <!-- Cart Table -->
                 <div class="max-h-[300px] overflow-y-auto border border-slate-700/60 rounded-lg p-2 bg-slate-900/50">
                     <table class="w-full text-left text-xs">
                         <thead>
@@ -205,7 +200,7 @@
                             </tr>
                         </thead>
                         <tbody id="cartTableBody" class="divide-y divide-slate-800">
-                            <!-- Dynamically Rendered -->
+                            <!-- Items -->
                         </tbody>
                     </table>
                     <div id="emptyCartMsg" class="text-center py-8 text-slate-500 text-xs flex flex-col items-center gap-2">
@@ -215,7 +210,7 @@
                 </div>
             </div>
 
-            <!-- Bill Calculations & Payment -->
+            <!-- Totals & Payment -->
             <div class="mt-4 pt-3 border-t border-slate-700 space-y-2">
                 <div class="flex justify-between text-xs text-slate-300">
                     <span>Total Items:</span>
@@ -227,7 +222,7 @@
                     <span class="font-bold text-white">₹ <span id="subtotalAmount">0.00</span></span>
                 </div>
 
-                <!-- Discount Selector -->
+                <!-- Discount (% / ₹) -->
                 <div class="flex justify-between items-center text-xs">
                     <label class="text-slate-300">Discount (தள்ளுபடி):</label>
                     <div class="flex items-center gap-1">
@@ -249,14 +244,14 @@
                     <span class="text-amber-400 text-xl">₹ <span id="netAmountDisplay">0.00</span></span>
                 </div>
 
-                <!-- Payment Method Buttons -->
+                <!-- Payment Modes -->
                 <div class="grid grid-cols-3 gap-2 pt-1">
                     <button onclick="setPaymentMethod('CASH')" id="payBtnCASH" class="py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg shadow">💵 CASH</button>
                     <button onclick="setPaymentMethod('UPI')" id="payBtnUPI" class="py-1.5 bg-slate-700 text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-600">📱 UPI/GPay</button>
                     <button onclick="setPaymentMethod('CARD')" id="payBtnCARD" class="py-1.5 bg-slate-700 text-slate-300 font-bold text-xs rounded-lg hover:bg-slate-600">💳 CARD</button>
                 </div>
 
-                <!-- Checkout Button -->
+                <!-- Print Action -->
                 <button onclick="checkoutOrder()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-black text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 mt-2 transition">
                     <i class="fa-solid fa-print"></i>
                     <span>Complete Order & Print Dual Bill</span>
@@ -265,15 +260,14 @@
         </section>
     </main>
 
-    <!-- Receipt Modal (Dual Receipt Screen View) -->
+    <!-- Dual Receipt Modal -->
     <div id="receiptModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white text-slate-900 rounded-xl p-4 max-w-sm w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             
             <div id="receiptPrintArea" class="font-mono text-xs text-slate-900 space-y-4 overflow-y-auto pr-1">
-                <!-- Customer & Merchant Copies rendered here -->
+                <!-- Customer Copy & Merchant Copy -->
             </div>
 
-            <!-- Modal Action Buttons for SC588 Thermal & Standard Print -->
             <div id="receiptModalButtons" class="mt-4 flex flex-wrap gap-2 pt-2 border-t border-slate-200 no-print">
                 <button onclick="connectSC588Printer()" class="flex-1 min-w-[110px] py-2 bg-blue-600 text-white font-bold text-xs rounded-lg hover:bg-blue-700 flex items-center justify-center gap-1">
                     <i class="fa-solid fa-bluetooth"></i>
@@ -297,7 +291,7 @@
         </div>
     </div>
 
-    <!-- Inventory Stock Management Modal -->
+    <!-- Inventory Stock Modal -->
     <div id="inventoryModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-cardbg text-slate-100 rounded-xl p-4 max-w-2xl w-full border border-slate-700 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center pb-3 border-b border-slate-700">
@@ -322,7 +316,6 @@
                         </tr>
                     </thead>
                     <tbody id="stockTableBody" class="divide-y divide-slate-800">
-                        <!-- Rendered via JS -->
                     </tbody>
                 </table>
             </div>
@@ -341,7 +334,7 @@
             </div>
             <div class="my-3 flex justify-between items-center text-xs">
                 <span>Total Bills Saved: <b id="summaryCount">0</b></span>
-                <span class="text-emerald-400 font-bold">Total Sales Revenue: ₹ <span id="summaryRevenue">0.00</span></span>
+                <span class="text-emerald-400 font-bold">Total Revenue: ₹ <span id="summaryRevenue">0.00</span></span>
             </div>
             <div class="flex-1 overflow-y-auto">
                 <table class="w-full text-left text-xs">
@@ -354,41 +347,197 @@
                         </tr>
                     </thead>
                     <tbody id="salesTableBody" class="divide-y divide-slate-800">
-                        <!-- Rendered via JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Application Logic -->
     <script>
-        // Catalog Products (Default List)
+        // Complete 173-Product Catalog parsed from both serial number columns
         const DEFAULT_PRODUCTS = [
-            {"id": 1, "itemNo": 1, "sku": "SKU-001", "name": "2 ¾\" BIRD", "category": "SOUND CRACKERS", "price": 15.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 2, "itemNo": 2, "sku": "SKU-002", "name": "3 ½\" CRACKERS LAKSHMI", "category": "SOUND CRACKERS", "price": 25.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 3, "itemNo": 3, "sku": "SKU-003", "name": "4\" LAXMI", "category": "SOUND CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 4, "itemNo": 4, "sku": "SKU-004", "name": "4\" DELUXE LAKSHMI", "category": "SOUND CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 5, "itemNo": 5, "sku": "SKU-005", "name": "4\" GOLD LAKSHMI", "category": "SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 6, "itemNo": 6, "sku": "SKU-006", "name": "5\" KOMBEN", "category": "SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 7, "itemNo": 7, "sku": "SKU-007", "name": "TWO SOUND CRACKERS", "category": "SOUND CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 8, "itemNo": 8, "sku": "SKU-008", "name": "28 CHORSA", "category": "GARLAND CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 9, "itemNo": 9, "sku": "SKU-009", "name": "56 CHORSA", "category": "GARLAND CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 10, "itemNo": 10, "sku": "SKU-010", "name": "28 GAINT", "category": "GARLAND CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 11, "itemNo": 11, "sku": "SKU-011", "name": "56 GAINT", "category": "GARLAND CRACKERS", "price": 120.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 12, "itemNo": 12, "sku": "SKU-012", "name": "24 DELUXE CRACKERS", "category": "GARLAND CRACKERS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 13, "itemNo": 13, "sku": "SKU-013", "name": "100 GAINT CRACKERS", "category": "GARLAND CRACKERS", "price": 240.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"},
-            {"id": 14, "itemNo": 14, "sku": "SKU-014", "name": "100 DELUXE CRACKERS", "category": "GARLAND CRACKERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA"}
+            {"itemNo": 1, "sku": "SKU-001", "name": "2 ¾\"  BIRD", "category": "FLASH SOUND CRACKERS", "price": 15.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 1},
+            {"itemNo": 2, "sku": "SKU-002", "name": "3 ½\" CRACKERS LAKSHMI", "category": "FLASH SOUND CRACKERS", "price": 25.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 2},
+            {"itemNo": 3, "sku": "SKU-003", "name": "4\" LAXMI", "category": "FLASH SOUND CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 3},
+            {"itemNo": 4, "sku": "SKU-004", "name": "4\" DELUXE LAKSHMI", "category": "FLASH SOUND CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 4},
+            {"itemNo": 5, "sku": "SKU-005", "name": "4\" GOLD LAKSHMI", "category": "FLASH SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 5},
+            {"itemNo": 6, "sku": "SKU-006", "name": "5\" KOMBEN", "category": "FLASH SOUND CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 6},
+            {"itemNo": 7, "sku": "SKU-007", "name": "TWO SOUND CRACKERS", "category": "FLASH SOUND CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 7},
+            {"itemNo": 8, "sku": "SKU-008", "name": "28 CHORSA", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 35.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 8},
+            {"itemNo": 9, "sku": "SKU-009", "name": "56 CHORSA", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 65.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 9},
+            {"itemNo": 10, "sku": "SKU-010", "name": "28 GAINT", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 10},
+            {"itemNo": 11, "sku": "SKU-011", "name": "56 GAINT", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 120.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 11},
+            {"itemNo": 12, "sku": "SKU-012", "name": "24 DELUXE CRACKERS", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 100.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 12},
+            {"itemNo": 13, "sku": "SKU-013", "name": "50 DELUXE CRACKERS", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 230.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 13},
+            {"itemNo": 14, "sku": "SKU-014", "name": "100 DELTA DELUXE CRACKERS", "category": "CHORSA,GAINT,DELUX CRACKERS", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 14},
+            {"itemNo": 15, "sku": "SKU-015", "name": "100 WALA", "category": "HAPPY CRACKERS", "price": 80.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 15},
+            {"itemNo": 16, "sku": "SKU-016", "name": "200 WALA", "category": "HAPPY CRACKERS", "price": 160.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 16},
+            {"itemNo": 17, "sku": "SKU-017", "name": "300 WALA", "category": "HAPPY CRACKERS", "price": 320.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 17},
+            {"itemNo": 18, "sku": "SKU-018", "name": "600 WALA", "category": "HAPPY CRACKERS", "price": 480.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 18},
+            {"itemNo": 19, "sku": "SKU-019", "name": "1000 WALA", "category": "HAPPY CRACKERS", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 19},
+            {"itemNo": 20, "sku": "SKU-020", "name": "1000 WALA SK", "category": "HAPPY CRACKERS", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 20},
+            {"itemNo": 21, "sku": "SKU-021", "name": "2000 WALA", "category": "HAPPY CRACKERS", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 21},
+            {"itemNo": 22, "sku": "SKU-022", "name": "2000 WALA SK", "category": "HAPPY CRACKERS", "price": 1200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 22},
+            {"itemNo": 23, "sku": "SKU-023", "name": "5000 WALA", "category": "HAPPY CRACKERS", "price": 2000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 23},
+            {"itemNo": 24, "sku": "SKU-024", "name": "5000 WALA SK", "category": "HAPPY CRACKERS", "price": 3000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 24},
+            {"itemNo": 25, "sku": "SKU-025", "name": "10000 WALA", "category": "HAPPY CRACKERS", "price": 4000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 25},
+            {"itemNo": 26, "sku": "SKU-026", "name": "10000 WALA SK", "category": "HAPPY CRACKERS", "price": 6000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 26},
+            {"itemNo": 27, "sku": "SKU-027", "name": "ATOM BOMB BIG", "category": "BOMBS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 27},
+            {"itemNo": 28, "sku": "SKU-028", "name": "HYDRO BOMB  GREEN", "category": "BOMBS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 28},
+            {"itemNo": 29, "sku": "SKU-029", "name": "KING OF KING BOMB", "category": "BOMBS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 29},
+            {"itemNo": 30, "sku": "SKU-030", "name": "CLASSIC BOMB", "category": "BOMBS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 30},
+            {"itemNo": 31, "sku": "SKU-031", "name": "RED BIJILI(50 pcs)", "category": "BIJILI CRACKERS", "price": 30.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 31},
+            {"itemNo": 32, "sku": "SKU-032", "name": "RED BIJILI(100 pcs)", "category": "BIJILI CRACKERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 32},
+            {"itemNo": 33, "sku": "SKU-033", "name": "STRIPPED BIJILI(100 pcs)", "category": "BIJILI CRACKERS", "price": 70.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 33},
+            {"itemNo": 34, "sku": "SKU-034", "name": "GROUND CHAKKAR BIG", "category": "GROUND CHAKKARS", "price": 80.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 34},
+            {"itemNo": 35, "sku": "SKU-035", "name": "GROUND CHAKKAR ASHOKA", "category": "GROUND CHAKKARS", "price": 140.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 35},
+            {"itemNo": 36, "sku": "SKU-036", "name": "GROUND CHAKKAR SPECIAL", "category": "GROUND CHAKKARS", "price": 180.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 36},
+            {"itemNo": 37, "sku": "SKU-037", "name": "GROUND CHAKKAR DELUXE", "category": "GROUND CHAKKARS", "price": 240.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 37},
+            {"itemNo": 38, "sku": "SKU-038", "name": "FLOWER POTS SMALL", "category": "FLOWER POTS", "price": 100.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 38},
+            {"itemNo": 39, "sku": "SKU-039", "name": "FLOWER POTS BIG", "category": "FLOWER POTS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 39},
+            {"itemNo": 40, "sku": "SKU-040", "name": "FLOWER POTS SPECIAL", "category": "FLOWER POTS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 40},
+            {"itemNo": 41, "sku": "SKU-041", "name": "FLOWER POTS ASHOKA/GAINT", "category": "FLOWER POTS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 41},
+            {"itemNo": 42, "sku": "SKU-042", "name": "FLOWER POTS DELUXE (5 pcs)", "category": "FLOWER POTS", "price": 320.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 42},
+            {"itemNo": 43, "sku": "SKU-043", "name": "FLOWER POTS SUPER DLX (2 pcs)", "category": "FLOWER POTS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 43},
+            {"itemNo": 44, "sku": "SKU-044", "name": "MERI JAAN(2 pcs)", "category": "FLOWER POTS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 44},
+            {"itemNo": 45, "sku": "SKU-045", "name": "COLOUR SONG", "category": "COLOUR FLOWERPOTS", "price": 360.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 45},
+            {"itemNo": 46, "sku": "SKU-046", "name": "COLOUR KOTI/POT GIRL", "category": "COLOUR FLOWERPOTS", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 46},
+            {"itemNo": 47, "sku": "SKU-047", "name": "COLOUR KOTI DELUXE", "category": "COLOUR FLOWERPOTS", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 47},
+            {"itemNo": 48, "sku": "SKU-048", "name": "BABY ROCKET", "category": "ROCKETS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 48},
+            {"itemNo": 49, "sku": "SKU-049", "name": "ROCKET BOMB", "category": "ROCKETS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 49},
+            {"itemNo": 50, "sku": "SKU-050", "name": "COLOUR ROCKET", "category": "ROCKETS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 50},
+            {"itemNo": 51, "sku": "SKU-051", "name": "LUNIC ROCKET", "category": "ROCKETS", "price": 250.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 51},
+            {"itemNo": 52, "sku": "SKU-052", "name": "WHISTELING ROCKET", "category": "ROCKETS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 52},
+            {"itemNo": 53, "sku": "SKU-053", "name": "1½\" TWINKLING STAR", "category": "TWINKLING STAR,PENCIL", "price": 50.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 53},
+            {"itemNo": 54, "sku": "SKU-054", "name": "4\" TWINKLING STAR", "category": "TWINKLING STAR,PENCIL", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 54},
+            {"itemNo": 55, "sku": "SKU-055", "name": "10\" PENCIL", "category": "TWINKLING STAR,PENCIL", "price": 130.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 55},
+            {"itemNo": 56, "sku": "SKU-056", "name": "1 3/4\" FANCY SHOT(3PCS)", "category": "AKASH WONDERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 56},
+            {"itemNo": 57, "sku": "SKU-057", "name": "2\" SINGLE FANCY SHOT", "category": "AKASH WONDERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 57},
+            {"itemNo": 58, "sku": "SKU-058", "name": "2 1/2 \" FANCY SHOT -3 STEP", "category": "AKASH WONDERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 58},
+            {"itemNo": 59, "sku": "SKU-059", "name": "3 1/2 \" FANCY SHOT(1 PCS)", "category": "AKASH WONDERS", "price": 700.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 59},
+            {"itemNo": 60, "sku": "SKU-060", "name": "74MM FANCY SHOT(1 PCS)", "category": "AKASH WONDERS", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 60},
+            {"itemNo": 61, "sku": "SKU-061", "name": "7 SHOT", "category": "AERIAL NOVELTIES", "price": 160.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 61},
+            {"itemNo": 62, "sku": "SKU-062", "name": "12 SHOT", "category": "AERIAL NOVELTIES", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 62},
+            {"itemNo": 63, "sku": "SKU-063", "name": "15 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 63},
+            {"itemNo": 64, "sku": "SKU-064", "name": "25 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 64},
+            {"itemNo": 65, "sku": "SKU-065", "name": "30 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 700.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 65},
+            {"itemNo": 66, "sku": "SKU-066", "name": "60 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 1500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 66},
+            {"itemNo": 67, "sku": "SKU-067", "name": "120 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 3000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 67},
+            {"itemNo": 68, "sku": "SKU-068", "name": "240 SHOT MULTICOLOUR", "category": "AERIAL NOVELTIES", "price": 6000.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 68},
+            {"itemNo": 69, "sku": "SKU-069", "name": "12CM ELECTRIC", "category": "SPARKLERS", "price": 50.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 69},
+            {"itemNo": 70, "sku": "SKU-070", "name": "12 CM COLOUR", "category": "SPARKLERS", "price": 55.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 70},
+            {"itemNo": 71, "sku": "SKU-071", "name": "12CM  GREEN", "category": "SPARKLERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 71},
+            {"itemNo": 72, "sku": "SKU-072", "name": "12CM  RED", "category": "SPARKLERS", "price": 60.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 72},
+            {"itemNo": 73, "sku": "SKU-073", "name": "15CM ELECTRIC", "category": "SPARKLERS", "price": 80.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 73},
+            {"itemNo": 74, "sku": "SKU-074", "name": "15 CM COLOUR", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 74},
+            {"itemNo": 75, "sku": "SKU-075", "name": "15CM  GREEN", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 75},
+            {"itemNo": 76, "sku": "SKU-076", "name": "15CM  RED", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 76},
+            {"itemNo": 77, "sku": "SKU-077", "name": "30CM ELECTRIC (5 pcs)", "category": "SPARKLERS", "price": 80.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 77},
+            {"itemNo": 78, "sku": "SKU-078", "name": "30CM COLOUR (5 pcs)", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 78},
+            {"itemNo": 79, "sku": "SKU-079", "name": "30CM  GREEN (5 pcs)", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 79},
+            {"itemNo": 80, "sku": "SKU-080", "name": "30CM  RED (5 pcs)", "category": "SPARKLERS", "price": 90.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 80},
+            {"itemNo": 81, "sku": "SKU-081", "name": "50CM ELECTRIC (5 pcs)", "category": "SPARKLERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 81},
+            {"itemNo": 82, "sku": "SKU-082", "name": "50CM COLOUR (5 pcs)", "category": "SPARKLERS", "price": 330.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 82},
+            {"itemNo": 83, "sku": "SKU-083", "name": "75CM ELECTRIC (5 pcs)", "category": "SPARKLERS", "price": 450.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 83},
+            {"itemNo": 84, "sku": "SKU-084", "name": "75CM COLOUR (5 pcs)", "category": "SPARKLERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 84},
+            {"itemNo": 85, "sku": "SKU-085", "name": "ADIYAL 1/4 KG", "category": "PAPER BOMB", "price": 120.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 85},
+            {"itemNo": 86, "sku": "SKU-086", "name": "ADIYAL 1/2 KG", "category": "PAPER BOMB", "price": 240.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 86},
+            {"itemNo": 87, "sku": "SKU-087", "name": "ADIYAL 1KG", "category": "PAPER BOMB", "price": 480.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 87},
+            {"itemNo": 88, "sku": "SKU-088", "name": "MONEY", "category": "PAPER BOMB", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 88},
+            {"itemNo": 89, "sku": "SKU-089", "name": "GANAGA JAMUNA (5 pcs))", "category": "FANCY CRACKERS", "price": 160.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 89},
+            {"itemNo": 90, "sku": "SKU-090", "name": "PHOTOFLASH", "category": "FANCY CRACKERS", "price": 150.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 90},
+            {"itemNo": 91, "sku": "SKU-091", "name": "TIN BEER SMALL", "category": "FANCY CRACKERS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 91},
+            {"itemNo": 92, "sku": "SKU-092", "name": "BUTTERFLY/PAMBARAM", "category": "FANCY CRACKERS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 92},
+            {"itemNo": 93, "sku": "SKU-093", "name": "HELICOPTER", "category": "FANCY CRACKERS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 93},
+            {"itemNo": 94, "sku": "SKU-094", "name": "DANCING WHEEL", "category": "FANCY CRACKERS", "price": 200.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 94},
+            {"itemNo": 95, "sku": "SKU-095", "name": "GYPSY", "category": "FANCY CRACKERS", "price": 250.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 95},
+            {"itemNo": 96, "sku": "SKU-096", "name": "JONE & JOKES(5 pcs)", "category": "FANCY CRACKERS", "price": 250.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 96},
+            {"itemNo": 97, "sku": "SKU-097", "name": "KATHI", "category": "FANCY CRACKERS", "price": 250.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 97},
+            {"itemNo": 98, "sku": "SKU-098", "name": "SMOKE", "category": "FANCY CRACKERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 98},
+            {"itemNo": 99, "sku": "SKU-099", "name": "SIREN", "category": "FANCY CRACKERS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 99},
+            {"itemNo": 100, "sku": "SKU-100", "name": "SPARSHA GREEN", "category": "FANCY CRACKERS", "price": 350.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 100},
+            {"itemNo": 101, "sku": "SKU-101", "name": "KURKURE", "category": "FANCY CRACKERS", "price": 350.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 101},
+            {"itemNo": 102, "sku": "SKU-102", "name": "SMALL PEACOCK", "category": "FANCY CRACKERS", "price": 350.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 102},
+            {"itemNo": 103, "sku": "SKU-103", "name": "COLOUR SONG", "category": "FANCY CRACKERS", "price": 360.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 103},
+            {"itemNo": 104, "sku": "SKU-104", "name": "TIN BEER BIG", "category": "FANCY CRACKERS", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 104},
+            {"itemNo": 105, "sku": "SKU-105", "name": "YOYO(5 pcs)", "category": "FANCY CRACKERS", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 105},
+            {"itemNo": 106, "sku": "SKU-106", "name": "NACHOS(2 pcs)", "category": "FANCY CRACKERS", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 106},
+            {"itemNo": 107, "sku": "SKU-107", "name": "EMU EGG", "category": "FANCY CRACKERS", "price": 450.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 107},
+            {"itemNo": 108, "sku": "SKU-108", "name": "TOPGUN(5 pcs)", "category": "FANCY CRACKERS", "price": 450.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 108},
+            {"itemNo": 109, "sku": "SKU-109", "name": "COCKTAIL(3 pcs)", "category": "FANCY CRACKERS", "price": 450.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 109},
+            {"itemNo": 110, "sku": "SKU-110", "name": "4 IN 1 ANDROID", "category": "FANCY CRACKERS", "price": 450.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 110},
+            {"itemNo": 111, "sku": "SKU-111", "name": "TROPICAL MUSHROOM", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 111},
+            {"itemNo": 112, "sku": "SKU-112", "name": "3 STAR MIX", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 112},
+            {"itemNo": 113, "sku": "SKU-113", "name": "BLOSSOM/THOR/PINKIE PIE", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 113},
+            {"itemNo": 114, "sku": "SKU-114", "name": "IPL MIX", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 114},
+            {"itemNo": 115, "sku": "SKU-115", "name": "BOOMER(10 pcs)", "category": "FANCY CRACKERS", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 115},
+            {"itemNo": 116, "sku": "SKU-116", "name": "LOVE SPARK FOUNTAIN", "category": "FANCY CRACKERS", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 116},
+            {"itemNo": 117, "sku": "SKU-117", "name": "BADA PEACOCK", "category": "FANCY CRACKERS", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 117},
+            {"itemNo": 118, "sku": "SKU-118", "name": "BADA PEACOCK MULTICOLOUR", "category": "FANCY CRACKERS", "price": 700.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 118},
+            {"itemNo": 119, "sku": "SKU-119", "name": "KULFI", "category": "FANCY CRACKERS", "price": 700.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 119},
+            {"itemNo": 120, "sku": "SKU-120", "name": "5 STAR TRI COLOUR FOUNTAIN", "category": "FANCY CRACKERS", "price": 700.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 120},
+            {"itemNo": 121, "sku": "SKU-121", "name": "WELCOME SHOW", "category": "FANCY CRACKERS", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 121},
+            {"itemNo": 122, "sku": "SKU-122", "name": "FANTASY LION/ELEPHANT", "category": "FANCY CRACKERS", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 122},
+            {"itemNo": 123, "sku": "SKU-123", "name": "CAR BIG", "category": "FANCY CRACKERS", "price": 900.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 123},
+            {"itemNo": 124, "sku": "SKU-124", "name": "ROLL CAPS", "category": "MATCHES & ROLLCAPS", "price": 120.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 124},
+            {"itemNo": 125, "sku": "SKU-125", "name": "SNAKE TABLETS BIG", "category": "MATCHES & ROLLCAPS", "price": 50.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 125},
+            {"itemNo": 126, "sku": "SKU-126", "name": "RED GREEN MATCHES ORD(10NO)", "category": "MATCHES & ROLLCAPS", "price": 20.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 126},
+            {"itemNo": 127, "sku": "SKU-127", "name": "JILJIL MATCH(10NO)", "category": "MATCHES & ROLLCAPS", "price": 40.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 127},
+            {"itemNo": 128, "sku": "SKU-128", "name": "BLOOMS", "category": "MATCHES & ROLLCAPS", "price": 140.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 128},
+            {"itemNo": 129, "sku": "SKU-129", "name": "SUPER 6", "category": "MATCHES & ROLLCAPS", "price": 130.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 129},
+            {"itemNo": 130, "sku": "SKU-130", "name": "NOKIO/ 10 IN 1", "category": "MATCHES & ROLLCAPS", "price": 300.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 130},
+            {"itemNo": 131, "sku": "SKU-131", "name": "GANESH 16 items", "category": "GIFT BOXES", "price": 400.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 131},
+            {"itemNo": 132, "sku": "SKU-132", "name": "TREAT 20 items", "category": "GIFT BOXES", "price": 500.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 132},
+            {"itemNo": 133, "sku": "SKU-133", "name": "LEO 25 items", "category": "GIFT BOXES", "price": 600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 133},
+            {"itemNo": 134, "sku": "SKU-134", "name": "LAXMI 31 items", "category": "GIFT BOXES", "price": 800.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 134},
+            {"itemNo": 135, "sku": "SKU-135", "name": "KGF 36 items", "category": "GIFT BOXES", "price": 900.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 135},
+            {"itemNo": 136, "sku": "SKU-136", "name": "PUBG 41 items", "category": "GIFT BOXES", "price": 1100.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 136},
+            {"itemNo": 137, "sku": "SKU-137", "name": "WHISTLE PODU 51 Items", "category": "GIFT BOXES", "price": 1600.0, "stock": 500, "brand": "SURYAKALA / SANTHIYA", "id": 137},
+            {"itemNo": 1, "sku": "ST-SKU-001", "name": "ST BOOM BOMB", "category": "ELECTRIC CRACKERS", "price": 300.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 138},
+            {"itemNo": 2, "sku": "ST-SKU-002", "name": "ST 1000 DIGITAL", "category": "ELECTRIC CRACKERS", "price": 800.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 139},
+            {"itemNo": 3, "sku": "ST-SKU-003", "name": "ST FLOWER POTS SMALL", "category": "FLOWER POTS", "price": 120.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 140},
+            {"itemNo": 4, "sku": "ST-SKU-004", "name": "ST FLOWER POTS SPECIAL", "category": "FLOWER POTS", "price": 300.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 141},
+            {"itemNo": 5, "sku": "ST-SKU-005", "name": "ST FLOWER POTS DELUXE", "category": "FLOWER POTS", "price": 400.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 142},
+            {"itemNo": 6, "sku": "ST-SKU-006", "name": "ST TRICOLOUR MILLENIUM", "category": "FLOWER POTS", "price": 800.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 143},
+            {"itemNo": 7, "sku": "ST-SKU-007", "name": "ST CHAVI ZAMIN CHAKKAR ASHOKA", "category": "CHAKKARS", "price": 150.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 144},
+            {"itemNo": 8, "sku": "ST-SKU-008", "name": "ST CHAVI ZAMIN CHAKKAR DELUXE", "category": "CHAKKARS", "price": 350.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 145},
+            {"itemNo": 9, "sku": "ST-SKU-009", "name": "ST 45CM TWINKLING STAR", "category": "NOVELTY CRACKERS/SPARKLERS", "price": 75.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 146},
+            {"itemNo": 10, "sku": "ST-SKU-010", "name": "ST 120 CM TWINKLING STAR", "category": "NOVELTY CRACKERS/SPARKLERS", "price": 240.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 147},
+            {"itemNo": 11, "sku": "ST-SKU-011", "name": "ST MULTI COLOUR CANDLE", "category": "NOVELTY CRACKERS/SPARKLERS", "price": 150.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 148},
+            {"itemNo": 12, "sku": "ST-SKU-012", "name": "ST 30 CM GOLD SPARKLER", "category": "NOVELTY CRACKERS/SPARKLERS", "price": 130.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 149},
+            {"itemNo": 13, "sku": "ST-SKU-013", "name": "ST 30CM COLOUR SPARKLER", "category": "NOVELTY CRACKERS/SPARKLERS", "price": 150.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 150},
+            {"itemNo": 14, "sku": "ST-SKU-014", "name": "ST SUN FLOWER 12 SHOT", "category": "SHOTS", "price": 400.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 151},
+            {"itemNo": 15, "sku": "ST-SKU-015", "name": "ST COLOUR MAGIC 16 SHOT", "category": "SHOTS", "price": 550.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 152},
+            {"itemNo": 16, "sku": "ST-SKU-016", "name": "ST 30 SHOT", "category": "SHOTS", "price": 1200.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 153},
+            {"itemNo": 17, "sku": "ST-SKU-017", "name": "ST 60 SHOT", "category": "SHOTS", "price": 2000.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 154},
+            {"itemNo": 18, "sku": "ST-SKU-018", "name": "ST 120 SHOT", "category": "SHOTS", "price": 3300.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 155},
+            {"itemNo": 19, "sku": "ST-SKU-019", "name": "ST CHAT CHAT", "category": "FANCY CRACKERS", "price": 150.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 156},
+            {"itemNo": 20, "sku": "ST-SKU-020", "name": "ST SIGNAL LIGHTS", "category": "FANCY CRACKERS", "price": 200.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 157},
+            {"itemNo": 21, "sku": "ST-SKU-021", "name": "ST COLOUR CHANGING BUTTERFLY", "category": "FANCY CRACKERS", "price": 400.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 158},
+            {"itemNo": 22, "sku": "ST-SKU-022", "name": "ST DOLLAR WHEEL/POKER WHEEL", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 159},
+            {"itemNo": 23, "sku": "ST-SKU-023", "name": "ST POKER WHEEL", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 160},
+            {"itemNo": 24, "sku": "ST-SKU-024", "name": "ST MONEY PENNY", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 161},
+            {"itemNo": 25, "sku": "ST-SKU-025", "name": "ST MAGICAL WAND", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 162},
+            {"itemNo": 26, "sku": "ST-SKU-026", "name": "ST JIL JUNG JUK", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 163},
+            {"itemNo": 27, "sku": "ST-SKU-027", "name": "ST SUNDROPS", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 164},
+            {"itemNo": 28, "sku": "ST-SKU-028", "name": "ST DIAMOND MINE", "category": "FANCY CRACKERS", "price": 500.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 165},
+            {"itemNo": 29, "sku": "ST-SKU-029", "name": "ST ARIEL OUT", "category": "FANCY CRACKERS", "price": 550.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 166},
+            {"itemNo": 30, "sku": "ST-SKU-030", "name": "ST POPCORN FOUNTAIN", "category": "FANCY CRACKERS", "price": 550.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 167},
+            {"itemNo": 31, "sku": "ST-SKU-031", "name": "ST LASER SHOW", "category": "FANCY CRACKERS", "price": 600.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 168},
+            {"itemNo": 32, "sku": "ST-SKU-032", "name": "ST CRACKLING KING", "category": "FANCY CRACKERS", "price": 800.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 169},
+            {"itemNo": 33, "sku": "ST-SKU-033", "name": "ST TREASURE BOX", "category": "FANCY CRACKERS", "price": 800.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 170},
+            {"itemNo": 34, "sku": "ST-SKU-034", "name": "ST RED BIJILI(50 pcs)", "category": "BIJILI", "price": 50.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 171},
+            {"itemNo": 35, "sku": "ST-SKU-035", "name": "ST RED BIJILI(100 pcs)", "category": "BIJILI", "price": 100.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 172},
+            {"itemNo": 36, "sku": "ST-SKU-036", "name": "ST ROLLCAPS", "category": "ROLLCAPS", "price": 150.0, "stock": 500, "brand": "STANDARD FIREWORKS", "id": 173}
         ];
 
-        // Global POS State
+        // State Management
         let products = JSON.parse(localStorage.getItem('pos_products')) || DEFAULT_PRODUCTS;
         let cart = [];
         let selectedPaymentMethod = 'CASH';
         let salesHistory = JSON.parse(localStorage.getItem('pos_sales_history')) || [];
         let lastGeneratedBill = null;
 
-        // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
             populateCategories();
             renderProductGrid(products);
@@ -416,7 +565,7 @@
                             <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">Stock: ${item.stock}</span>
                         </div>
                         <h4 class="font-bold text-xs text-slate-100 leading-snug line-clamp-2">${item.name}</h4>
-                        <p class="text-[10px] text-slate-400 truncate mt-0.5">${item.brand || 'PATTASU'}</p>
+                        <p class="text-[10px] text-slate-400 truncate mt-0.5">${item.brand}</p>
                     </div>
                     <div class="flex justify-between items-center mt-3 pt-2 border-t border-slate-700/50">
                         <span class="font-extrabold text-amber-400 text-sm">₹${item.price}</span>
@@ -456,7 +605,7 @@
                 qty = parseInt(parts[1].trim()) || 1;
             }
 
-            const found = products.find(p => String(p.itemNo) === itemNoStr || String(p.id) === itemNoStr);
+            const found = products.find(p => String(p.itemNo) === itemNoStr || String(p.id) === itemNoStr || (p.sku && p.sku.toLowerCase() === itemNoStr.toLowerCase()));
             if (found) {
                 addToCart(found.id, qty);
                 document.getElementById('quickCodeInput').value = '';
@@ -475,9 +624,8 @@
                 return;
             }
 
-            const customId = 'custom_' + Date.now();
             cart.push({
-                id: customId,
+                id: 'custom_' + Date.now(),
                 name: name,
                 price: price,
                 qty: qty,
@@ -487,7 +635,6 @@
             document.getElementById('customName').value = '';
             document.getElementById('customPrice').value = '';
             document.getElementById('customQty').value = '1';
-
             renderCart();
         }
 
@@ -554,7 +701,6 @@
                     </tr>
                 `).join('');
             }
-
             calculateBillTotals();
         }
 
@@ -565,14 +711,9 @@
             const discType = document.getElementById('discountType').value;
             const discInput = parseFloat(document.getElementById('discountValue').value) || 0;
 
-            let discountAmt = 0;
-            if (discType === 'PERCENT') {
-                discountAmt = (subtotal * discInput) / 100;
-            } else {
-                discountAmt = discInput;
-            }
-
+            let discountAmt = discType === 'PERCENT' ? (subtotal * discInput) / 100 : discInput;
             if (discountAmt > subtotal) discountAmt = subtotal;
+
             const netAmount = subtotal - discountAmt;
 
             document.getElementById('totalItemsCount').innerText = totalItems;
@@ -593,10 +734,9 @@
             });
         }
 
-        // Checkout & Build Dual Receipt
         function checkoutOrder() {
             if (cart.length === 0) {
-                alert("Cart is empty! Please add items before printing.");
+                alert("Cart is empty!");
                 return;
             }
 
@@ -627,7 +767,6 @@
             });
             localStorage.setItem('pos_products', JSON.stringify(products));
 
-            // Save Sales Record
             salesHistory.unshift(lastGeneratedBill);
             localStorage.setItem('pos_sales_history', JSON.stringify(salesHistory));
 
@@ -705,7 +844,7 @@
             clearCart();
         }
 
-        // --- Bluetooth Thermal ESC/POS Engine for SC588 ---
+        // Bluetooth SC588 Direct Thermal Printing
         let sc588Device = null;
         let sc588Characteristic = null;
 
@@ -744,16 +883,16 @@
                 if (sc588Characteristic) {
                     alert(`Connected to SC588 (${sc588Device.name})!`);
                 } else {
-                    alert("Connected, but Bluetooth write characteristic was not found.");
+                    alert("Printer paired, but serial characteristic not found.");
                 }
             } catch (error) {
-                alert("Bluetooth connection error: " + error.message);
+                alert("Bluetooth Error: " + error.message);
             }
         }
 
         async function sendESCPOSToSC588(buffer) {
             if (!sc588Characteristic) {
-                alert("Please tap 'Pair SC588' first to pair your Bluetooth thermal printer.");
+                alert("Please tap 'Pair SC588' first.");
                 return;
             }
             const CHUNK_SIZE = 100;
@@ -866,7 +1005,6 @@
             await sendESCPOSToSC588(bytes);
         }
 
-        // RawBT Mobile App Printing Integration
         function printRawBT() {
             if (!lastGeneratedBill) return;
             const b = lastGeneratedBill;
@@ -877,17 +1015,16 @@
             receiptText += `--------------------------------\nNET PAYABLE: Rs.${b.netTotal.toFixed(2)}\n\n✂ - - - CUT HERE - - - ✂\n\n`;
             receiptText += `THOLILALAR PATTASU KADAI\n*** MERCHANT COPY ***\nBill: ${b.billNo}\nNET PAYABLE: Rs.${b.netTotal.toFixed(2)}\n\n`;
 
-            const rawBtUrl = "intent:#Intent;scheme=rawbt;package=ru.a4service.rawbtprinter;S.intent.extra.TEXT=" + encodeURIComponent(receiptText) + ";end;";
-            window.location.href = rawBtUrl;
+            window.location.href = "intent:#Intent;scheme=rawbt;package=ru.a4service.rawbtprinter;S.intent.extra.TEXT=" + encodeURIComponent(receiptText) + ";end;";
         }
 
-        // Tamil & English Voice Recognition Engine
+        // Tamil & English Voice Billing Engine
         let recognition = null;
         let isListening = false;
 
         function toggleVoiceRecognition() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Voice billing is not supported on this browser. Please use Google Chrome.");
+                alert("Voice billing requires Google Chrome.");
                 return;
             }
 
@@ -942,7 +1079,7 @@
             }
         }
 
-        // Modals Logic
+        // Modals
         function openInventoryModal() {
             renderStockTable(products);
             document.getElementById('inventoryModal').classList.remove('hidden');
